@@ -1,2 +1,2 @@
 # BBDD
-## Carpeta per a la matèria de 1r d'ÀSIX Bases de Dades
+## Carpeta per a les Instal·lacions de les diferents Bases de Dades.
