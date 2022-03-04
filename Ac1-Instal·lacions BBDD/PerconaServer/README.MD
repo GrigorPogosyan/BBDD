@@ -1,2 +1,2 @@
 # Instal·lació Percona Server
-<img align="right" width="100" height="100" src="captures/percona_logo.png"/>
+<img align="right" width = "200" src="captures/percona_logo.png"/>
