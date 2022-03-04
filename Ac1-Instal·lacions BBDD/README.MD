@@ -1,4 +1,4 @@
-# INSTAL·LACIONS BASES DE DADES <img style="position:relative" src="imatges/bbdd_logo.png" alt="drawing" width="85"/>
+# INSTAL·LACIONS BASES DE DADES <img style="position:absolute" src="imatges/bbdd_logo.png" alt="drawing" width="125" height="100"/>
 
 
 
