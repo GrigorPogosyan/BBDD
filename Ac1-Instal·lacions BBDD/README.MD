@@ -1,5 +1,5 @@
 # INSTAL·LACIONS BASES DE DADES 
-![Logo](imatges/bbdd_logo.png)
+<img align="left" width="100" height="100" src="imatges/bbdd_logo.png">
 
 
 
