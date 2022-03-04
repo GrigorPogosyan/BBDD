@@ -1,2 +1,2 @@
 # BBDD
-## Carpeta per a les Instal·lacions de les diferents Bases de Dades.
+## Carpeta per la UF3 de BBDD.
