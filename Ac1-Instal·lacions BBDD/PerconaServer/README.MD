@@ -30,8 +30,15 @@ sudo percona-release setup ps80 -y
 <img src="captures/enable_repository.png"/>
 &nbsp;
 
-3. 
+3. Instal·lem els paquets (Percona Server)
+```
+sudo yum install percona-server-server
+```
+<img src="captures/install_packages.png"/>
+&nbsp;
+<img src="captures/install_packages2.png">
+&nbsp;
 
-
+4. 
 
 
