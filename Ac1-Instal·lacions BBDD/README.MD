@@ -3,6 +3,7 @@
 
 - Percona Server
 -  MySQL 8.0
+<hr>
 
 ### Característiques de la Màquina Virtual Utilitzada:
  - Linux Red Hat 8 
