@@ -3,7 +3,7 @@
 ### Connexió per SSH al Sistema
 Primer de tot, ens connectarem a la màquina per **SSH** desde CMD (ho tenim prèviament instal·lat).
 ```
-ssh user@ip 
+ssh machineuser@ip 
 ```
 <img src="captures/ssh.png">
 
