@@ -6,7 +6,7 @@ Primer de tot, ens connectarem a la màquina per **SSH** desde CMD (ho tenim pr�
 ssh machineuser@ip 
 ```
 <details open>
-<summary>Screenshot</summary>
+<summary>Screenshot <b>(Connection SSH)</b></summary>
 <img src="captures/ssh.png">
 </details>
 
@@ -17,7 +17,7 @@ Després, actualitzarem els nostres paquets del sistema.
 yum update && yum upgrade
 ```
 <details open>
-<summary>Screenshot</summary>
+<summary>Screenshot <b>(OS Upgrade)</b></summary>
 <img src="captures/upgrade.png">
 </details>
 
@@ -27,7 +27,7 @@ yum update && yum upgrade
 sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 ```
 <details open>
-<summary>Screenshot</summary>
+<summary>Screenshot <b>(Installing Percona)</b></summary>
 <img src="captures/install_percona.png">
 </details>
 
@@ -36,7 +36,7 @@ sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 sudo percona-release setup ps80 -y
 ```
 <details open>
-<summary>Screenshot</summary>
+<summary>Screenshot <b>(Enable Repository)</b></summary>
 <img src="captures/enable_repository.png">
 </details>
 
@@ -45,11 +45,11 @@ sudo percona-release setup ps80 -y
 sudo yum install percona-server-server
 ```
 <details open>
-<summary>Screenshot</summary>
+<summary>Screenshot <b>(Installation Packages)</b></summary>
 <img src="captures/install_packages.png">
 </details>...
 <details open>
-<summary>Screenshot 2</summary>
+<summary>Screenshot <b>(Installation Packages Part 2)</summary>
 <img src="captures/install_packages2.png">
 </details>
 
@@ -61,7 +61,7 @@ Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir
 sudo systemctl start mysqld
 ```
 <details open>
-<summary>Screenshot</summary>
+<summary>Screenshot <b>(Start Mysqld)</b></summary>
 <img src="captures/start_mysqld.png">
 </details>
 
@@ -70,7 +70,7 @@ sudo systemctl start mysqld
 sudo systemctl enable mysqld
 ```
 <details open>
-<summary>Screenshot</summary>
+<summary>Screenshot <b>(Enable Mysqld)</b></summary>
 <img src="captures/enable_mysqld.png">
 </details>
 
@@ -79,7 +79,7 @@ sudo systemctl enable mysqld
 sudo systemctl status mysqld
 ```
 <details open>
-<summary>Screenshot</summary>
+<summary>Screenshot <b>(Status Mysqld)</b></summary>
 <img src="captures/active_mysqld.png">
 </details>
 
@@ -88,7 +88,7 @@ sudo systemctl status mysqld
 cat /var/log/mysqld.log | grep generated
 ```
 <details open>
-<summary>Screenshot</summary>
+<summary>Screenshot <b>(Password Generated)</b></summary>
 <img src="captures/password_generated.png">
 </details>
 
@@ -101,7 +101,10 @@ cat /var/log/mysqld.log | grep generated
 ```
 mysql_secure_installation
 ```
-
+<details open>
+<summary>Screenshot <b>(Root Password)</b></summary>
+<img src="captures/password_generated.png">
+</details>
 
 
 
