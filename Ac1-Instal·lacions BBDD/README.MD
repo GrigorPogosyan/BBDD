@@ -6,10 +6,13 @@
 <hr>
 
 ### Característiques de la Màquina Virtual Utilitzada:
- - Linux Red Hat 8 
+ - Linux Red Hat 8 (Enterprise)
  - Kernel Version: 4.18.0-348.12.2.el8_5.x86_64 <img align="right" width = "200" src="imatges/redhat_logo.png"/>
  - 2 GB RAM
  - 2 CPU CORES
+ - 50 GB Emmagatzematge
+ - Targeta de Xarxa NAT
+ - Targeta de Xarxa Host-Only
 
 
 
