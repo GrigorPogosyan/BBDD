@@ -16,7 +16,7 @@ yum update && yum upgrade
 <img src="captures/upgrade.png">
 
 ### Instal·lació des del Repositori
-Començarem instal·lant el Percona Server per MySQL amb la següent comanda amb un usuari **root** o **sudo**.
+Començarem instal·lant el Repositori de Percona Server per MySQL amb la següent comanda amb un usuari **root** o **sudo**.
 ```
 sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 ```
