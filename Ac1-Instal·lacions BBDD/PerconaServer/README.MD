@@ -5,7 +5,7 @@ Primer de tot, ens connectarem a la màquina per **SSH** desde CMD (ho tenim pr�
 ```
 ssh machineuser@ip 
 ```
-<details open>
+<details closed>
 <summary>Screenshot</summary>
 <img src="captures/ssh.png">
 </details>
@@ -16,7 +16,7 @@ Després, actualitzarem els nostres paquets del sistema.
 ```
 yum update && yum upgrade
 ```
-<details open>
+<details closed>
 <summary>Screenshot</summary>
 <img src="captures/upgrade.png">
 </details>
@@ -26,7 +26,7 @@ yum update && yum upgrade
 ```
 sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 ```
-<details open>
+<details closed>
 <summary>Screenshot</summary>
 <img src="captures/install_percona.png">
 </details>
@@ -35,7 +35,7 @@ sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 ```
 sudo percona-release setup ps80 -y
 ```
-<details open>
+<details closed>
 <summary>Screenshot</summary>
 <img src="captures/enable_repository.png">
 </details>
@@ -44,11 +44,11 @@ sudo percona-release setup ps80 -y
 ```
 sudo yum install percona-server-server
 ```
-<details open>
+<details closed>
 <summary>Screenshot</summary>
 <img src="captures/install_packages.png">
 </details>...
-<details open>
+<details closed>
 <summary>Screenshot 2</summary>
 <img src="captures/install_packages2.png">
 </details>
@@ -60,7 +60,7 @@ Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir
 ```
 sudo systemctl start mysqld
 ```
-<details open>
+<details closed>
 <summary>Screenshot</summary>
 <img src="captures/start_mysqld.png">
 </details>
@@ -69,7 +69,7 @@ sudo systemctl start mysqld
 ```
 sudo systemctl enable mysqld
 ```
-<details open>
+<details closed>
 <summary>Screenshot</summary>
 <img src="captures/enable_mysqld.png">
 </details>
@@ -78,7 +78,7 @@ sudo systemctl enable mysqld
 ```
 sudo systemctl status mysqld
 ```
-<details open>
+<details closed>
 <summary>Screenshot</summary>
 <img src="captures/active_mysqld.png">
 </details>
@@ -87,7 +87,7 @@ sudo systemctl status mysqld
 ```
 cat /var/log/mysqld.log | grep generated
 ```
-<details open>
+<details closed>
 <summary>Screenshot</summary>
 <img src="captures/password_generated.png">
 </details>
