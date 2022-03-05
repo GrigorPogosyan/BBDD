@@ -9,17 +9,19 @@ ssh user@ip
 
 
 ### Actualització dels Paquets del Sistema
-Primer de tot, actualitzarem els nostres paquets del sistema.
+Després, actualitzarem els nostres paquets del sistema.
 ```
 yum update && yum upgrade
 ```
 <img src="captures/upgrade.png">
 
 ### Instal·lació des del Repositori
-Començarem instal·lant el Repositori de Percona Server per MySQL amb la següent comanda amb un usuari **root** o **sudo**.
+1. Començarem instal·lant el Repositori de Percona Server per MySQL amb la següent comanda amb un usuari **root** o **sudo**.
 ```
 sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 ```
 <img src="captures/install_percona.png">
+
+
 
 
