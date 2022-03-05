@@ -20,7 +20,17 @@ yum update && yum upgrade
 ```
 sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 ```
-<img src="captures/install_percona.png">
+<img src="captures/install_percona.png"/>
+&nbsp;
+
+2. Activarem el Repositori Instal·lat de Percona.
+```
+sudo percona-release setup ps80 -y
+```
+<img src="captures/enable_repository.png"/>
+&nbsp;
+
+3. 
 
 
 
