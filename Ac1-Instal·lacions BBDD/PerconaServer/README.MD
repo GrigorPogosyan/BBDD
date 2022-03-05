@@ -123,6 +123,70 @@ sudo mysqladmin -u root -p version
 <hr>
 
 ## [Extra] Accedir en Remot
+Arribat al punt anterior, ja estaria la instal·lació i configuració del Percona Server, però aquest punt és per poder accedir-hi remotament.
 
+Tal com ho tenim ara configurat:
+- Port MySQL 3306 **escoltant**. ✔️
+- Firewall Configurat. ❌
+- Usuari MySQL amb el qual poder accedir-hi des de qualsevol màquina. ❌
 
+1. Procedirem a configurar el Firewall per poder accedir al MySQL del Percona Server Remotament.
 
+```
+# sudo firewall-cmd --zone=public --add-port=3306/tcp --permanent
+
+# sudo systemctl restart firewalld.service
+```
+<details open>
+<summary>Screenshot <b>(Firewall Configuration)</b></summary>
+<img src="captures/configure_firewall.png">
+</details>
+<details open>
+<summary>Screenshot <b>(Check Firewall Conf)</b></summary>
+<img src="captures/check_firewall.png">
+</details>
+
+2. Ara procedirem a crear un usuari que pugui accedir des de qualsevol màquina al MySQL i li donarem els màxims privilegis possibles (per comprobar que funciona.)
+```
+# mysql -u root -p
+[root password]
+
+# CREATE USER 'new_user'@'%' IDENTIFIED BY 'P4SSW0RD';
+
+# GRANT ALL PRIVILEGES ON *.* TO 'new_user'@'%';
+
+# FLUSH PRIVILEGES;
+```
+<details open>
+<summary>Screenshot <b>(MySQL Access)</b></summary>
+<img src="captures/acced_to_mysql.png">
+</details>
+
+<details open>
+<summary>Screenshot <b>(MySQL Create User)</b></summary>
+<img src="captures/create_user.png">
+</details>
+
+<details open>
+<summary>Screenshot <b>(MySQL Grant Privileges User)</b></summary>
+<img src="captures/user_privileges.png">
+</details>
+
+<details open>
+<summary>Screenshot <b>(MySQL Flush Privileges To Take Effect Now)</b></summary>
+<img src="captures/flush_privileges.png">
+</details>
+
+3. Crearem una connexió cap a aquesta màquina des del Workbench
+<details open>
+<summary>Screenshot <b>(Creating Connection)</b></summary>
+<img src="captures/connection_wb.png">
+</details>
+<details open>
+<summary>Screenshot <b>(Acceding to MySQL)</b></summary>
+<img src="captures/connection_wb2.png">
+</details>
+<details open>
+<summary>Screenshot <b>(Testing DB)</b></summary>
+<img src="captures/create_db_test.png">
+</details>
