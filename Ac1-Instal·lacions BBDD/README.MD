@@ -4,6 +4,12 @@
 - Percona Server
 -  MySQL 8.0
 
+### Característiques de la Màquina Virtual Utilitzada:
+ - Linux Red Hat 8 
+ - Kernel Version: 4.18.0-348.12.2.el8_5.x86_64 <img align="right" width = "200" src="imatges/redhat_logo.png"/>
+ - 2 GB RAM
+ - 2 CPU CORES
+
 
 
 
