@@ -190,3 +190,18 @@ Tal com ho tenim ara configurat:
 <summary>Screenshot <b>(Testing DB)</b></summary>
 <img src="captures/create_db_test.png">
 </details>
+<hr>
+
+## RESPON O COMPROVA ELS SEGÜENTS APARTATS
+
+1. Un cop realitzada la instal·lació realitza una securització de la mateixa. Quin programa realitza aquesta tasca? Realitza una securització de la instal·lació indicant que la contrasenya de root sigui patata. 
+
+    ><span style="color:#6495ED">La securització s'ha fet en els passos anteriors de la Post Instal·lació, el programa que el realitza és el mysql_secure_installation, i el executable es troba al path `/usr/bin/mysql_secure_installation` i està dissenyat per establir alguns paràmetres inicials que són més segurs que els de la instal·lació en el nostre SO</span>.
+
+    <details open>
+    <summary>Screenshot <b>(Path Mysql Secure Installation)</b></summary>
+    <img src="captures/secure_program.png">
+    </details>
+
+2. Quines són les instruccions per arrancar / verificar status / apagar servei de la base de dades
+de Percona Server en el sistema operatiu?
