@@ -1,4 +1,4 @@
-# Instal·lació Percona Server <img align="right" width="200" src="captures/percona_logo.png"/>
+# Instal·lació Percona Server 8.0 <img align="right" width="200" src="captures/percona_logo.png"/>
 
 ### Connexió per SSH al Sistema
 Primer de tot, ens connectarem a la màquina per **SSH** desde CMD (ho tenim prèviament instal·lat).
@@ -20,6 +20,7 @@ yum update && yum upgrade
 <summary>Screenshot <b>(OS Upgrade)</b></summary>
 <img src="captures/upgrade.png">
 </details>
+<hr>
 
 ### Instal·lació des del Repositori
 1. Començarem instal·lant el Repositori de Percona Server per MySQL amb la següent comanda amb un usuari **root** o **sudo**.
@@ -52,6 +53,7 @@ sudo yum install percona-server-server
 <summary>Screenshot <b>(Installation Packages Part 2)</summary>
 <img src="captures/install_packages2.png">
 </details>
+<hr>
 
 ### Post Instal·lació
 Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir correctament modificat i montar el nostre Percona Server
@@ -103,8 +105,24 @@ mysql_secure_installation
 ```
 <details open>
 <summary>Screenshot <b>(Root Password)</b></summary>
-<img src="captures/password_generated.png">
+<img src="captures/secure1.png">
 </details>
+<details open>
+<summary>Screenshot <b>(Disallow Remote Conection Root + Remove Anonymous Users + Remove Database and Privileges Test + Reloading Tables Privileges)</b></summary>
+<img src="captures/secure2.png">
+</details>
+
+6. Arribat en aquest punt, procedirem a mirar la versió del MySQL instal·lat.
+```
+sudo mysqladmin -u root -p version
+```
+<details open>
+<summary>Screenshot <b>(Check Version)</b></summary>
+<img src="captures/check_version.png">
+</details>
+<hr>
+
+## [Extra] Accedir en Remot
 
 
 
