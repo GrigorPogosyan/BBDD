@@ -35,10 +35,36 @@ sudo percona-release setup ps80 -y
 sudo yum install percona-server-server
 ```
 <img src="captures/install_packages.png"/>
-&nbsp;
+&nbsp;...
 <img src="captures/install_packages2.png">
 &nbsp;
 
-4. 
+### Post Instal·lació
+Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir correctament modificat i montar el nostre Percona Server
+
+1. Primer de tot encendrem el servei de MySQL.
+```
+sudo systemctl start mysqld
+```
+<details open>
+<summary>Screenshot</summary>
+<img src="captures/start_mysqld.png">
+</details>
+
+2. Posteriorment configurarem que MySQL s'inicii al iniciar el Sistema operatiu
+```
+sudo systemctl enable mysqld
+```
+3. Farem el secure_installation per **millorar la seguretat** del nostre servidor, el Script que executarem fa lo següent:
+    - Canvia la contrassenya **Root**.
+    - **Inhabilita la connexió** remota a la BBDD per l'usuari **Root**.
+    - Elimina els usuaris anónims.
+    - Elimina la Base de Dades de Test.
+    - Reinicia els permisos de les Taules.
+```
+mysql_secure_installation
+```
+
+
 
 
