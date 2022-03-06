@@ -205,3 +205,81 @@ Tal com ho tenim ara configurat:
 
 2. Quines són les instruccions per arrancar / verificar status / apagar servei de la base de dades
 de Percona Server en el sistema operatiu?
+> Per arrancar el Servei
+> ```
+>systemctl start mysqld
+> ```
+
+> Per verificar el Status del Servei
+> ```
+> systemctl status mysqld
+> ```
+
+> Per apagar el Servei
+> ```
+> systemctl stop mysqld
+> ```
+
+3. A on es troba i quin nom rep el fitxer de configuració del SGBD Percona Server?
+
+    Es troba a /etc i  el fitxer rep el nom de my.cnf
+    
+    Ruta:
+    ```
+    /etc/my.cnf
+    ```
+
+4. A on es troben físicament els fitxers de dades (per defecte). Com ho has sabut?
+
+    Es troben a `/usr/mysql/data` ho sabem perquè en el fitxer /etc/my.cnf hi ha una variable de "datadir" on crida aquesta ruta.
+
+    ```
+    cat /etc/my.cnf
+    ```
+    <details open>
+    <summary>Screenshot <b>(Lloc del Fitxer my.cnf on ens diu la ruta del directori dels fitxers)</b></summary>
+    <img src="captures/mycnf.png">
+    </details>
+
+    I si veiem els passos anteriors vam crear una base de dades de prova nomenada github, on hauria de sortir al llistar el contingut d'aquesta ruta.
+    ```
+    ls /var/lib/mysql
+    ```
+    <details open>
+    <summary>Screenshot <b>(Es veu el lloc on es guarden els fitxers de dades (i podrem veure la nostra BBDD creada))</b></summary>
+    <img src="captures/mysqldata.png">
+    </details>
+
+    I ara si creem en la BBDD de github una taula, ens apareix la manera en que ho guarda.
+    ```
+    ls /var/lib/mysql/github
+    ```
+    <details open>
+    <summary>Screenshot <b>(Com es guarden les nostres taules)</b></summary>
+    <img src="captures/table_proves.png">
+    </details>
+
+5. Crea un usuari anomenat asix en el sistema operatiu i en SGBD de tal manera que aquest usuari del sistema operatiu no hagi d'introduir l'usuari i password cada vegada que cridem al
+client mysql?
+
+     Crearem i li establirem al usuari una contrasenya (SO).
+    ```
+    useradd asix
+    ```
+    ```
+    passwd asix
+    ```
+    Ara, per posar una contrasenya feble en el MySQL, hem de baixar el nivell de seguretat afegint les següents línies al final del fitxer de configuració `/etc/my.cnf` i desprès reiniciarem el servei de `mysqld`.
+    ```
+    ...
+    validate_password.privacy=LOW
+    validate.password.length=4
+    ```
+    <details open>
+    <summary>Screenshot <b>(Configurar el nivell de)</b></summary>
+    <img src="captures/pass_low.png">
+    </details>
+
+    Crearem el mateix usuari en el MySQL des de Root.
+    ```
+    CREATE USER IF NOT EXISTS asix IDENTIFIED BY 'patata';
