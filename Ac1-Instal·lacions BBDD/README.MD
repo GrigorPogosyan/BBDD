@@ -1,13 +1,13 @@
 # INSTAL·LACIONS SISTEMES GESTORS DE BASES DE DADES 
-<img align="right" width="100" height="100" src="imatges/bbdd_logo.png"/>
+<img align="right" width="100" height="100" src="imatges/bbdd_logo.png" alt="bbdd_logo"/>
 
-- Percona Server 8.0
+- [Percona Server 8.0](PerconaServer/)
 -  MySQL 8.0
 <hr>
 
-### Característiques de la Màquina Virtual Utilitzada <img width=40 height=40 src="imatges/vmware_logo.png"/>:
+### Característiques de la Màquina Virtual Utilitzada <img width=40 height=40 src="imatges/vmware_logo.png" alt="vmware_logo"/>:
  - Linux Red Hat 8.5 (Enterprise 8.5 Ootpa)
- - Kernel Version: 4.18.0-348.12.2.el8_5.x86_64 <img align="right" width = "200" src="imatges/redhat_logo.png"/>
+ - Kernel Version: 4.18.0-348.12.2.el8_5.x86_64 <img align="right" width = "200" src="imatges/redhat_logo.png" alt="redhat_logo"/>
  - Architecture x86_64
  - CPE OS NAME: cpe:/o:redhat:enterprise_linux:8::baseos
  - 2 GB RAM
