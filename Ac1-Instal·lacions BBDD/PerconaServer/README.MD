@@ -349,7 +349,7 @@ de Percona Server en el sistema operatiu?
 
 ### WEBGRAFIA
 - <a href="https://www.percona.com/doc/percona-server/8.0/installation/yum_repo.html" target="_blank">Instal·lació Percona Server</a>.
-- <a href="https://www.percona.com/doc/percona-server/8.0/installation/yum_repo.html">Post Instal·lació</a>.
-- <a href="https://forums.percona.com/t/default-password-after-installing-in-centos7/4838">Obtenir contrasenya Root Generada</a>.
-- <a href="https://bgasparotto.com/enable-mysql-remote-access">Accés Remot MySQL</a>.
-- <a href="https://dev.mysql.com/doc/refman/5.7/en/password-security-user.html">MySQL Auto Login</a>.
+- <a href="https://www.percona.com/doc/percona-server/8.0/installation/yum_repo.html" target="_blank">Post Instal·lació</a>.
+- <a href="https://forums.percona.com/t/default-password-after-installing-in-centos7/4838" target="_blank">Obtenir contrasenya Root Generada</a>.
+- <a href="https://bgasparotto.com/enable-mysql-remote-access" target="_blank">Accés Remot MySQL</a>.
+- <a href="https://dev.mysql.com/doc/refman/5.7/en/password-security-user.html" target="_blank">MySQL Auto Login</a>.
