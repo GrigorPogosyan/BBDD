@@ -291,6 +291,65 @@ de Percona Server en el sistema operatiu?
     CREATE USER IF NOT EXISTS asix IDENTIFIED BY 'patata';
     ```
     <details open>
-    <summary>Screenshot <b>(MySQL usuari ASIX)</b></summary>
+    <summary>Screenshot <b>(MySQL usuari asix)</b></summary>
     <img src="captures/mysql_asix_user.png">
     </details>
+
+    Ara ens loguejarem amb el usuari asix que hem creat.
+    I ens situarem en el directori personal `/home/asix`
+    ```
+    # cd /home/asix
+    # pwd
+    /home/asix
+    ```
+    Crearem l'arxiu `.my.cnf` (fitxer ocult)
+    ```
+    # nano .my.cnf
+    ```
+    I dintre escriurem lo següent:
+    ```
+    [CLIENT]
+    password = patata
+    ``` 
+    <details open>
+    <summary>Screenshot <b>(.my.cnf configuration)</b></summary>
+    <img src="captures/client_user.png">
+    </details>
+
+    Ara definirem uns permisos al fitxer perquè sigui lo menys accessible per la resta possible, ja que conté la nostra PASSWORD.
+    ```
+    chmod 600 .my.cnf
+    ```
+    I al fer MySQL des d'aquest usuari que hem configurat entraria automàticament.
+    ```
+    mysql
+    ```
+    <details open>
+    <summary>Screenshot <b>(.my.cnf configuration)</b></summary>
+    <img src="captures/auto_login.png">
+    </details>
+
+6. El servei de MySQL (mysqld) escolta al port 3306. Quina modificació/passos caldrien fer per canviar aquest port a 33306 per exemple? Important: No realitzis els canvis. Només indica els passos que faries.
+
+    Primer de tot aniriem a l'arxiu de configuració del SGBD.
+    ```
+    # nano /etc/my.cnf
+    ```
+
+    I afegiriem el següent text. ( Si no hi ha aquesta opció escrita per defecte està en 3306, al escriure una nosaltres aquesta agafa la prioritat.)
+    ```
+    port = 33306
+    ```
+    <details open>
+    <summary>Screenshot <b>(my.cnf canviar port)</b></summary>
+    <img src="captures/change_port.png">
+    </details>
+
+<hr>
+
+### WEBGRAFIA
+- <a href="https://www.percona.com/doc/percona-server/8.0/installation/yum_repo.html">Instal·lació Percona Server</a>.
+- <a href="https://www.percona.com/doc/percona-server/8.0/installation/yum_repo.html">Post Instal·lació</a>.
+- <a href="https://forums.percona.com/t/default-password-after-installing-in-centos7/4838">Obtenir contrasenya Root Generada</a>.
+- <a href="https://bgasparotto.com/enable-mysql-remote-access">Accés Remot MySQL</a>.
+- <a href="https://dev.mysql.com/doc/refman/5.7/en/password-security-user.html">MySQL Auto Login</a>.
