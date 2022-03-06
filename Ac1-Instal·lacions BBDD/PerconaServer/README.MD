@@ -348,7 +348,7 @@ de Percona Server en el sistema operatiu?
 <hr>
 
 ### WEBGRAFIA
-- [Instal·lació Percona Server](https://www.percona.com/doc/percona-server/8.0/installation/yum_repo.html)
+- [Instal·lació Percona Server](https://www.percona.com/doc/percona-server/8.0/installation/yum_repo.html:target="blank")
 - <a href="https://www.percona.com/doc/percona-server/8.0/installation/yum_repo.html" target="_blank">Post Instal·lació</a>.
 - <a href="https://forums.percona.com/t/default-password-after-installing-in-centos7/4838" target="_blank">Obtenir contrasenya Root Generada</a>.
 - <a href="https://bgasparotto.com/enable-mysql-remote-access" target="_blank">Accés Remot MySQL</a>.
