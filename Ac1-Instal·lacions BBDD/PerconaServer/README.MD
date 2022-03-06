@@ -14,7 +14,7 @@ ssh machineuser@ip
 ### Actualització dels Paquets del Sistema
 Després, actualitzarem els nostres paquets del sistema.
 ```
-yum update && yum upgrade
+# yum update && yum upgrade
 ```
 <details open>
 <summary>Screenshot <b>(OS Upgrade)</b></summary>
@@ -25,7 +25,7 @@ yum update && yum upgrade
 ### Instal·lació des del Repositori
 1. Començarem instal·lant el Repositori de Percona Server per MySQL amb la següent comanda amb un usuari **root** o **sudo**.
 ```
-sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+# sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 ```
 <details open>
 <summary>Screenshot <b>(Installing Percona)</b></summary>
@@ -43,7 +43,7 @@ sudo percona-release setup ps80 -y
 
 3. Instal·lem els paquets (Percona Server)
 ```
-sudo yum install percona-server-server
+# sudo yum install percona-server-server
 ```
 <details open>
 <summary>Screenshot <b>(Installation Packages)</b></summary>
@@ -60,7 +60,7 @@ Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir
 
 1. Primer de tot encendrem el servei de MySQL.
 ```
-sudo systemctl start mysqld
+# sudo systemctl start mysqld
 ```
 <details open>
 <summary>Screenshot <b>(Start Mysqld)</b></summary>
@@ -69,7 +69,7 @@ sudo systemctl start mysqld
 
 2. Posteriorment configurarem que MySQL s'inic al iniciar el Sistema operatiu
 ```
-sudo systemctl enable mysqld
+# sudo systemctl enable mysqld
 ```
 <details open>
 <summary>Screenshot <b>(Enable Mysqld)</b></summary>
@@ -78,7 +78,7 @@ sudo systemctl enable mysqld
 
 3. Comprovació del estat del servei **mysqld**
 ```
-sudo systemctl status mysqld
+# sudo systemctl status mysqld
 ```
 <details open>
 <summary>Screenshot <b>(Status Mysqld)</b></summary>
@@ -87,7 +87,7 @@ sudo systemctl status mysqld
 
 4. Obtenir la contrasenya del **Root del MySQL** que es genera per defecte en els logs.
 ```
-cat /var/log/mysqld.log | grep generated
+# cat /var/log/mysqld.log | grep generated
 ```
 <details open>
 <summary>Screenshot <b>(Password Generated)</b></summary>
@@ -101,7 +101,7 @@ cat /var/log/mysqld.log | grep generated
     > - Elimina la Base de Dades de Test.
     > - Reinicia els permisos de les Taules.
 ```
-mysql_secure_installation
+# mysql_secure_installation
 ```
 <details open>
 <summary>Screenshot <b>(Root Password)</b></summary>
@@ -114,7 +114,7 @@ mysql_secure_installation
 
 6. Arribat en aquest punt, procedirem a mirar la versió del MySQL instal·lat.
 ```
-sudo mysqladmin -u root -p version
+# sudo mysqladmin -u root -p version
 ```
 <details open>
 <summary>Screenshot <b>(Check Version)</b></summary>
@@ -151,11 +151,11 @@ Tal com ho tenim ara configurat:
 # mysql -u root -p
 [root password]
 
-# CREATE USER 'new_user'@'%' IDENTIFIED BY 'P4SSW0RD';
+mysql> CREATE USER 'new_user'@'%' IDENTIFIED BY 'P4SSW0RD';
 
-# GRANT ALL PRIVILEGES ON *.* TO 'new_user'@'%';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'new_user'@'%';
 
-# FLUSH PRIVILEGES;
+mysql> FLUSH PRIVILEGES;
 ```
 <details open>
 <summary>Screenshot <b>(MySQL Access)</b></summary>
@@ -207,26 +207,26 @@ Tal com ho tenim ara configurat:
 de Percona Server en el sistema operatiu?
 > Per arrancar el Servei
 > ```
->systemctl start mysqld
+># systemctl start mysqld
 > ```
 
 > Per verificar el Status del Servei
 > ```
-> systemctl status mysqld
+> # systemctl status mysqld
 > ```
 
 > Per apagar el Servei
 > ```
-> systemctl stop mysqld
+> # systemctl stop mysqld
 > ```
 
 3. A on es troba i quin nom rep el fitxer de configuració del SGBD Percona Server?
 
     Es troba a /etc i  el fitxer rep el nom de my.cnf
     
-    Ruta:
+    Com accedir:
     ```
-    /etc/my.cnf
+    # cd /etc/my.cnf
     ```
 
 4. A on es troben físicament els fitxers de dades (per defecte). Com ho has sabut?
@@ -234,7 +234,7 @@ de Percona Server en el sistema operatiu?
     Es troben a `/usr/mysql/data` ho sabem perquè en el fitxer /etc/my.cnf hi ha una variable de "datadir" on crida aquesta ruta.
 
     ```
-    cat /etc/my.cnf
+    # cat /etc/my.cnf
     ```
     <details open>
     <summary>Screenshot <b>(Lloc del Fitxer my.cnf on ens diu la ruta del directori dels fitxers)</b></summary>
@@ -243,7 +243,7 @@ de Percona Server en el sistema operatiu?
 
     I si veiem els passos anteriors vam crear una base de dades de prova nomenada github, on hauria de sortir al llistar el contingut d'aquesta ruta.
     ```
-    ls /var/lib/mysql
+    # ls /var/lib/mysql
     ```
     <details open>
     <summary>Screenshot <b>(Es veu el lloc on es guarden els fitxers de dades (i podrem veure la nostra BBDD creada))</b></summary>
@@ -252,7 +252,7 @@ de Percona Server en el sistema operatiu?
 
     I ara si creem en la BBDD de github una taula, ens apareix la manera en que ho guarda.
     ```
-    ls /var/lib/mysql/github
+    # ls /var/lib/mysql/github
     ```
     <details open>
     <summary>Screenshot <b>(Com es guarden les nostres taules)</b></summary>
@@ -263,11 +263,11 @@ de Percona Server en el sistema operatiu?
 
     Crearem i li establirem al usuari una contrasenya (SO).
     ```
-    useradd asix
+    # useradd asix
     ```
     
     ```
-    passwd asix
+    # passwd asix
     ```
 
     Ara, per posar una contrasenya feble en el MySQL, hem de baixar el nivell de seguretat afegint les següents línies al final del fitxer de configuració `/etc/my.cnf` i desprès reiniciarem el servei de `mysqld`.
@@ -283,12 +283,12 @@ de Percona Server en el sistema operatiu?
 
     I reiniciarem el servei per a que s'apliquin els canvis.
     ```
-    systemctl restart mysqld
+    # systemctl restart mysqld
     ```
 
     Crearem el mateix usuari en el MySQL des de Root.
     ```
-    CREATE USER IF NOT EXISTS asix IDENTIFIED BY 'patata';
+    mysql> CREATE USER IF NOT EXISTS asix IDENTIFIED BY 'patata';
     ```
     <details open>
     <summary>Screenshot <b>(MySQL usuari asix)</b></summary>
@@ -318,11 +318,11 @@ de Percona Server en el sistema operatiu?
 
     Ara definirem uns permisos al fitxer perquè sigui lo menys accessible per la resta possible, ja que conté la nostra PASSWORD.
     ```
-    chmod 600 .my.cnf
+    # chmod 600 .my.cnf
     ```
     I al fer MySQL des d'aquest usuari que hem configurat entraria automàticament.
     ```
-    mysql
+    # mysql
     ```
     <details open>
     <summary>Screenshot <b>(.my.cnf configuration)</b></summary>
