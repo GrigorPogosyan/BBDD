@@ -259,16 +259,17 @@ de Percona Server en el sistema operatiu?
     <img src="captures/table_proves.png">
     </details>
 
-5. Crea un usuari anomenat asix en el sistema operatiu i en SGBD de tal manera que aquest usuari del sistema operatiu no hagi d'introduir l'usuari i password cada vegada que cridem al
-client mysql?
+5. Crea un usuari anomenat asix en el sistema operatiu i en SGBD de tal manera que aquest usuari del sistema operatiu no hagi d'introduir l'usuari i password cada vegada que cridem al client mysql?
 
-     Crearem i li establirem al usuari una contrasenya (SO).
+    Crearem i li establirem al usuari una contrasenya (SO).
     ```
     useradd asix
     ```
+    
     ```
     passwd asix
     ```
+
     Ara, per posar una contrasenya feble en el MySQL, hem de baixar el nivell de seguretat afegint les següents línies al final del fitxer de configuració `/etc/my.cnf` i desprès reiniciarem el servei de `mysqld`.
     ```
     ...
@@ -276,10 +277,20 @@ client mysql?
     validate.password.length=4
     ```
     <details open>
-    <summary>Screenshot <b>(Configurar el nivell de)</b></summary>
+    <summary>Screenshot <b>(Configurar el nivell de seguretat de la password)</b></summary>
     <img src="captures/pass_low.png">
     </details>
+
+    I reiniciarem el servei per a que s'apliquin els canvis.
+    ```
+    systemctl restart mysqld
+    ```
 
     Crearem el mateix usuari en el MySQL des de Root.
     ```
     CREATE USER IF NOT EXISTS asix IDENTIFIED BY 'patata';
+    ```
+    <details open>
+    <summary>Screenshot <b>(MySQL usuari ASIX)</b></summary>
+    <img src="captures/mysql_asix_user.png">
+    </details>
