@@ -344,6 +344,11 @@ de Percona Server en el sistema operatiu?
     <summary>Screenshot <b>(my.cnf canviar port)</b></summary>
     <img src="captures/change_port.png">
     </details>
+    I després reiniciariem el Servei.
+
+    ```
+    # systemctl restart mysqld
+    ```
 
 <hr>
 
