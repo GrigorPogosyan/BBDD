@@ -1,7 +1,7 @@
 # M02 Base de Dades
 
 ### Apartats Disponibles:
-- [Instal·lacions dels SGBD]("Ac1-Instal·lacions-SGBD/)
+- [Instal·lacions dels SGBD](Ac1-Instal·lacions-SGBD/)
 
 
 <hr>
