@@ -1,6 +1,6 @@
 # Instal·lació Percona Server 8.0 <img align="right" width="200" src="captures/percona_logo.png"/>
 
-### Connexió per SSH al Sistema
+## Connexió per SSH al Sistema
 Primer de tot, ens connectarem a la màquina per **SSH** desde CMD (ho tenim prèviament instal·lat).
 ```
 ssh machineuser@ip 
@@ -11,7 +11,7 @@ ssh machineuser@ip
 </details>
 
 
-### Actualització dels Paquets del Sistema
+## Actualització dels Paquets del Sistema
 Després, actualitzarem els nostres paquets del sistema.
 ```
 # yum update && yum upgrade
@@ -22,7 +22,7 @@ Després, actualitzarem els nostres paquets del sistema.
 </details>
 <hr>
 
-### Instal·lació des del Repositori
+## Instal·lació des del Repositori
 1. Començarem instal·lant el Repositori de Percona Server per MySQL amb la següent comanda amb un usuari **root** o **sudo**.
 ```
 # sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
@@ -34,7 +34,7 @@ Després, actualitzarem els nostres paquets del sistema.
 
 2. Activarem el Repositori Instal·lat de Percona.
 ```
-sudo percona-release setup ps80 -y
+# sudo percona-release setup ps80 -y
 ```
 <details open>
 <summary>Screenshot <b>(Enable Repository)</b></summary>
@@ -55,7 +55,7 @@ sudo percona-release setup ps80 -y
 </details>
 <hr>
 
-### Post Instal·lació
+## Post Instal·lació
 Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir correctament modificat i montar el nostre Percona Server
 
 1. Primer de tot encendrem el servei de MySQL.
