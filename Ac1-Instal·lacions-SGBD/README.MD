@@ -1,5 +1,4 @@
 # INSTAL·LACIONS SISTEMES GESTORS DE BASES DE DADES 
-<img align="right" width="100" height="100" src="imatges/bbdd_logo.png" alt="bbdd_logo"/>
 
 - [Percona Server 8.0](Percona-Server8.0/)
 -  MySQL 8.0

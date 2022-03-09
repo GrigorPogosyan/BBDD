@@ -1,6 +1,6 @@
 # M02 Base de Dades
 
-### Apartats Disponibles:
+### Apartats Disponibles: <img align="right" width="100" height="100" src="Ac1-Instal·lacions-SGBD/imatges/bbdd_logo.png" alt="bbdd_logo"/>
 - [Instal·lacions dels SGBD](Ac1-Instal·lacions-SGBD/)
 
 
