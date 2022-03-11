@@ -2,21 +2,21 @@
 
 
 <div style="display:flex; flex-direction: row; justify-content: space-around;">
-        <p style="display:flex; flex-direction: column; justify-content: center; align-items: center">
+        <div style="display:flex; flex-direction: column; justify-content: center; align-items: center">
         Percona Server 8.0
         <br><br>
         <img width = "110" src="imatges/percona_logo.png" />
-        </p>
-        <p style="display:flex; flex-direction: column; justify-content: center; align-items: center">
+        </div>
+        <div style="display:flex; flex-direction: column; justify-content: center; align-items: center">
         MySQL 8.0
         <br><br>
         <img width = "60" src="imatges/mysql_logo.png" />
-        </p>
-        <p style="display:flex; flex-direction: column; justify-content: center; align-items: center">
+        </div>
+        <div style="display:flex; flex-direction: column; justify-content: center; align-items: center">
         Mongo DB
         <br><br>
         <img width = "85" src="imatges/mongo_logo.png" />
-        </p>
+        </div>
 </div>        
 <hr>
 
