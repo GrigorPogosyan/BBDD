@@ -1,11 +1,23 @@
 # INSTAL·LACIONS SISTEMES GESTORS DE BASES DE DADES 
 
 
-<div style="display:flex; flex-direction: row; justify-content: space-evenly;">
-        <div>Percona Server 8.0</div>
-        <div>MySQL 8.0</div>
-        <div>Mongo DB</div>
-      </div>
+<div style="display:flex; flex-direction: row; justify-content: space-around;">
+        <p style="display:flex; flex-direction: column; justify-content: center; align-items: center">
+        Percona Server 8.0
+        <br><br>
+        <img width = "110" src="imatges/percona_logo.png" />
+        </p>
+        <p style="display:flex; flex-direction: column; justify-content: center; align-items: center">
+        MySQL 8.0
+        <br><br>
+        <img width = "60" src="imatges/mysql_logo.png" />
+        </p>
+        <p style="display:flex; flex-direction: column; justify-content: center; align-items: center">
+        Mongo DB
+        <br><br>
+        <img width = "85" src="imatges/mongo_logo.png" />
+        </p>
+</div>        
 <hr>
 
 ### Característiques de la Màquina Virtual Utilitzada <img width=40 height=40 src="imatges/vmware_logo.png" alt="vmware_logo"/>:
