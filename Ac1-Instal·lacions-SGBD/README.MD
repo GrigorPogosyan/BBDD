@@ -1,8 +1,11 @@
 # INSTAL·LACIONS SISTEMES GESTORS DE BASES DE DADES 
-<img align="right" width="100" height="100" src="imatges/bbdd_logo.png" alt="bbdd_logo"/>
 
-- [Percona Server 8.0](Percona-Server8.0/)
--  MySQL 8.0
+
+<div style="display:flex; flex-direction: row; justify-content: space-evenly;">
+        <div>Percona Server 8.0</div>
+        <div>MySQL 8.0</div>
+        <div>Mongo DB</div>
+      </div>
 <hr>
 
 ### Característiques de la Màquina Virtual Utilitzada <img width=40 height=40 src="imatges/vmware_logo.png" alt="vmware_logo"/>:
