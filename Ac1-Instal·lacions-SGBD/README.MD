@@ -1,7 +1,7 @@
 # INSTAL·LACIONS SISTEMES GESTORS DE BASES DE DADES 
 
 
-<div style="display:flex; flex-direction: row; justify-content: space-around;">
+<div align:center>
         <div style="display:flex; flex-direction: column; justify-content: center; align-items: center">
         Percona Server 8.0
         <br><br>
