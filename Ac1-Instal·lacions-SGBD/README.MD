@@ -1,7 +1,7 @@
 # INSTAL·LACIONS SISTEMES GESTORS DE BASES DE DADES 
 
-<div style="display:flex; flex-direction: row; justify-content: space-around;">
-        <div style="display:flex; flex-direction: row; justify-content: center; align-items: center">
+<div align = "center">
+        <div>
         <img  width = 90 src="imatges/mongo_logo.png"/>
         <img  width = 90 src="imatges/mongo_logo.png"/>
         <img  width = 90 src="imatges/mongo_logo.png"/>
