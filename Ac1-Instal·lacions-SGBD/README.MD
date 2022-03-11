@@ -1,10 +1,12 @@
 # INSTAL·LACIONS SISTEMES GESTORS DE BASES DE DADES 
 
+
 <div align = "center">
+       <p style="margin-left: -250px">dd</p> 
         <div>
-        <img  width = 90 src="imatges/mongo_logo.png"/>
-        <img  width = 90 src="imatges/mongo_logo.png"/>
-        <img  width = 90 src="imatges/mongo_logo.png"/>
+        <img  width = 150 src="imatges/percona_logo.png"/>
+        <img  width = 90 src="imatges/mysql_logo.png"/>
+        <img  width = 135 src="imatges/mongo_logo.png"/>
         </div>
 </div>  
 
