@@ -1,12 +1,8 @@
 # INSTAL·LACIONS SISTEMES GESTORS DE BASES DE DADES 
 
-
-<div style="display:flex; flex-direction: row; justify-content: space-evenly;">
-        <div>Percona Server 8.0</div>
-        <div>MySQL 8.0</div>
-        <div>Mongo DB</div>
-</div>
-
+## ÍNDEX
+>[Percona Server 8.0](Percona-Server8.0/) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[MySQL 8.0](MySQL8.0/)<br><br>
+<img src ="imatges/percona_logo.png" width = 150/>
 
 <hr>
 
