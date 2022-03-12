@@ -56,7 +56,7 @@ Després, actualitzarem els nostres paquets del sistema.
 <hr>
 
 ## Post Instal·lació
-Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir correctament modificat i montar el nostre Percona Server
+Al acabar la instal·lació cal que fem un seguit de passos per acabar de tenir correctament configurat i montat el nostre Percona Server.
 
 1. Primer de tot encendrem el servei de MySQL.
 ```
@@ -95,6 +95,7 @@ Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir
 </details>
 
 5. Farem el secure_installation per **millorar la seguretat** del nostre servidor, el Script que executarem fa lo següent:
+
     > - Canvia la contrassenya **Root**.
     > - **Inhabilita la connexió** remota a la BBDD per l'usuari **Root**.
     > - Elimina els usuaris anónims.

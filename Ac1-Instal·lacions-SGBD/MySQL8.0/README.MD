@@ -45,7 +45,7 @@ Després, actualitzarem els nostres paquets del nostre sistema.
 # sudo dnf config-manager --enable mysql80-community
 ```
 
-4. A partir dels sistemes RHEL8 en els sistemes operatius hi ha un mòdul activat per defecte de MySQL, on enmascara tots els paquets de MySQL, llavors haurem de deshabilitar aquest mòdul per fer visibles els paquets del repositori de MySQL.
+4. A partir dels sistemes RHEL8 en posterior hi ha un mòdul activat per defecte de MySQL, on enmascara tots els paquets de MySQL, llavors haurem de deshabilitar aquest mòdul per fer visibles els paquets del repositori de MySQL.
 
 ```
 # sudo yum module disable mysql -y
@@ -55,7 +55,77 @@ Després, actualitzarem els nostres paquets del nostre sistema.
 <img src="captures/disable_default_module.png">
 </details>
 
-5. 
+5. I ara sí que podem instal·lar el MySQL amb les seves dependències en el nostre sistema.
+```
+# sudo yum install mysql-community-server -y
+```
+<details open>
+<summary><b>Instal·lació MySQL</b></summary>
+<img src="captures/install_mysql.png">
+</details>
+
+<details open>
+<summary><b>Instal·lació Feta Correctament</b></summary>
+<img src="captures/install_mysql2.png">
+</details>
+
+<hr>
+
+## Post Instal·lació
+Al acabar la instal·lació cal que fem un seguit de passos per acabar de tenir correctament configurat i montat el nostre MySQL Server 8.0.
+
+1. Primer de tot encendrem el nostre servei de MySQL i comprovarem el seu estat, ha d'estar en <span style="color:green">active running</span>.
+```
+# sudo systemctl start mysqld
+
+# sudo systemctl status mysqld
+```
+<details open>
+<summary><b>Iniciem el servei Mysqld</b></summary>
+<img src="captures/start_mysqld.png">
+</details>
+
+<details open>
+<summary><b>Comprovem l'estat del servei.</b></summary>
+<img src="captures/status_mysqld.png">
+</details>
+
+2. Per defecte al instal·lar el MySQL, en els logs s'ha generat la contrasenya del Root per poder accedir-hi, llavors filtrarem aquest apartat dels logs per veure la contrasenya.
+```
+# sudo grep 'temporary password' /var/log/mysqld.log
+```
+<details open>
+<summary><b>Obtenir la contrasenya Root dels Logs.</b></summary>
+<img src="captures/grep_root_password.png">
+</details>
+
+3. Ara executarem el script <span style="color:yellow">mysql_secure_installation</span>, millorar la seguretat del nostre MySQL instal·lat on haurem de configurar els següents apartats.
+
+    > - Canvia la contrasenya del Root.
+    > - Treure el accés remot per l'usuari Root.
+    > - Treure els usuaris anonims.
+    > - Treure la base de dades test on per defect poden accedir tots els usuaris i els anonims, i també reiniciar els privilegis de les bases de dades que comencin per "test_.".
+
+    Executarem el mysql_secure_installation.
+    ```
+    # sudo mysql_secure_installation
+    ```
+    I configurarem les opcions que venen a continuació.
+    <details open>
+    <summary><b>Opció 1:  Canviar Contrasenya Root.</b></summary>
+    <img src="captures/mysql_secure1.png">
+    </details>
+
+    <details open>
+    <summary><b>Opció 2: Eliminar usuaris anonims.</b></summary>
+    <img src="captures/mysql_secure1.png">
+    </details>
+    
+    
+
+
+
+
 
 
 
