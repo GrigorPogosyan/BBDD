@@ -24,9 +24,9 @@ Després, actualitzarem els nostres paquets del nostre sistema.
 ## Instal·lació des del Repositori
 1. Començarem instal·lant el Repositori de MySQL 8.0 amb la següent comanda amb un usuari **root** o amb**sudo**.
 ```
-# sudo yum install https://repo.mysql.com/mysql80-community-release-el8-3.noarch.rpm
+# sudo yum install https://repo.mysql.com/mysql80-community-release-el8-3.noarch.rpm -y
 ```
 <details open>
-<summary>Screenshot <b>(Instal)</b></summary>
-<img src="captures/install_percona.png">
+<summary><b>Instal·lant el Repositori de MySQL 8.0</b></summary>
+<img src="captures/install_repository_mysql.png">
 </details>
