@@ -136,7 +136,7 @@ Al acabar la instal·lació cal que fem un seguit de passos per acabar de tenir 
     <img src="captures/mysql_secure5.png">
     </details>
 
-4. Arribat en aquest punt, ja tenim configurat la base de MySQL, si volem podem veure quina versió s'ha instal·lat ho podrem fer
+4. Arribat en aquest punt, ja tenim configurat la base de MySQL, si volem podem veure quina versió s'ha instal·lat ho podrem fer.
     ```
     # sudo mysqladmin -u root -p version
     (root password)
