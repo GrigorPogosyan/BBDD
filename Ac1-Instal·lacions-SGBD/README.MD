@@ -1,12 +1,11 @@
 # INSTAL·LACIONS SISTEMES GESTORS DE BASES DE DADES 
 
+## ÍNDEX
+[Percona Server 8.0](Percona-Server8.0/) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[MySQL 8.0](MySQL8.0/)<br><br>
+<a href="Percona-Server8.0/"><img src ="imatges/percona_logo.png" width = 150/></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="MySQL8.0/"><img src ="imatges/mysql_logo.png" width = 85/></a>
 
-<div style="display:flex; flex-direction: row; justify-content: space-evenly;">
-        <div>Percona Server 8.0</div>
-        <div>MySQL 8.0</div>
-        <div>Mongo DB</div>
-      </div>
 <hr>
+
 
 ### Característiques de la Màquina Virtual Utilitzada <img width=40 height=40 src="imatges/vmware_logo.png" alt="vmware_logo"/>:
  - Linux Red Hat 8.5 (Enterprise 8.5 Ootpa)
