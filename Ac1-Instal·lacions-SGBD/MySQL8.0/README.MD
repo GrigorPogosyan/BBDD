@@ -91,13 +91,13 @@ Al acabar la instal·lació cal que fem un seguit de passos per acabar de tenir 
 </details>
 
 2. Per defecte al instal·lar el MySQL, en els logs s'ha generat la contrasenya del Root per poder accedir-hi, llavors filtrarem aquest apartat dels logs per veure la contrasenya.
-```
-# sudo grep 'temporary password' /var/log/mysqld.log
-```
-<details open>
-<summary><b>Obtenir la contrasenya Root dels Logs.</b></summary>
-<img src="captures/grep_root_password.png">
-</details>
+    ```
+    # sudo grep 'temporary password' /var/log/mysqld.log
+    ```
+    <details open>
+    <summary><b>Obtenir la contrasenya Root dels Logs.</b></summary>
+    <img src="captures/grep_root_password.png">
+    </details>
 
 3. Ara executarem el script <span style="color:yellow">mysql_secure_installation</span>, millorar la seguretat del nostre MySQL instal·lat on haurem de configurar els següents apartats.
 
@@ -136,7 +136,7 @@ Al acabar la instal·lació cal que fem un seguit de passos per acabar de tenir 
     <img src="captures/mysql_secure5.png">
     </details>
 
-4. Arribat en aquest punt, ja tenim configurat la base de MySQL, si volem podem veure quina versió s'ha instal·lat ho podrem fer
+4. Arribat en aquest punt, ja tenim configurat la base de MySQL, si volem podem veure quina versió s'ha instal·lat ho podrem fer.
     ```
     # sudo mysqladmin -u root -p version
     (root password)
