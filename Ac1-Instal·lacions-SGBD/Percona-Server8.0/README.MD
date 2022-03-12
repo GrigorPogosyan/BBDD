@@ -6,7 +6,7 @@ Primer de tot, ens connectarem a la màquina per **SSH** desde CMD (ho tenim pr�
 ssh machineuser@ip 
 ```
 <details open>
-<summary>Screenshot <b>(Connection SSH)</b></summary>
+<summary><b>Connexió per SSH</b></summary>
 <img src="captures/ssh.png">
 </details>
 
@@ -17,7 +17,7 @@ Després, actualitzarem els nostres paquets del sistema.
 # yum update && yum upgrade
 ```
 <details open>
-<summary>Screenshot <b>(OS Upgrade)</b></summary>
+<summary><b>Actualitzant paquets</b></summary>
 <img src="captures/upgrade.png">
 </details>
 <hr>
@@ -28,7 +28,7 @@ Després, actualitzarem els nostres paquets del sistema.
 # sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
 ```
 <details open>
-<summary>Screenshot <b>(Installing Percona)</b></summary>
+<summary><b>Instal·lant Repositori Percona</b></summary>
 <img src="captures/install_percona.png">
 </details>
 
@@ -37,7 +37,7 @@ Després, actualitzarem els nostres paquets del sistema.
 # sudo percona-release setup ps80 -y
 ```
 <details open>
-<summary>Screenshot <b>(Enable Repository)</b></summary>
+<summary><b>Activar Repositori</b></summary>
 <img src="captures/enable_repository.png">
 </details>
 
@@ -46,11 +46,11 @@ Després, actualitzarem els nostres paquets del sistema.
 # sudo yum install percona-server-server
 ```
 <details open>
-<summary>Screenshot <b>(Installation Packages)</b></summary>
+<summary><b>Instal·lació Paquets</b></summary>
 <img src="captures/install_packages.png">
 </details>...
 <details open>
-<summary>Screenshot <b>(Installation Packages Part 2)</summary>
+<summary><b>Instal·lació Paquets Part 2</summary>
 <img src="captures/install_packages2.png">
 </details>
 <hr>
@@ -63,7 +63,7 @@ Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir
 # sudo systemctl start mysqld
 ```
 <details open>
-<summary>Screenshot <b>(Start Mysqld)</b></summary>
+<summary><b>Iniciant el servei mysqld</b></summary>
 <img src="captures/start_mysqld.png">
 </details>
 
@@ -72,7 +72,7 @@ Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir
 # sudo systemctl enable mysqld
 ```
 <details open>
-<summary>Screenshot <b>(Enable Mysqld)</b></summary>
+<summary><b>Inici amb el sistema</b></summary>
 <img src="captures/enable_mysqld.png">
 </details>
 
@@ -81,7 +81,7 @@ Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir
 # sudo systemctl status mysqld
 ```
 <details open>
-<summary>Screenshot <b>(Status Mysqld)</b></summary>
+<summary><b>Veure estat mysqld</b></summary>
 <img src="captures/active_mysqld.png">
 </details>
 
@@ -90,7 +90,7 @@ Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir
 # cat /var/log/mysqld.log | grep generated
 ```
 <details open>
-<summary>Screenshot <b>(Password Generated)</b></summary>
+<summary><b>Veure Contrasenya Generada Root</b></summary>
 <img src="captures/password_generated.png">
 </details>
 
@@ -104,11 +104,11 @@ Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir
 # mysql_secure_installation
 ```
 <details open>
-<summary>Screenshot <b>(Root Password)</b></summary>
+<summary><b>Canviar la contrasenya Root</b></summary>
 <img src="captures/secure1.png">
 </details>
 <details open>
-<summary>Screenshot <b>(Disallow Remote Conection Root + Remove Anonymous Users + Remove Database and Privileges Test + Reloading Tables Privileges)</b></summary>
+<summary><b>Treure Connexió Remota Root + Eliminar Usuaris Anónims + Eliminar les taules per defectes amb els seus privilegis i reiniciar privilegis sobre les taules</b></summary>
 <img src="captures/secure2.png">
 </details>
 
@@ -117,7 +117,7 @@ Al acabar la instal·lació cal que ferm un seguit de passos per acabar de tenir
 # sudo mysqladmin -u root -p version
 ```
 <details open>
-<summary>Screenshot <b>(Check Version)</b></summary>
+<summary><b>Veure versió Percona</b></summary>
 <img src="captures/check_version.png">
 </details>
 <hr>
@@ -130,7 +130,7 @@ Tal com ho tenim ara configurat:
 - Firewall Configurat. ❌
 - Usuari MySQL amb el qual poder accedir-hi des de qualsevol màquina. ❌
 
-1. Procedirem a configurar el Firewall per poder accedir al MySQL del Percona Server Remotament.
+1. Procedirem a configurar el Firewall per poder accedir al MySQL del Percona Server Remotament, configurarem la regla i reiniciarem el servei per a que s'apliquin els canvis.
 
 ```
 # sudo firewall-cmd --zone=public --add-port=3306/tcp --permanent
@@ -138,11 +138,11 @@ Tal com ho tenim ara configurat:
 # sudo systemctl restart firewalld.service
 ```
 <details open>
-<summary>Screenshot <b>(Firewall Configuration)</b></summary>
+<summary><b>Configurar Firewall</b></summary>
 <img src="captures/configure_firewall.png">
 </details>
 <details open>
-<summary>Screenshot <b>(Check Firewall Conf)</b></summary>
+<summary><b>Veure configuració Firewall</b></summary>
 <img src="captures/check_firewall.png">
 </details>
 
@@ -158,36 +158,36 @@ mysql> GRANT ALL PRIVILEGES ON *.* TO 'new_user'@'%';
 mysql> FLUSH PRIVILEGES;
 ```
 <details open>
-<summary>Screenshot <b>(MySQL Access)</b></summary>
+<summary><b>Accés al MySQL</b></summary>
 <img src="captures/acced_to_mysql.png">
 </details>
 
 <details open>
-<summary>Screenshot <b>(MySQL Create User)</b></summary>
+<summary><b>Crear Usuari MySQL</b></summary>
 <img src="captures/create_user.png">
 </details>
 
 <details open>
-<summary>Screenshot <b>(MySQL Grant Privileges User)</b></summary>
+<summary><b>Permisos Usuari MySQL</b></summary>
 <img src="captures/user_privileges.png">
 </details>
 
 <details open>
-<summary>Screenshot <b>(MySQL Flush Privileges To Take Effect Now)</b></summary>
+<summary><b>Flush Privileges perquè els canvis s'apliquin ara.</b></summary>
 <img src="captures/flush_privileges.png">
 </details>
 
 3. Crearem una connexió cap a aquesta màquina des del Workbench
 <details open>
-<summary>Screenshot <b>(Creating Connection)</b></summary>
+<summary><b>Creant connexió</b></summary>
 <img src="captures/connection_wb.png">
 </details>
 <details open>
-<summary>Screenshot <b>(Acceding to MySQL)</b></summary>
+<summary><b>Accedint al MySQL</b></summary>
 <img src="captures/connection_wb2.png">
 </details>
 <details open>
-<summary>Screenshot <b>(Testing DB)</b></summary>
+<summary><b>Testejant el SGBD</b></summary>
 <img src="captures/create_db_test.png">
 </details>
 <hr>
@@ -199,7 +199,7 @@ mysql> FLUSH PRIVILEGES;
     ><span style="color:#6495ED">La securització s'ha fet en els passos anteriors de la Post Instal·lació, el programa que el realitza és el mysql_secure_installation, i el executable es troba al path `/usr/bin/mysql_secure_installation` i està dissenyat per establir alguns paràmetres inicials que són més segurs que els de la instal·lació en el nostre SO</span>.
 
     <details open>
-    <summary>Screenshot <b>(Path Mysql Secure Installation)</b></summary>
+    <summary><b>Ruta Script mysql_secure_installation</b></summary>
     <img src="captures/secure_program.png">
     </details>
 
@@ -237,7 +237,7 @@ de Percona Server en el sistema operatiu?
     # cat /etc/my.cnf
     ```
     <details open>
-    <summary>Screenshot <b>(Lloc del Fitxer my.cnf on ens diu la ruta del directori dels fitxers)</b></summary>
+    <summary><b>Lloc del Fitxer my.cnf on ens diu la ruta del directori dels fitxers</b></summary>
     <img src="captures/mycnf.png">
     </details>
 
@@ -246,7 +246,7 @@ de Percona Server en el sistema operatiu?
     # ls /var/lib/mysql
     ```
     <details open>
-    <summary>Screenshot <b>(Es veu el lloc on es guarden els fitxers de dades (i podrem veure la nostra BBDD creada))</b></summary>
+    <summary><b>Es veu el lloc on es guarden els fitxers de dades (i podrem veure la nostra BBDD creada)</b></summary>
     <img src="captures/mysqldata.png">
     </details>
 
@@ -255,7 +255,7 @@ de Percona Server en el sistema operatiu?
     # ls /var/lib/mysql/github
     ```
     <details open>
-    <summary>Screenshot <b>(Com es guarden les nostres taules)</b></summary>
+    <summary><b>Com es guarden les nostres taules</b></summary>
     <img src="captures/table_proves.png">
     </details>
 
@@ -277,7 +277,7 @@ de Percona Server en el sistema operatiu?
     validate.password.length=4
     ```
     <details open>
-    <summary>Screenshot <b>(Configurar el nivell de seguretat de la password)</b></summary>
+    <summary><b>Configurar el nivell de seguretat de la password</b></summary>
     <img src="captures/pass_low.png">
     </details>
 
@@ -291,7 +291,7 @@ de Percona Server en el sistema operatiu?
     mysql> CREATE USER IF NOT EXISTS asix IDENTIFIED BY 'patata';
     ```
     <details open>
-    <summary>Screenshot <b>(MySQL usuari asix)</b></summary>
+    <summary><b>MySQL Usuari asix</b></summary>
     <img src="captures/mysql_asix_user.png">
     </details>
 
@@ -312,7 +312,7 @@ de Percona Server en el sistema operatiu?
     password = patata
     ``` 
     <details open>
-    <summary>Screenshot <b>(.my.cnf configuration)</b></summary>
+    <summary><b>.my.cnf configuration</b></summary>
     <img src="captures/client_user.png">
     </details>
 
@@ -325,7 +325,7 @@ de Percona Server en el sistema operatiu?
     # mysql
     ```
     <details open>
-    <summary>Screenshot <b>(.my.cnf configuration)</b></summary>
+    <summary><b>Accedim sense que ens demani la password al MySQL</b></summary>
     <img src="captures/auto_login.png">
     </details>
 
@@ -341,7 +341,7 @@ de Percona Server en el sistema operatiu?
     port = 33306
     ```
     <details open>
-    <summary>Screenshot <b>(my.cnf canviar port)</b></summary>
+    <summary><b>my.cnf canviar port</b></summary>
     <img src="captures/change_port.png">
     </details>
     I després reiniciariem el Servei.
