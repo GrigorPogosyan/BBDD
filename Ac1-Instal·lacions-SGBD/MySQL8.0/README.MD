@@ -9,3 +9,15 @@ ssh machineuser@ip
 <summary>Screenshot <b>(Connection SSH)</b></summary>
 <img src="captures/ssh.png">
 </details>
+
+## Actualització dels Paquets del Sistema
+Després, actualitzarem els nostres paquets del nostre sistema.
+```
+# yum update && yum upgrade
+```
+<details open>
+<summary>Screenshot <b>(OS Upgrade)</b></summary>
+<img src="captures/upgrade.png">
+</details>
+<hr>
+
