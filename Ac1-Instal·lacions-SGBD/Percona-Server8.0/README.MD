@@ -22,7 +22,7 @@ Després, actualitzarem els nostres paquets del sistema.
 </details>
 <hr>
 
-## Instal·lació des del Repositori
+## Instal·lació Percona Server 8.0 des del Repositori
 1. Començarem instal·lant el Repositori de Percona Server per MySQL amb la següent comanda amb un usuari **root** o **sudo**.
 ```
 # sudo yum install https://repo.percona.com/yum/percona-release-latest.noarch.rpm
