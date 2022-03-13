@@ -11,7 +11,7 @@ ssh machineuser@ip
 </details>
 
 ## Actualització dels Paquets del Sistema
-Després, actualitzarem els nostres paquets del nostre sistema.
+Després, actualitzarem els nostres paquets del nostre sistema acceptant tots els inputs que ens vagi demanant.
 ```
 # sudo yum update && yum upgrade
 ```
