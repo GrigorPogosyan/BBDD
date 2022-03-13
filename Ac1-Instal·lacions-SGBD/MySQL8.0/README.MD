@@ -232,6 +232,7 @@ Llavors haurem de configurar els següents punts amb una ❌
     Es troba a la ruta **/etc/my.cnf**
 
     Podrem veure el seu contingut amb la comanda cat.
+    I com el seu nom indica és el arxiu de configuració, podrem configurar el path del directori de dades, canviar el port, el directori dels sockets, el directori dels logs, podrem configurar el nivell de contrasenya que volem que permeti el nostre MySQL, els buffers de les consultes...
 
     ```
     cat /etc/my.cnf
