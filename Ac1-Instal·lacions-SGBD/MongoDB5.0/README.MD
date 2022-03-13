@@ -9,3 +9,14 @@ ssh machineuser@ip
 <summary><b>Connexió per SSH</b></summary>
 <img src="captures/ssh.png">
 </details>
+
+## Actualització dels Paquets del Sistema
+Després, actualitzarem els nostres paquets del nostre sistema.
+```
+# sudo yum update && yum upgrade -y
+```
+<details open>
+<summary><b>Actualització Paquets SO</b></summary>
+<img src="captures/upgrade.png">
+</details>
+<hr>
