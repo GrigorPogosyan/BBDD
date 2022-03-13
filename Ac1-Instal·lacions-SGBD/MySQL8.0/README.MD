@@ -146,6 +146,14 @@ Al acabar la instal·lació cal que fem un seguit de passos per acabar de tenir 
     <img src="captures/mysql_version.png">
     </details>
 
+5. I ara amb la següent comanda el MySQL s'iniciarà al encendre el servidor.
+    ```
+    sudo systemctl enable mysql
+    ```
+    <details open>
+    <summary><b>Inciar MySQL juntament el SO</b></summary>
+    <img src="captures/enable_mysql.png">
+    </details>
 <hr>
 
 ## [Extra] Accedir en remot al MySQL
