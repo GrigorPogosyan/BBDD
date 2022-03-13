@@ -6,7 +6,7 @@ Primer de tot, ens connectarem a la màquina per **SSH** desde CMD (ho tenim pr�
 ssh machineuser@ip 
 ```
 <details open>
-<summary>Screenshot <b>(Connection SSH)</b></summary>
+<summary><b>Connexió per SSH</b></summary>
 <img src="captures/ssh.png">
 </details>
 
@@ -16,7 +16,7 @@ Després, actualitzarem els nostres paquets del nostre sistema.
 # yum update && yum upgrade
 ```
 <details open>
-<summary>Screenshot <b>(OS Upgrade)</b></summary>
+<summary><b>Actualització Paquets SO</b></summary>
 <img src="captures/upgrade.png">
 </details>
 <hr>
