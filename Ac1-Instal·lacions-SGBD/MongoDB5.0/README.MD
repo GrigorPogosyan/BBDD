@@ -77,4 +77,44 @@ Després, actualitzarem els nostres paquets del nostre sistema acceptant tots el
 
 ## Post Instal·lació
 
+1. Un cop tenim instal·lat el MongoDB, ens assegurarem que en els directoris de dades i de logs el propietari és el usuari mongod que és el que utilitza per defecte MongoDB per la instal·lació i creació de dependencies.
+    ```
+    # ls -ld /var/lib/mongo
+
+    # ls -ld /var/log/mongodb
+    ```
+    <details open>
+    <summary><b>Comprovació Permisos</b></summary>
+    <img src="captures/owner.png">
+    </details>
+
+2. Ara iniciarem el Servei de MongoDB i comprovarem que hagi arrancat.
+
+    ```
+    # sudo systemctl start mongod
+
+    # sudo systemctl status mongod
+    ```
+
+    <details open>
+    <summary><b>Activar Servei mongod</b></summary>
+    <img src="captures/start_status_mongod.png">
+    </details>
+
+3. Ara habilitarem el servei de MongoDB per a que s'inicii juntament amb el sistema operatiu.
+    ```
+    # sudo systemctl enable mongod
+    ```
+
+    <details open>
+    <summary><b>Iniciar mongod amb el sistema</b></summary>
+    <img src="captures/enable_mongod.png">
+    </details>
+
+4. 
+
+
+
+
+
 
