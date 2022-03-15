@@ -111,8 +111,22 @@ Després, actualitzarem els nostres paquets del nostre sistema acceptant tots el
     <img src="captures/enable_mongod.png">
     </details>
 
-4. 
+4. Arribat en aquest punt, si volem accedir la shell de MongoDB des de local podrem utilitzar la comanda **mongosh**, on es la manera més ràpida de conectar-nos, configurar i treballar amb la nostra base de dades. Per defecte ens situara a la BD de Test que crea per defecte, a més veurem la versió de MongoDB instal·lat. Abans per accedir a la shell era posant **mongo** només, però ho estan pasant a mongosh perquè és mes visual i pràctic.
 
+    ```
+    # mongosh
+    ```
+    <details open>
+    <summary><b>Accedir a la Shell de MongoDB + Versió</b></summary>
+    <img src="captures/mongosh.png">
+    </details>
+
+## [Extra] Accedir a MongoDB en Remot
+Arribat al punt anterior tindriem el MongoDB instal·lat i "configurat" de base. 
+
+Ara ens agradaria accedir i gestionar aquesta BD en remot. 
+
+El client que utilitzarem serà **[Studio 3T](https://studio3t.com/knowledge-base/articles/installation/)** <img src="captures/studio3t.jpg" width=100 align="right"/>
 
 
 
