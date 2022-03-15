@@ -182,7 +182,7 @@ El client que utilitzarem serà **[Studio 3T](https://studio3t.com/knowledge-bas
     ```
     Haurem d'eliminar el següent fitxer:
     ```
-    sudo rm /tmp/mongodb-27017.sock
+    # sudo rm /tmp/mongodb-27017.sock
     ```
     Aquest error es degut a que estem reiniciant el servei de mongoDB amb un usuari que no té accés de lectura al PATH `/var/lib/mongo` i al eliminar el fitxer es torna a crear però amb nous permisos
     
@@ -249,3 +249,12 @@ I ja tindriem la instal·lació i postinstal·lació feta.
 <hr>
 
 ## WEBGRAFIA
+- [Instal·lació MongoDB](https://docs.mongodb.com/v5.0/tutorial/install-mongodb-on-red-hat/)
+
+- [Solució a possible error al reiniciar el servei.](https://www.dev2qa.com/how-to-fix-failed-to-unlink-socket-file-error-when-start-mongo-db-on-macos/)
+
+- [Connexió Remota a MongoDB](https://carlosazaustre.es/como-conectarte-remotamente-a-tu-base-de-datos-mongodb)
+
+- [Firewall (Adaptat al port de MongoDB)](https://bgasparotto.com/enable-mysql-remote-access)
+
+- [Primers passos en MongoDB](https://www.freecodecamp.org/news/learn-mongodb-a4ce205e7739/)
