@@ -6,17 +6,17 @@ Primer de tot, ens connectarem a la màquina per **SSH** desde CMD (ho tenim pr�
 ssh machineuser@ip 
 ```
 <details open>
-<summary>Screenshot <b>(Connection SSH)</b></summary>
+<summary><b>Connexió per SSH</b></summary>
 <img src="captures/ssh.png">
 </details>
 
 ## Actualització dels Paquets del Sistema
-Després, actualitzarem els nostres paquets del nostre sistema.
+Després, actualitzarem els nostres paquets del nostre sistema acceptant tots els inputs que ens vagi demanant.
 ```
 # yum update && yum upgrade
 ```
 <details open>
-<summary>Screenshot <b>(OS Upgrade)</b></summary>
+<summary><b>Actualització Paquets SO</b></summary>
 <img src="captures/upgrade.png">
 </details>
 <hr>
@@ -146,6 +146,14 @@ Al acabar la instal·lació cal que fem un seguit de passos per acabar de tenir 
     <img src="captures/mysql_version.png">
     </details>
 
+5. I ara amb la següent comanda el MySQL s'iniciarà al encendre el servidor.
+    ```
+    sudo systemctl enable mysql
+    ```
+    <details open>
+    <summary><b>Inciar MySQL juntament el SO</b></summary>
+    <img src="captures/enable_mysql.png">
+    </details>
 <hr>
 
 ## [Extra] Accedir en remot al MySQL
@@ -224,6 +232,7 @@ Llavors haurem de configurar els següents punts amb una ❌
     Es troba a la ruta **/etc/my.cnf**
 
     Podrem veure el seu contingut amb la comanda cat.
+    I com el seu nom indica és el arxiu de configuració, podrem configurar el path del directori de dades, canviar el port, el directori dels sockets, el directori dels logs, podrem configurar el nivell de contrasenya que volem que permeti el nostre MySQL, els buffers de les consultes...
 
     ```
     cat /etc/my.cnf
