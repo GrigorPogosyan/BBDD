@@ -133,3 +133,81 @@ La versió de Redis 5.0, ja ve incorporat en el nostre sistema, en el repositori
 
 
 ## Configuració per Accedir en Remot
+
+Ara, configurarem els paràmetres necessaris per poder accedir a redis remotament.
+
+### Configurar Servidor
+1. Configurarem el `Bind a 0.0.0.0` per poder accedir-hi des de qualsevol màquina.
+    ```
+    # nano /etc/redis.conf
+
+    bind 0.0.0.0
+    ```
+    <details open>
+    <summary><b>Configurar Bind</b></summary>
+    <img src="captures/bindip.png">
+    </details>
+
+2. Reiniciarem el servei de Redis
+    ```
+    # systemctl restart redis
+    ```
+
+3. Aplicarem una regla de firewall per acceptar connexions entrants al port 6379 que és el port per defecte de redis i reiniciarem el servei del firewall per a que la regla s'apliqui.
+    ```
+    # sudo firewall-cmd --add-port=6379/tcp --permanent
+
+    # sudo firewall-cmd --reload
+    ```
+    <details open>
+    <summary><b>Configurar Firewall</b></summary>
+    <img src="captures/redis_firewall.png">
+    </details>
+
+### Configurar Client
+Utilitzarem un client Linux per poder accedir remotament.
+
+1. Instal·larem les redis tool en el client per poder utilitzar la comanda per accedir a redis.
+    <details open>
+    <summary><b>Redis Tools</b></summary>
+    <img src="captures/redistools.png">
+    </details>
+
+2. Per poder accedir al redis remotament, hem de utilitzar la següent comanda, on el paràmetre -h fa referència al host del server, (han d'estar en la mateixa xarxa).
+    ```
+    # redis-cli -h 192.168.151.133
+    ```
+    <details open>
+    <summary><b>Client accedint a Redis</b></summary>
+    <img src="captures/clientredis.png">
+    </details>
+
+3. Com Redis guarda tota la informació que posem a la memòria principal, podem guardar la informació manualment, dient-li, cada 60 segons per cada 10 canvis fets guarda el que hi ha fet en forma de fitxer on després el carregaràs al encendre. Però també podem posar que ho faci automàtic, i que guardi en un fitxer per cada acció realitzada, d'aquesta manera si hi ha una avaria, sabrem quin va ser l'última comanda.
+
+    Per activar aquesta opció d'autoguarda activarem l'opció `AOF, (Append Only File)`
+    ```
+    127.0.0.1:6397> config set appendonly yes
+    ```
+    <details open>
+    <summary><b>Activant l'autoguardat AOF</b></summary>
+    <img src="captures/aof.png">
+    </details>
+<hr>
+
+### Quin tipus de SGBD és Redis?
+
+Redis vol dir Remote Dictionary Server, és un emmagatzematge de dades molt ràpid en memòria guardant les dades en forma clau-valor, és un SGBD de tipus NoSQL (no relacional), no guarda les dades en format taules i columnes, sino en clau-valor esmentat anteriorment.
+
+Es ràpid ja que guarda les dades en memòria i les consultes són molt ràpides oferint respostes inferiors al milisegon.
+
+És denominat la base de dades preferida de [StackOverflow](https://stackoverflow.com/).
+
+<hr>
+
+## WEBGRAFIA
+- [Instal·lació i configuració Redis](https://www.linuxtechi.com/install-redis-server-on-centos-8-rhel-8/)
+
+- [Primers passos de la familiarització amb Redis](https://www.ionos.es/digitalguide/hosting/cuestiones-tecnicas/redis-tutorial-paso-a-paso/)
+
+
+
