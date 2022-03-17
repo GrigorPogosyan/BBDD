@@ -19,6 +19,6 @@
  - Targeta de Xarxa Host-Only
 
 
-**Nota**: Hem de tenir un compte i una subscripció a Redhat, en aquesta pràctica s'ha utilitzar la Subscripció Developer, però en un cas real s'hauria de pagar per la subscripció empresarial.
+**Nota**: Hem de tenir un compte i una subscripció a Redhat, en aquesta pràctica s'ha utilitzat la Subscripció Developer, però en un cas real s'hauria de pagar per la subscripció empresarial.
 
 
