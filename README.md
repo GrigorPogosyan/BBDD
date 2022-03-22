@@ -1,7 +1,7 @@
 # M02 Base de Dades
 
 ## Apartats Disponibles: <img align="right" width="100" height="100" src="Ac1-Instal·lacions-SGBD/imatges/bbdd_logo.png" alt="bbdd_logo"/>
-- [Instal·lacions dels SGBD](Ac1-Instal·lacions-SGBD/)
+- [Instal·lacions dels SGBD i configuració Inicial Bàsica](Ac1-Instal·lacions-SGBD/)
 - [Configuracions de Logs i Connexió Segura Percona Server SSL](Ac2-Configuracions-Logs/)
 
 <hr>
