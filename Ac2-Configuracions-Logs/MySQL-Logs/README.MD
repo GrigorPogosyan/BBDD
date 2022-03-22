@@ -1,0 +1,1 @@
+# Configuracions i comprovacions de logs en el MySQL <img align="right" width="70" src="../imatges/logs.ico"/>
