@@ -233,6 +233,35 @@ Ara per desactivar aquests logs (no borrar-los) sinó desactivar i que no es gra
     <img src="captures/offslowquerylog.png">
     </details>
 
-4. Desactivarem el log de Binaris, com no ho hem configurat per activar-ho perquè ja venia per defecte activat, haurem d'afegir els següents paràmetres per desactivar-ho.
+4. Desactivarem el log de Binaris. Com no ho hem configurat per activar-ho perquè ja venia per defecte activat, haurem d'afegir els següents paràmetres per desactivar-ho.
     ```
+    disable_log_bin
     ```
+    <details open>
+    <summary><b>Desactivar el Log Binary</b></summary>
+    <img src="captures/disablelogbin.png">
+    </details>
+
+5. Reiniciarem el Servei MySQLD comprovarem que el servei s'ha aixecat i comprovarem que els canvis s'han realitzat correctament.
+    ```
+    # systemctl restart mysqld
+
+    # systemctl status mysqld
+    ```
+    <details open>
+    <summary><b>Reiniciar Servei</b></summary>
+    <img src="captures/reiniciar.png">
+    </details>
+
+    ```
+    mysql> SHOW VARIABLES LIKE '%log';
+
+    mysql> SHOW VARIABLES LIKE '%bin_log%';
+    ```
+    <details open>
+    <summary><b>Comprovar que s'han desactivat els logs</b></summary>
+    <img src="captures/comprovaroff.png">
+    </details>
+
+## Activar els Logs a nivell de Sesió 
+
