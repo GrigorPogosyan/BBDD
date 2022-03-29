@@ -349,7 +349,17 @@ Però si tenim activat el Master a nivell de fitxer, sí que podem activar i des
     <img src="captures/texttable.png">
     </details>
 
+6. Ara si reiniciem el servei de mysqld totes les configuracions de sessió no estarán ja actives, i es carregaria les configuracions de nivell de fitxer.
 
+    ```
+    # systemctl restart mysqld
+    ```
+    <details open>
+    <summary><b>Reiniciar Servei</b></summary>
+    <img src="captures/reiniciar.png">
+    </details>
+
+## Carregar la BBDD Sakila
 
 
 
