@@ -263,5 +263,95 @@ Ara per desactivar aquests logs (no borrar-los) sinó desactivar i que no es gra
     <img src="captures/comprovaroff.png">
     </details>
 
-## Activar els Logs a nivell de Sesió 
+## Activar els Logs a Nivell de Sessió
+
+Ara activarem els logs, però a nivell de sessió, a nivell de sessió vol dir que quan es reinici el servidor tornarà a l'estat anterior (com està configurat en el fitxer de configuracions de logs)
+
+1. El log de Binaris, funciona diferent a la resta. Té una configuració **Master-Slave**. Hi ha un paràmetre pare (Master) que si no està activat, el paràmetre Slave no té utilitat, i aquest log és el únic log que **no es pot activar el Master a nivell de sessió**, només es pot activar a nivell de fitxer. 
+Però si tenim activat el Master a nivell de fitxer, sí que podem activar i desactivar el slave a nivell de sessió i tendria sentit.
+
+- Per activar el paràmetre Slave per tenir el Log de Binaris a nivell de sessió es faria de la següent manera:
+
+    Nota: Hem de tenir el Master activat si volem canviar el Slave a nivell de sessió (si no, no té sentit).
+
+    Paràmetre Màster = `log_bin`
+
+    Paràmetre Slave = `sql_log_bin`
+
+    ```
+    mysql> SET sql_log_bin = ON;
+    ```
+    <details open>
+    <summary><b>Activar el log de binaris (Slave) a nivell de sessió, (No podem activar el log_bin (Master) a nivell de sessió. Llavors en aquest cas no té cap utilitat.</b></summary>
+    <img src="captures/sqllogbin.png">
+    </details>
+
+2. Ara, activarem el Slow Query Log a nivell de sessió:
+
+- Alguns logs s'activen amb SET GLOBAL perquè són variables globals de sessió (per tots els usuaris) i sense globals només per la sessió corrents.
+
+    ```
+    mysql> SET GLOBAL slow_query_log = 'ON';
+    ```
+    <details open>
+    <summary><b>Activar els Slow Query Log a nivell de sessió</b></summary>
+    <img src="captures/sesionslow.png">
+    </details>
+
+3. Ara activarem el General Log amb el tipus de guardat de taula a nivell de sessió.
+
+    ```
+    mysql> SET GLOBAL log_output = "TABLE";
+    ```
+    <details open>
+    <summary><b>Activar el guardar de logs tipus taula</b></summary>
+    <img src="captures/outputtable.png">
+    </details>
+
+4. Activarem els logs generals a nivell de sessió
+
+    ```
+    mysql> SET GLOBAL general_log = ON;
+    ```
+
+    <details open>
+    <summary><b>Activar el general log a nivell de taula</b></summary>
+    <img src="captures/sesiongenerallog.png">
+    </details>
+
+- I farem qualsevol consulta perquè s'enregistri.
+
+    <details open>
+    <summary><b>Fer proves d'enregistrament</b></summary>
+    <img src="captures/tests.png">
+    </details>
+
+5. Si ara consultem a la taula on es guarden els logs en format taula, podrem veure que es van registrant querys.
+
+    Comprovarem que es guardin (però d'aquesta manera estan en format hexadecimal)
+    ```
+    mysql> SELECT * FROM mysql.general_log;
+    ```
+
+    <details open>
+    <summary><b>Taula General_Log (Hexadecimal Arguments)</b></summary>
+    <img src="captures/selectgenerallogtable.png">
+    </details>
+
+    Si volem veure les Selects en format String i no en format hexadecimal amb la següent select ho podrem veure, posant un \G ens ho mostrarà més ordenat.
+
+    ```
+    mysql> select a.*, convert(a.argument using utf8) from mysql.general_log a \G;
+    ```
+
+    <details open>
+    <summary><b>Taula General_Log (En format Text Arguments)</b></summary>
+    <img src="captures/texttable.png">
+    </details>
+
+
+
+
+
+ 
 
