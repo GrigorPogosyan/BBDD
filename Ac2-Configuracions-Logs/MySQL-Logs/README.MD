@@ -30,7 +30,7 @@ mysql> SHOW VARIABLES LIKE '%LOG_ERROR%';
 ```
 
 <details open>
-<summary><b>Log d'Errors: ACTIVAT sempre per DEFECTE </b></sumary>
+<summary><b>Log d'Errors: ACTIVAT sempre per DEFECTE </b></summary>
 <img src="captures/logerror.png">
 </details>
 
