@@ -349,7 +349,7 @@ Però si tenim activat el Master a nivell de fitxer, sí que podem activar i des
     <img src="captures/texttable.png">
     </details>
 
-6. Ara si reiniciem el servei de mysqld totes les configuracions de sessió no estarán ja actives, i es carregaria les configuracions de nivell de fitxer.
+6. Ara si reiniciem el servei de mysqld totes les configuracions de sessió no estarán ja actives, i es tornarien a carregar les configuracions de nivell de fitxer.
 
     ```
     # systemctl restart mysqld
@@ -359,9 +359,45 @@ Però si tenim activat el Master a nivell de fitxer, sí que podem activar i des
     <img src="captures/reiniciar.png">
     </details>
 
-## Carregar la BBDD Sakila
+## Carregar la BBDD Sakila 
+Arribat, en aquest punt, carregarem la BBDD Sakila per fer proves en el nostre SGBD, la BBDD Sakila és una BBDD de proves que proporciona MySQL.
+
+1. Clicant [aqui](https://dev.mysql.com/doc/index-other.html) et rederigirà a la pàgina per descarregar aquesta base de dades.
+
+    <details open>
+    <summary><b>Apartat on hi ha aquesta base de dades de prova</b></summary>
+    <img src="captures/paginasakila.png"></details>
+
+    Podem pasar-lo manualment el .sql de Sakila, però ho podrem fer amb un WGET.
+
+    Llavors per descarregar el .TAR del Sakila haurem de fer lo següent:
+
+    ```
+    # wget https://downloads.mysql.com/docs/sakila-db.tar.gz
+    ```
+
+    <details open>
+    <summary><b>Descarregar la BBDD Sakila</b></summary>
+    <img src="captures/wgetsakila.png"></details>
+
+2. Un cop descarregat haurem de descomprimir la carpeta on tenim la BBDD.
+    ```
+    # tar xzvf sakila-db.tar.gz
+    ```
+    <details open>
+    <summary><b>Descomprimir carpeta on tenim la BBDD</b></summary>
+    <img src="captures/tarsakila.png"></details>
+
+3. Ara carregarem el fitxer `sakila-schema.sql` del Sakila que és el que ens interessa. Per fer això accedirem al MySQL i amb la sentència `source` i la ruta del fitxer l'importarem, en el meu cas el tinc a `/root/sakila-db/sakila-schema.sql`. Al carregar-ho veuriem diferents respostes de part de MySQL informant-nos de que les sèntencies estan OK i s'han carregat.
+
+    ```
+    mysql> SOURCE /root/sakila-db/sakila-schema.sql
+    ```
+    <details open>
+    <summary><b>Carreguem el fitxer sakila-schema.sql</b></summary>
+    <img src="captures/sourcesakila.png"></details>
+
+    Un cop fet això ja tindriem la nostra BBDD per fer proves.
 
 
-
- 
 
