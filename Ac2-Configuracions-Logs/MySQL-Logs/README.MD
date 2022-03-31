@@ -298,7 +298,7 @@ Però si tenim activat el Master a nivell de fitxer, sí que podem activar i des
     <img src="captures/sesionslow.png">
     </details>
 
-3. Ara activarem el General Log amb el tipus de guardat de taula a nivell de sessió.
+3. Ara activarem el General Log amb el tipus de guardat de taula a nivell de sessió, (compte perquè el slow_query_log també s'haurà posat en format taula)
 
     ```
     mysql> SET GLOBAL log_output = "TABLE";
@@ -348,6 +348,20 @@ Però si tenim activat el Master a nivell de fitxer, sí que podem activar i des
     <summary><b>Taula General_Log (En format Text Arguments)</b></summary>
     <img src="captures/texttable.png">
     </details>
+
+    Si volem veure-ho d'una manera encara millor ho podrem fer de la següent manera:
+    ```
+    mysql> SELECT convert(argument using utf8) FROM mysql.general_log \G;
+    ```
+    <details open>
+    <summary><b>Taula General_Log (En format Text Arguments) Alternativa 2 (La Millor)</b></summary>
+    <img src="captures/alternativeselect.png">
+    </details>
+
+    En cas de que vulguéssim comprovar els Slow Query Logs en format taula també, la consulta seria semblant.
+    ```
+    mysql> SELECT CONVERT(sql_text using utf8) FROM mysql.slow_log;
+    ```
 
 6. Ara si reiniciem el servei de mysqld totes les configuracions de sessió no estarán ja actives, i es tornarien a carregar les configuracions de nivell de fitxer.
 
@@ -399,5 +413,89 @@ Arribat, en aquest punt, carregarem la BBDD Sakila per fer proves en el nostre S
 
     Un cop fet això ja tindriem la nostra BBDD per fer proves.
 
+## Comptar el numero de sentències CREATE TABLE dins del general log mitjançant una sentència SQL.
 
+Si per estadística volem saber quantes sentències amb CREATE TABLE o altra sentència SQL s'han executat contra la nostre Base de Dades ho podrem comprovar de la següent manera. Hem de tenir el `log_output a Table` i tenir els `logs generals activats`. Obviament cada cop que executem la sentència tindrem +1 al Count ja que com la nostra sentència s'enregistra es suma 1 al valor total.
+Internament ja converteix l'argument a Text i pot trobar resultats.
 
+```
+mysql> SELECT COUNT(argument) 
+FROM mysql.general_log 
+WHERE argument RLIKE 'CREATE TABLE';
+```
+<details open>
+<summary><b>Comptar el número de sentències</b></summary>
+<img src="captures/countargument.png"></details>
+
+## Tractament amb el Binary Log
+
+1. Primer de tot ens assegurarem que el log de Binaris estigui activat, tant la configuració a nivell de fitxer tant la de sessió. Podrem seguir els passos de l'apartat on s'explica com activar aquest tipus de Logs.
+
+    Primer de tot ens assegurarem que el binary log estigui activat 
+    ```
+    mysql> SHOW VARIABLES LIKE '%log_bin%';
+    ```
+
+    <details open>
+    <summary><b>Assegurar que tenim el log bin activat</b></summary>
+    <img src="captures/asegurarlogbin.png"></details>
+
+2. Ara amb la sentència `RESET MASTER` eliminarem tots el fitxers binary log que estan en el `/var/lib/mysql/`, i acaba deixant només 1 fitxer binary log amb el sufix .000001 i el index.
+
+    Comprovarem els fitxers binary log abans d'esborrar.
+    ```
+    # ls /var/lib/mysql/binlog.*
+    ```
+    <details open>
+    <summary><b>Comprovar els fitxers bin log abans de borrar-ho</b></summary>
+    <img src="captures/comprovarbinlog.png"></details>
+
+    Farem el reset master per borrar aquests logs menys el 000001 i el del index
+    ```
+    mysql> RESET MASTER;
+    ```
+    <details open>
+    <summary><b>Reset Master</b></summary>
+    <img src="captures/resetmaster.png"></details>
+
+    Tornarem a comprovar els fitxers de la ruta anterior (del log bin). I podrem veure que només tenim el 00001 i el del index.
+    ```
+    # ls /var/lib/mysql/binlog.*
+    ```
+    <details open>
+    <summary><b>Comprovació d'esborrat dels fitxers binary log</b></summary>
+    <img src="captures/recomprovaciobinlog.png"></details>
+
+3. Crearem una base dades anomenada foo i l'esborrarem.
+
+    ```
+    mysql> CREATE DATABASE foo;
+    Query OK, 1 row affected (0,00 sec)
+
+    mysql> DROP DATABASE foo;
+    Query OK, 0 rows affected (0,02 sec)
+    ```
+    <details open>
+    <summary><b>Crear i esborrar BBDD foo</b></summary>
+    <img src="captures/createdropfoo.png"></details>
+
+4. Amb la sentència SHOW BINLOG EVENTS llistarem els events que s'han produit, ens hauria d'aparèixer el CREATE I DROP DATABASE FOO que hem fet.
+
+    ```
+    mysql> SHOW BINLOG EVENTS;
+    ```
+    <details open>
+    <summary><b>Mostrar Events</b></summary>
+    <img src="captures/showbinlogevents.png"></details>
+
+    Si ho volem veure a nivell de fitxer, haurem de fer un mysqlbinlog (per veure formats de fitxer binari en text pla) a la següent ruta, sabem el fitxer ja que la consulta anterior ens diu el nom del fitxer del log. Veure-ho d'aquesta manera ens sortirà molt de text que no ens interessa i haurem de trobar el que necessitem a mà...
+
+    Ruta del fitxer: `/var/lib/mysql/binlog.000001`
+    ```
+    # mysqlbinlog /var/lib/mysql/binlog.000001
+    ```
+    <details open>
+    <summary><b>Mostrar Contingut Fitxer binari log 000001</b></summary>
+    <img src="captures/mysqlbinlog.png"></details>
+
+5. 
