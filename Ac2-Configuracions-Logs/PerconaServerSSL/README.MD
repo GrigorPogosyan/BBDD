@@ -82,7 +82,7 @@ mysql> FLUSH PRIVILEGES;
 </details>
 <hr>
 
-## Comprovar amb el programa WireShark que la connexió d'autentificació al SGBD no és segura    <img src="captures/wire.png" width = 120 align=right>
+## Comprovar amb el programa WireShark que la connexió d'autentificació al SGBD no és segura    <img src="captures/wire.png" width = 180 align=right>
 
 
 Abans de les versions de MySQL 8.0, per defecte les connexions estaven desencriptats, i s'havien de configurar a mà per encriptar-los.
