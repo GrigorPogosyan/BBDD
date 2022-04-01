@@ -91,4 +91,57 @@ Ara, la versió que tenim de MySQL (8.0), posteriors a aquesta està per defecte
 
 Llavors el que farem, serà amb el client Workbench realitzar una connexió insegura, que ens donen una opció per fer això i amb el Wireshark capturarem les diferents sentències realitzades contra la BD.
 
-1. El primer pas que haurem de fer serà instal·lar-nos el Wireshark.
+1. El primer pas que haurem de fer serà descarregar el Wireshark. [Fent clic aquí podràs descarregar el Wireshark](https://www.wireshark.org/download.html)
+
+    <details open>  
+    <summary><b>Descarregar el WireShark per Windows x64</b></summary>
+    <img src="captures/installwire.png">
+    </details>
+
+2. Realitzarem una connexió remota amb el Workbench amb la opció de no SSL no encriptat, per veure que sense la encriptació es poden veure les selects. 
+    <details open>  
+    <summary><b>Crear Connexió no SSL</b></summary>
+    <img src="captures/nosslconnection.png">
+    </details>
+
+3. Obrirem el Wireshark i començarem a esnifar la xarxa. Com estem virtualitzant, haurem de seleccionar el adaptador virtual de xarxa que ens fa connectar amb la màquina virtual. En el meu cas la NAT VMNET19.
+    <details open>  
+    <summary><b>Seleccionar l'adaptador Wifi</b></summary>
+    <img src="captures/vmnet19.png">
+    </details>
+
+4. Un cop dins veurem tots els missatges de la xarxa de l'adaptador que s'envien que es reben dels diferents dispositius, totes les peticions que es fan, amb les respotes...
+    <details open>  
+    <summary><b>Visió General Wireshark</b></summary>
+    <img src="captures/generalvision.png">
+    </details>
+
+5. Ara, no volem veure tots els paquets, perquè en una xarxa gran hauriem d'estar hores buscant el paquet corresponent i resposta de la comunicació amb el MySQL llavors el Wireshark permet molts filtres de paquets, un d'ells és el d'especificar el port que utilitzarem. En aquest cas amb el filtre `tcp.port eq 3306` ens filtrarà per les comunicacions del MySQL. (En entorns de proves no ens apareixerà res perquè encara no hem fet la consulta, ve en el següent punt.)
+    <details open>  
+    <summary><b>Filtrar per comunicacions MySQL</b></summary>
+    <img src="captures/portsql.png">
+    </details>
+
+6. Ara amb el client farem una consulta contra la BD de Sakila un d'exemple.
+    <details open>  
+    <summary><b>Consulta de Prova</b></summary>
+    <img src="captures/testselect.png">
+    </details>
+
+7. Ara en el Wireshark buscarem els `REQUEST QUERY` i `RESPONSE QUERY`, el que l'usuari demana, i el que respon. On tenim el port filtrat hauria de ser més fàcil trobar-ho. Teòricament el Response estarà en la següent trama després de fer la consulta.
+    <details open>  
+    <summary><b>Request QUERY (Consulta que Fem)</b></summary>
+    <img src="captures/requestquery.png">
+    </details>
+
+    <details open>  
+    <summary><b>Response TABULAR (El que BD Retorna)</b></summary>
+    <img src="captures/responsetabular.png">
+    </details>
+
+    I com s'ha pogut veure podem veure el contingut i això no és res segur ja que si fossin consultes i comunicacions de bancs ens poden robar diners.
+<hr>
+
+## Connexió per SSL (TLS) amb Certificats
+
+
