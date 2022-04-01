@@ -87,7 +87,9 @@ mysql> FLUSH PRIVILEGES;
 
 Abans de les versions de MySQL 8.0, per defecte les connexions estaven desencriptats, i s'havien de configurar a mà per encriptar-los.
 
-Ara, la versió que tenim de MySQL (8.0), posteriors a aquesta està per defecte activat amb encriptació TLS per raons de seguretat. A més a més, SSL es quedarà en desús, a partir d'ara quan veiem informació parlant de SSL es refereix a TLS.
+Ara, la versió que tenim de MySQL (8.0), posteriors a aquesta està per defecte activat amb encriptació TLS per raons de seguretat. Però no obstant això per defecte el Client pot triat si fer connexions segures o no.
+
+A més a més, SSL es quedarà en desús, a partir d'ara quan veiem informació parlant de SSL es refereix a TLS.
 
 Llavors el que farem, serà amb el client Workbench realitzar una connexió insegura, que ens donen una opció per fer això i amb el Wireshark capturarem les diferents sentències realitzades contra la BD.
 
@@ -140,8 +142,28 @@ Llavors el que farem, serà amb el client Workbench realitzar una connexió inse
     </details>
 
     I com s'ha pogut veure podem veure el contingut i això no és res segur ja que si fossin consultes i comunicacions de bancs ens poden robar diners.
+
+    També amb una variable de sessió podem assegurar-nos de que no tenim encriptació en la nostra connexió
+    <details open>  
+    <summary><b>Veure que la connexió no utilitza encriptació</b></summary>
+    <img src="captures/cipher.png">
+    </details>
+
+    
 <hr>
 
 ## Connexió per SSL (TLS) amb Certificats
+Ara, ens connectarem per SSL (TLS) a la Base de Dades mitjançant certificats que ens proporcionarà el Servidor.
 
+1. Tots els certificats del servidor MySQL per defecte estarán en la següent ruta `/var/lib/mysql` els podrem veure mitjançant la següent comanda. Els certificats acaben amb `.pem`
+
+    ```
+    # ls /var/lib/mysql/*.pem
+    ```
+    <details open>  
+    <summary><b>Llistar els certificats que té el nostre Servidor MySQL per defecte</b></summary>
+    <img src="captures/llistarclaus.png">
+    </details>
+
+2. Hem de passar els certificats necessaris per fer la connexió del servidor cap al Client.
 
