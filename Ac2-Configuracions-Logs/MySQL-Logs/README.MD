@@ -415,7 +415,7 @@ Arribat, en aquest punt, carregarem la BBDD Sakila per fer proves en el nostre S
 
 ## Comptar el numero de sentències CREATE TABLE dins del general log mitjançant una sentència SQL.
 
-Si per estadística volem saber quantes sentències amb CREATE TABLE o altra sentència SQL s'han executat contra la nostre Base de Dades ho podrem comprovar de la següent manera. Hem de tenir el `log_output a Table` i tenir els `logs generals activats`. Obviament cada cop que executem la sentència tindrem +1 al Count ja que com la nostra sentència s'enregistra es suma 1 al valor total.
+Si per estadística volem saber quantes sentències amb CREATE TABLE o altra sentència SQL s'han executat contra la nostre Base de Dades ho podrem comprovar de la següent manera. Hem de tenir el `log_output a Table` i tenir els `logs generals activats`. Obviament cada cop que executem la sentència tindrem +1 al Count ja que com la nostra sentència conté filtre 'CREATE TABLE' s'enregistra es suma 1 al valor total.
 Internament ja converteix l'argument a Text i pot trobar resultats.
 
 ```
@@ -543,7 +543,7 @@ WHERE argument RLIKE 'CREATE TABLE';
 
     I l'esborrat s'ha produït en el Event Nº415
     ```
-    mysql> mysqlbinlog /var/lib/mysql/binlog.000002
+    # mysqlbinlog /var/lib/mysql/binlog.000002
     ```
     <details open>
     <summary><b>Es pot veure que s'ha creat el binlog.000002</b></summary>
@@ -563,7 +563,7 @@ WHERE argument RLIKE 'CREATE TABLE';
     <summary><b>Veure events binlog.000002</b></summary>
     <img src="captures/binlogevents2.png"></details>
 
-7. Si per alguna raó volem llistar tots els fitxers de logs binaris ho podem fer de la següent manera:
+7. Si volem llistar tots els fitxers de logs binaris ho podem fer de la següent manera:
 
     ```
     mysql> ls /var/lib/mysql/binlog.*
@@ -573,3 +573,39 @@ WHERE argument RLIKE 'CREATE TABLE';
     <img src="captures/allbinlogs.png"></details>
     
 8. Si volem esborrar el primer fitxer de log binari o qualsevol fitxer binari ho podem fer de la següent manera.
+
+    ```
+    # rm -r /var/lib/mysql/binlog.000001
+    ```
+    <details open>
+    <summary><b>Borrar fitxer de log</b></summary>
+    <img src="captures/rm binlog1.png"></details>
+
+## Desactivar Binary Log en una Sessió
+Aquesta part ja s'ha fet anteriorment, però es podrà tornar a veure com es fa.
+
+Si tenim el `logbin` activat, hi ha un altre paràmetre que és el `sql_log_bin` que si el desactivem, el tindrem desactivat en la sessió, però al obrir una nova sessió es tornarà a activar.
+
+```
+mysql> SHOW VARIABLES LIKE '%log_bin%';
+```
+<details open>
+<summary><b>Activat log_bin i sql_log_bin</b></summary>
+<img src="captures/logbinon.png"></details>
+
+Llavors, podrem desactivar el sql_log_bin per la sessió mitjançant la següent sentència:
+
+```
+mysql> SET sql_log_bin = OFF;
+```
+<details open>
+<summary><b>Desactivat Log Bin per la sessió</b></summary>
+<img src="captures/sqllogbinoff.png"></details>
+
+Però si ens sortim de la sessió i tornem a entrar es tornarà a posar en ON.
+
+SET GLOBAL (paràmetre) = ON/OFF --> L'actives per totes les sessions però al reiniciar el servidor es tornaria en l'estat anterior
+
+SET (paràmetre) = ON/OFF --> L'actives només per la sessió, tornant a entrar en la sessió o reiniciant el servidor es tornaria a l'estat anterior.
+
+**Nota:** Alguns paràmetres no admeten ser activats globalment.
