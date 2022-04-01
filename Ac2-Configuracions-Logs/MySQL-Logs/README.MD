@@ -553,7 +553,7 @@ WHERE argument RLIKE 'CREATE TABLE';
     <summary><b>Es pot veure que ara escriu dins de binlog.000002</b></summary>
     <img src="captures/binlogbar.png"></details>
 
-    La comanda SHOW BINLOG EVENTS per defecte mostra nomès el primer binlog. Llavors com podem veure els altres binlogs?
+    La comanda SHOW BINLOG EVENTS per defecte mostra nomès el primer binlog que troba. Llavors com podem veure els altres binlogs?
 
     Si ho volem veure en format taula com en el binlog.000001 ho farem de la següent manera:
     ```
