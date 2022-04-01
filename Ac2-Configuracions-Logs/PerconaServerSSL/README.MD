@@ -1,0 +1,1 @@
+# Configuració Percona Server per fer Connexions Remotes Segures (SSL) <img align="right" width="70" src="../imatges/ssl_logo.png"/>
