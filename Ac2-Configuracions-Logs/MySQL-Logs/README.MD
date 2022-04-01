@@ -498,4 +498,78 @@ WHERE argument RLIKE 'CREATE TABLE';
     <summary><b>Mostrar Contingut Fitxer binari log 000001</b></summary>
     <img src="captures/mysqlbinlog.png"></details>
 
-5. 
+5. Arribat en aquest punt farem un rotate log mitjançant mitjançant la sentència FLUSH LOGS; 
+
+    Aquesta sentència es pot utilitzar posant FLUSH LOGS; o també podrem especificar el tipus de log.
+
+    > - FLUSH BINARY LOGS;
+    > - FLUSH GENERAL LOGS;
+    > - FLUSH SLOW LOGS;
+
+    En el cas de FLUSH BINARY LOGS; el que fa és un rotate log, és a dir si estava escrivint en el fitxer binari.000001 passarà a escriure al fitxer binari.000002 i així succesivament.
+
+    En els altres casos, el que farà serà un cop executat el Flush Logs, en la pròxima escriptura sobreescriuria sobre el fitxer de log començant des de 0.
+
+    En aquest cas utilitzarem el `FLUSH BINARY LOGS;`
+
+    ```
+    mysql> FLUSH BINARY LOGS;
+    ```
+    <details open>
+    <summary><b>Flush Binary Logs</b></summary>
+    <img src="captures/flushbinarylogs.png"></details>
+
+    Ara si fem un SHOW BINLOG EVENTS podrem veure que s'ha afegit una fila de ROTATE cap a binlog.000002 indicant que a partir d'ara escriurà a binlog.000002
+    ```
+    mysql> SHOW BINLOG EVENTS;
+    ```
+    <details open>
+    <summary><b>Fila Rotate Show Binlog Events</b></summary>
+    <img src="captures/rotate.png"></details>
+
+6. Ara si creem una altre base de dades de prova i l'eliminem
+    ```
+    mysql> CREATE DATABASE bar;
+
+    mysql> DROP DATABASE bar;
+    ```
+    <details open>
+    <summary><b>Crear segona BD de Prova</b></summary>
+    <img src="captures/testdb.png"></details>
+
+    I mirem el contingut del fitxer de binari.000002 podrem veure aquest canvis.
+
+    On la creació de la BD s'ha produït en el Event Nº338
+
+    I l'esborrat s'ha produït en el Event Nº415
+    ```
+    mysql> mysqlbinlog /var/lib/mysql/binlog.000002
+    ```
+    <details open>
+    <summary><b>Es pot veure que s'ha creat el binlog.000002</b></summary>
+    <img src="captures/lsbinlog2.png"></details>
+
+    <details open>
+    <summary><b>Es pot veure que ara escriu dins de binlog.000002</b></summary>
+    <img src="captures/binlogbar.png"></details>
+
+    La comanda SHOW BINLOG EVENTS per defecte mostra nomès el primer binlog. Llavors com podem veure els altres binlogs?
+
+    Si ho volem veure en format taula com en el binlog.000001 ho farem de la següent manera:
+    ```
+    mysql> SHOW BINLOG EVENTS IN 'binlog.000002';
+    ```
+    <details open>
+    <summary><b>Veure events binlog.000002</b></summary>
+    <img src="captures/binlogevents2.png"></details>
+
+7. Si per alguna raó volem llistar tots els fitxers de logs binaris ho podem fer de la següent manera:
+
+    ```
+    mysql> ls /var/lib/mysql/binlog.*
+    ```
+    <details open>
+    <summary><b>Tots els binlogs</b></summary>
+    <img src="captures/allbinlogs.png"></details>
+    
+8. Si volem esborrar el primer fitxer de log binari o qualsevol fitxer binari ho podem fer de la següent manera.
