@@ -167,3 +167,87 @@ Ara, ens connectarem per SSL (TLS) a la Base de Dades mitjançant certificats qu
 
 2. Hem de passar els certificats necessaris per fer la connexió del servidor cap al Client.
 
+    Necessitem els següents certificats:
+
+    > - Clau del Client (Client Key File for SSL) --> `client-key.pem`
+    > - Certificat del Client (Client Certificate File for SSL) --> `client-cert.pem`
+    > - Certificat d'Autoritat (Certificate Authority File for SSL) --> `ca.pem`
+
+    Per passar els certificats des d'un Ubuntu Server sense entorn cap a un Windows Client, una de les maneres és amb el programa WinSCP que ens permet fer transferències d'arxius amb connexions segures.
+    
+    Fes [clic aqui](https://winscp.net/eng/download.php) per anar a la pàgina de descarrega de WinSCP
+
+    <details open>  
+    <summary><b>Descarregar WinSCP</b></summary>
+    <img src="captures/scp.png">
+    </details>
+
+    Un cop descarregat realitzarem la connexió a la màquina servidor mitjançant el protocol TFTP.
+    <details open>  
+    <summary><b>Connexió WinSCP</b></summary>
+    <img src="captures/connexioscp.png">
+    </details>
+
+    Navegarem al directori del Ubuntu des del programa WinSCP on es troben aquestes certificats `/var/lib/mysql/` i els pasarem a la màquina del client, en aquest cas tinc una carpeta per aquests certificats i claus.
+    <details open>  
+    <summary><b>Passar certificats a la màquina Client</b></summary>
+    <img src="captures/pasarcertificats.png">
+    </details>
+
+3. Ara en la connexió del Workbench - MySQL, l'editarem o en crearem una de nova, configurant-lo de la següent manera.
+
+    - A l'apartat de Connexions, el mètode el posarem en `Standard TCP/IP`
+    - Posarem que verifiqui SSL i el Certificat d'Autoritat `Require and Verify CA`
+    - Posarem la `Clau del Client`
+    - Posarem el `Certificat del Client`
+    - Posarem el `Certificat d'Autoritat`
+    
+    I després testejarem la connexió.
+
+    <details open>  
+    <summary><b>Configuració per la connexió amb SSL</b></summary>
+    <img src="captures/connectionssl.png">
+    </details>
+
+    Posarem les credencials del compte d'usari.
+    <details open>  
+    <summary><b>Credencials de l'usuari</b></summary>
+    <img src="captures/credentials.png">
+    </details>
+
+    I ens sortirà que la connexió s'ha realitzat correctament i que el SSL està activat amb `TLS`
+    <details open>  
+    <summary><b>Connexió realitzada correctament amb SSL</b></summary>
+    <img src="captures/successconnection.png">
+    </details>
+
+4. Ara, entrarem a una sessió de MySQL, realitzarem una consulta i comprovarem que ara amb el SSL activat no es poden llegir els paquets.
+
+    Abans de la consulta tornarem a comprovar amb les variables de sessió que tenim el SSL actiu.
+    ```
+    SHOW SESSION STATUS LIKE 'Ssl_Cipher';
+    ```
+    <details open>  
+    <summary><b>Comprovar estat SSL</b></summary>
+    <img src="captures/cipheron.png">
+    </details>
+
+    Realització de Consulta de Prova
+    ```
+    SELECT * 
+	    FROM actor;
+    ```
+    <details open>  
+    <summary><b>Consulta de Prova</b></summary>
+    <img src="captures/consulta.png">
+    </details>
+
+    I si amb el Wireshark intentem mirar els paquets, no podrem, perquè estan encriptats.
+    <details open>  
+    <summary><b>Ara la connexió està encriptada i no es poden llegir els paquets</b></summary>
+    <img src="captures/encriptat.png">
+    </details>
+
+    
+    
+
