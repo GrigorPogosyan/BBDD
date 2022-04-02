@@ -130,7 +130,7 @@ Llavors el que farem, serà amb el client Workbench realitzar una connexió inse
     <img src="captures/testselect.png">
     </details>
 
-7. Ara en el Wireshark buscarem els `REQUEST QUERY` i `RESPONSE QUERY`, el que l'usuari demana, i el que respon. On tenim el port filtrat hauria de ser més fàcil trobar-ho. Teòricament el Response estarà en la següent trama després de fer la consulta.
+7. Ara en el Wireshark buscarem els `REQUEST QUERY` i `RESPONSE TABULAR`, el que l'usuari demana, i el que respon. On tenim el port filtrat hauria de ser més fàcil trobar-ho. Teòricament el Response estarà en la següent trama després de fer la consulta.
     <details open>  
     <summary><b>Request QUERY (Consulta que Fem)</b></summary>
     <img src="captures/requestquery.png">
