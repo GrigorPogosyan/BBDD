@@ -130,7 +130,7 @@ Llavors el que farem, serà amb el client Workbench realitzar una connexió inse
     <img src="captures/testselect.png">
     </details>
 
-7. Ara en el Wireshark buscarem els `REQUEST QUERY` i `RESPONSE QUERY`, el que l'usuari demana, i el que respon. On tenim el port filtrat hauria de ser més fàcil trobar-ho. Teòricament el Response estarà en la següent trama després de fer la consulta.
+7. Ara en el Wireshark buscarem els `REQUEST QUERY` i `RESPONSE TABULAR`, el que l'usuari demana, i el que respon. On tenim el port filtrat hauria de ser més fàcil trobar-ho. Teòricament el Response estarà en la següent trama després de fer la consulta.
     <details open>  
     <summary><b>Request QUERY (Consulta que Fem)</b></summary>
     <img src="captures/requestquery.png">
@@ -242,7 +242,7 @@ Ara, ens connectarem per SSL (TLS) a la Base de Dades mitjançant certificats qu
     <img src="captures/consulta.png">
     </details>
 
-    I si amb el Wireshark intentem mirar els paquets, no podrem, perquè estan encriptats.
+    I si amb el Wireshark intentem mirar el contingut dels paquets, no podrem, perquè estan encriptats.
     <details open>  
     <summary><b>Ara la connexió està encriptada i no es poden llegir els paquets</b></summary>
     <img src="captures/encriptat.png">
