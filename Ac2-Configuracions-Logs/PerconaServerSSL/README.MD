@@ -242,7 +242,7 @@ Ara, ens connectarem per SSL (TLS) a la Base de Dades mitjançant certificats qu
     <img src="captures/consulta.png">
     </details>
 
-    I si amb el Wireshark intentem mirar els paquets, no podrem, perquè estan encriptats.
+    I si amb el Wireshark intentem mirar el contingut dels paquets, no podrem, perquè estan encriptats.
     <details open>  
     <summary><b>Ara la connexió està encriptada i no es poden llegir els paquets</b></summary>
     <img src="captures/encriptat.png">
