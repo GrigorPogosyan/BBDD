@@ -78,5 +78,5 @@ mysql> SHOW ENGINES;
 ```
 <details open>
 <summary><b>Comprovació del Storage Engine per defecte MyISAM</b></summary>
-<img src="captures/myisam_default.png">
+<img src="captures/MyISAM_default.png">
 </details>
