@@ -12,7 +12,8 @@ ssh machineuser@ip
 <hr>
 
 ## Ús del Storage Engine CSV
-Si volem crear una taula en la nostra Base de Dades amb el Motor d'Emmagatzematge CSV, haurem d'afegir `ENGINE = CSV` abans del final de la sentència DDL al crear les taules.
+Si volem crear una taula en la nostra Base de Dades amb el Motor d'Emmagatzematge CSV, haurem d'afegir `ENGINE = CSV` abans del final de la sentència DDL al crear les taules indicant quin Storage Engine volem utilitzar en aquella taula.
+
 ```
 mysql> CREATE TABLE provaCSV (
        id INT NOT NULL,
@@ -33,7 +34,7 @@ mysql> INSERT INTO provaCSV VALUES(1,"Primer Registre"),(2,"Segon Registre"),(3,
 <img src="captures/insertTableCSV.png">
 </details>
 
-Si volem on s'ha guardat la informació de la taula haurem d'anar a la ruta on es guarda la base de dades, que per defecte és `/var/lib/mysql/base_de_dades/`
+Si volem veure on i com s'ha guardat la informació de la taula haurem d'anar a la ruta on es guarda la base de dades, que per defecte és `/var/lib/mysql/base_de_dades/`
 
 Crea 3 fitxers per cada taula CSV:
 
