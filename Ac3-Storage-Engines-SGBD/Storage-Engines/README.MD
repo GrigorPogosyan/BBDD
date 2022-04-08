@@ -34,6 +34,7 @@ mysql> SHOW STORAGE ENGINES\G
 <summary><b>Veure Storage Engines 2</b></summary>
 <img src="captures/show_storage_engines2.png">
 </details>
+<hr>
 
 ## Canviar el Motor d'Emmagatzematge per Defecte
 Per veure ràpidament la informació dels Storage Engines, ho podem fer de la següent manera:
@@ -77,6 +78,42 @@ I ara si tornem a comprovar el Storage Engine per defecte, hauria de canviar el 
 mysql> SHOW ENGINES;
 ```
 <details open>
-<summary><b>Comprovació del Storage Engine per defecte MyISAM</b></summary>
+<summary><b>Comprovació del canvi de Storage Engine per defecte a MyISAM</b></summary>
 <img src="captures/MyISAM_default.png">
+</details>
+<hr>
+
+# Instal·lació i Activació del Storage Engine MyRocks
+Per instal·lar el Storage Engine MyRocks, l'instal·larem fent servir els administradors de paquets corresponents
+```
+# sudo yum install percona-server-rocksdb
+```
+<details open>
+<summary><b>Instal·lació MyRocks</b></summary>
+<img src="captures/install_rocksdb.png">
+</details>
+
+Un cop instal·lat al final de la instal·lació ens hauria de sortir lo següent
+<details open>
+<summary><b>Text que surt al final de la Instal·lació</b></summary>
+<img src="captures/installed_rocks.png">
+</details>
+
+Llavors ara, guiant-nos per el text haurem d'activar aquest Engien, on ho farem amb el script `ps-admin` indicant l'usuari i contrasenya root del nostre MySQL perquè el script ens activi el MyRocks.
+
+```
+# sudo ps-admin --enable-rocksdb -u root -pPassw0rd
+```
+<details open>
+<summary><b>Activant el MyRocks</b></summary>
+<img src="captures/enabling_myrocks.png">
+</details>
+
+I si tornem a llistar els Storage Engines ens sortirà que el tenim actiu (`Support = YES`)
+```
+mysql> SHOW ENGINES;
+```
+<details open>
+<summary><b>Comprovar que tenim Actiu el MyRocks (RocksDB)</b></summary>
+<img src="captures/rocksdb_enabled.png">
 </details>
