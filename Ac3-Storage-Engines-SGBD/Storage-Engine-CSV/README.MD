@@ -34,12 +34,11 @@ mysql> INSERT INTO provaCSV VALUES(1,"Primer Registre"),(2,"Segon Registre"),(3,
 <img src="captures/insertTableCSV.png">
 </details>
 
-Si volem veure on i com s'ha guardat la informació de la taula haurem d'anar a la ruta on es guarda la base de dades, que per defecte és `/var/lib/mysql/base_de_dades/`
+Si volem veure on i com s'ha guardat la informació de la taula haurem d'anar a la ruta on es guarda la base de dades, que per defecte és `/var/lib/mysql/base_de_dades/` ho podrem fer amb la comanda següent
 
-Crea 3 fitxers per cada taula CSV:
+Nota: Crea 3 fitxers per cada taula CSV:
 
-> - nomtaula_394.sdi   🡺 Fitxer on guarda les metadades i altres dades de la taula del .CSV
-> - nomtaula.CSM  🡺 Fitxer on guarda 
+> - nomtaula_394.sdi   🡺 Fitxer on guarda les metadades i altres dades de la taula del .CSV 
 > - nomtaula.CSV  🡺 Fitxer on conté les dades separades per el delimitador de la taula.
 
 ```
@@ -47,7 +46,7 @@ mysql> ls /var/lib/mysql/github
 ```
 
 <details open>
-<summary><b>Fitxers CSV</b></summary>
+<summary><b>Fitxers que genera</b></summary>
 <img src="captures/fitxersCSV.png">
 </details>
 
@@ -59,3 +58,13 @@ Si obrim el fitxer .csv podrem veure les dades insertades anteriorment.
 <summary><b>Informació fitxer .CSV</b></summary>
 <img src="captures/ficherocsv.png">
 </details>
+
+Si volem consultar aquesta informació des del MySQL ho podrem fer mitjançant una simple select.
+```
+mysql> SELECT * FROM provaCSV;
+```
+<details open>
+<summary><b>Select amb un fitxer CSV</b></summary>
+<img src="captures/selectcsv.png">
+</details>
+

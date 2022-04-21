@@ -117,3 +117,28 @@ mysql> SHOW ENGINES;
 <summary><b>Comprovar que tenim Actiu el MyRocks (RocksDB)</b></summary>
 <img src="captures/rocksdb_enabled.png">
 </details>
+
+### Posar MyRocks com a Storage Engine per Defecte
+Per posar MyRocks com a motor d'emmagatzematge per defecte, anirem al fitxer de configuració de MySQL `/etc/my.cnf`, i canviarem el MyIsam per defecte que teniem abans per RocksDB que és el MyRocks.
+```
+# nano /etc/my.cnf
+
+[mysqld]
+default-storage-engine=RocksDB
+```
+<details open>
+<summary><b>Activar el RocksDB per defecte desde el fitxer de configuració de MySQL</b></summary>
+<img src="captures/rocksdb_mycnf.png">
+</details>
+
+Ara si tornem al MySQL i mirem els engines, veurem que per defecte és el MyRocks i a partir d'ara qualsevol taula que es crees es crearia amb l'engine MyRocks.
+```
+mysql> SHOW ENGINES;
+```
+<details open>
+<summary><b>MyRocks (RocksDB) Storage Engine per defecte</b></summary>
+<img src="captures/rocksdb_default.png">
+</details>
+
+
+
