@@ -11,3 +11,21 @@ ssh machineuser@ip
 </details>
 
 <hr>
+
+## Ús del Storage Engine MyRocks
+MyRocks és un motor d'emmagatzematge basat en RocksDB. És de tipus Clau-Valor.
+
+Les Advantatges a sobre del InnoDB són:
+
+- <b><span style="color:green">Eficiència de Compressió:</span></b> Comprimeix millor perquè no utilitza mides de paginació fixes. Si en MyRocks una pàgina es comprimeix en 5 KB només utilitzarà aquest 5 KB d'emmagatzematge. Estalvia espai en disc i indirectament estalvia diners.
+
+- <b><span style="color:green">Annexació i Compactació:</span></b> Utilitza menys quantitat de lectures i escriptures perquè els patrons d'accés a les dades estan emmagatzemats de manera persistents i són de clau-valor.
+
+- <b><span style="color:green">Replicació més ràpida:</span></b> MyRocks no necessita lectures aleatories per actualitzar les claus primàries i no necessita verificar la integritat (replicació sense lectura)
+
+- <b><span style="color:green">Carrega de dades més ràpid:</span></b>Activat aquesta opció a nivell de sessió MyRocks escriu dades directament en el nivell més baix, i evita tots els gastos de compactació que aquests utilitzen CPU, E/S per comprimir i descomprimir dades.
+
+    [Més informació](https://www.codetd.com/es/article/12032793)
+
+    [Més informació+](https://engineering.fb.com/2016/08/31/core-data/myrocks-a-space-and-write-optimized-mysql-database/)
+
