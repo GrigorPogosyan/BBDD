@@ -32,8 +32,16 @@ Les Advantatges a sobre del InnoDB són:
 
     [Més informació+](https://engineering.fb.com/2016/08/31/core-data/myrocks-a-space-and-write-optimized-mysql-database/)
 
-    RocksDB s'utilitza àmpliament per emmagatzemar dades persistents en SSD a Facebook, i també l'utilitzen diversos serveis que serveixen consultes en línia als discs durs.
+    [Més informació++](https://rimzy.net/category/myrocks/)
 
+### Casos d'Ús
+
+RocksDB s'utilitza àmpliament per emmagatzemar dades persistents en SSD a Facebook, i també l'utilitzen diversos serveis que serveixen consultes en línia als discs durs.
+
+Com que MyRocks és un motor d'emmagatzematge basat en arbres LSM construït sobre RocksDB. Té moltes ventatges sobre els B+Tree tradicionals com els que té el InnoDB, utilitzant menys espai en el disc i una escriptura reduïda això a nivell comercial produeix:
+> - Disminució del cost d'emmagatzematge al núvol/HDFS per a còpies de seguretat
+>- L'amplificació d'escriptura reduïda dóna com a resultat una vida útil més llarga del disc
+>- L'espai reduït requereix menys divisions i augmenta la pista.
 
 ### Creació de BD amb Taules de Storage Engine MyRocks
 Ara, crearem una BD on posteriorment crearem Taules fent servir el Storage Engine MyRocks.
@@ -43,6 +51,62 @@ mysql> CREATE DATABASE myRocks;
 USE myRocks;
 ```
 <details open>
-<summary><b>Crear BD per myRocks</b></summary>
+<summary><b>Crear BD per myRocks (on farem les proves)</b></summary>
 <img src="captures/create_myRocks.png">
 </details>
+
+Ara crearem un seguit de taules utilitzant aquest Storage Engine, també crearem un índex per les claus primàries.
+```
+mysql> CREATE TABLE taula1(
+    id INT, nom VARCHAR(30),
+    PRIMARY KEY (id) COMMENT 'cfname=cf1')ENGINE=RocksDB;
+```
+
+```
+mysql> CREATE TABLE taula2(
+    id INT, nom VARCHAR(30), cognom VARCHAR(40),
+    PRIMARY KEY (id) COMMENT 'cfname=cf1')
+    ENGINE=RocksDB;
+```
+
+```
+mysql> CREATE TABLE numbers(
+a INT, b INT,
+PRIMARY KEY (a) COMMENT 'cfname=cf1')
+ENGINE = RocksDB;
+```
+<details open>
+<summary><b>Creació de taules amb l'engine MyRocks</b></summary>
+<img src="captures/createRocksTables.png">
+</details>
+
+Ara, inserirem dades en aquestes taules, amb 2 registres per cada taula en tenim prou
+```
+mysql> INSERT INTO taula1 VALUES (1,"Pere"),(2,"Marta");
+```
+```
+mysql> INSERT INTO taula2 VALUES (1,"Carla","Gómez"),(2,"Pere","Pi");
+```
+```
+mysql> INSERT INTO numbers VALUES (10,20),(30,40),(50,60);
+```
+<details open>
+<summary><b>Inserció de dades a taules amb storage engine MyRocks</b></summary>
+<img src="captures/inserts_myrocks.png">
+</details>
+
+Un cop creada i feta les insercions en aquestes taules, tota aquesta informació (metadades i contingut de taules) es guarda en algun lloc en el nostre sistema gestor de base de dades d'una certa manera. Llavors anem a analitzar-los.
+
+El directori dels `fitxers de metadades` es guarden a `/var/lib/mysql/nomBD/fitxerTaula`. En el meu cas per poder veure aquests fitxers es faria de la següent manera:
+```
+mysql> ls /var/lib/mysql/myRocks/
+```
+<details open>
+<summary><b>Llistar el directori de les metadades de les taules amb l'engine myRocks</b></summary>
+<img src="captures/llistar_metadades.png">
+</details>
+
+
+
+
+
