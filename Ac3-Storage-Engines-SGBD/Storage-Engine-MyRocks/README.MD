@@ -95,16 +95,56 @@ mysql> INSERT INTO numbers VALUES (10,20),(30,40),(50,60);
 <img src="captures/inserts_myrocks.png">
 </details>
 
+### Directori Fitxers de Dades i Metadades
 Un cop creada i feta les insercions en aquestes taules, tota aquesta informació (metadades i contingut de taules) es guarda en algun lloc en el nostre sistema gestor de base de dades d'una certa manera. Llavors anem a analitzar-los.
 
-El directori dels `fitxers de metadades` es guarden a `/var/lib/mysql/nomBD/fitxerTaula`. En el meu cas per poder veure aquests fitxers es faria de la següent manera:
-```
-mysql> ls /var/lib/mysql/myRocks/
-```
-<details open>
-<summary><b>Llistar el directori de les metadades de les taules amb l'engine myRocks</b></summary>
-<img src="captures/llistar_metadades.png">
-</details>
+- El directori dels `fitxers de metadades` es a `/var/lib/mysql/nomBD/fitxerTaula`. En el meu cas per poder veure aquests fitxers es faria de la següent manera:
+    ```
+    mysql> ls /var/lib/mysql/myRocks/
+    ```
+    <details open>
+    <summary><b>Llistar el directori de les metadades de les taules amb l'engine myRocks</b></summary>
+    <img src="captures/llistar_metadades.png">
+    </details>
+
+- El directori dels `fitxers de dades` és una carpeta oculta nomenada `.rocksdb` i aquesta carpeta oculta es troba a `/var/lib/mysql/`.
+
+    Ho podrem saber també buscant per la variable global %dir%, i fixant-nos en la variable `rocksdb_datadir`. Ens indicarà segurament que per defecte és `./.rocksdb`, aquest "." vol dir que dins d'aquell mateix directori que es troba ara mateix, hi ha una carpeta oculta, i quin és aquell directori que es troba ara mateix? És `/var/lib/mysql` i a partir d'això deduïm que la ruta sencera dels fitxers de dades és `/var/lib/mysql/.rocksdb`
+
+    ```
+    mysql> SHOW VARIABLES LIKE %dir%;
+    ```
+    <details open>
+    <summary><b>Saber el directori dels fitxers de dades</b></summary>
+    <img src="captures/rocksdb_dir.png">
+    </details>
+
+    Per llistar tots aquests fitxers i veure el que ocupen ho podem fer de la següent manera:
+
+    `--block-size=K` --> Estem indicant que volem que la mida per tots els arxius ens ho mostri amb KiloBytes, perquè si no posem mida, depenent de l'arxiu sempre ens ho mostra amb la unitat més petita que pot per a cada arxiu, llavors per tenir tots en una única unitat l'especificarem.
+
+    ```
+    mysql> ls -l --block-size=K /var/lib/mysql/.rocksdb/
+    ```
+    <details open>
+    <summary><b>Veure el que ocupen els fitxers en KiloBytes</b></summary>
+    <img src="captures/ls_blocksize.png">
+    </details>
+
+    I si volem que ens mostri per a cada arxiu amb la unitat més petita que pot ho farem de la següent manera:
+
+    ```
+    mysql> ls -lh /var/lib/mysql/.rocksdb/
+    ```
+    <details open>
+    <summary><b>Veure el que ocupen els fitxers en la mida més petita possible (ho decideix el Linux)</b></summary>
+    <img src="captures/ls-lh.png">
+    </details>
+
+### Compressions MyRocks
+
+
+
 
 
 
