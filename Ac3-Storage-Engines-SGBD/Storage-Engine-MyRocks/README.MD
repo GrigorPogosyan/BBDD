@@ -124,7 +124,7 @@ Un cop creada i feta les insercions en aquestes taules, tota aquesta informació
     `--block-size=K` --> Estem indicant que volem que la mida per tots els arxius ens ho mostri amb KiloBytes, perquè si no posem mida, depenent de l'arxiu sempre ens ho mostra amb la unitat més petita que pot per a cada arxiu, llavors per tenir tots en una única unitat l'especificarem.
 
     ```
-    mysql> ls -l --block-size=K /var/lib/mysql/.rocksdb/
+    # ls -l --block-size=K /var/lib/mysql/.rocksdb/
     ```
     <details open>
     <summary><b>Veure el que ocupen els fitxers en KiloBytes</b></summary>
@@ -134,14 +134,210 @@ Un cop creada i feta les insercions en aquestes taules, tota aquesta informació
     I si volem que ens mostri per a cada arxiu amb la unitat més petita que pot ho farem de la següent manera:
 
     ```
-    mysql> ls -lh /var/lib/mysql/.rocksdb/
+    # ls -lh /var/lib/mysql/.rocksdb/
     ```
     <details open>
     <summary><b>Veure el que ocupen els fitxers en la mida més petita possible (ho decideix el Linux)</b></summary>
     <img src="captures/ls-lh.png">
     </details>
 
-### Compressions MyRocks
+### Compressions RocksDB (MyRocks)
+#### Format de Compressions per defecte
+Tota la informació corresponent a dades de les taules les va guardant en fitxers .sst repartidament vists anteriorment, aquests fitxers si intentem obrir-los veurem que estan en binari, i aquest fitxers de binari a més, estan comprimits per el format per defecte `LZ4`.
+
+Per saber quin format de compressió per defecte utilitza, ho podrem saber realitzant la següent consulta des del MySQL:
+```
+mysql> SELECT *
+FROM information_schema.rocksdb_cf_options
+WHERE option_type LIKE '%compression%'
+AND cf_name='default';
+```
+<details open>
+<summary><b>Format per defecte per compressió (kLZ4 (LZ4))</b></summary>
+<img src="captures/kLZ4_default.png">
+</details>
+
+A més si mirem el contingut de qualsevol .sst, podrem veure que hi ha en algun lloc escrit les sigles LZ4 o el format que tingui.
+```
+# cat /var/lib/mysql/.rocksdb/000183.sst
+```
+<details open>
+<summary><b>Forma alternativa de veure format de compressió (LZ4)</b></summary>
+<img src="captures/kLZ4_default2.png">
+</details>
+
+#### Canviar el format de compressió
+RocksDB admet els següents formats de compressió:
+
+> - Snappy
+> - Zlib
+> - LZ4 (per defecte)
+> - LZ4HC
+> - ZSTDNotFinal
+> - Sense Compressió
+
+##### 🟢 ZLIB 🟢
+Ara, canviarem el format de compressió i utilitzarem el Zlib.
+
+Anirem al fitxer de configuració de MySQL que la ruta és `/etc/my.cnf` i modificarem el paràmetre de la compressió de MyRocks (RocksDB), aplicant-ho al dimoni del MySQL (mysqld, servei que utilitza).
+
+```
+# nano /etc/my.cnf
+```
+Modificarem els paràmetres `bottommost_compression` i compression seguit especificant el mètode de `compressió` que volguem. Cada paràmetre finalitza amb un `;` i l'altre comença després d'aquest `;`
+```
+[mysqld]
+rocksdb_default_cf_options=bottommost_compression=kZlibCompression;compression=kZlibCompression
+```
+<details open>
+<summary><b>Canviar el format de compressió a Zlib</b></summary>
+<img src="captures/default_kzlib.png">
+</details>
+
+Seguit reiniciarem el servei de MySQL. Si ens dona un error o el status està en vermell és que algun paràmetre està malament configurat.
+```
+# systemctl restart mysqld && systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar i comprovar el servei de MySQLD</b></summary>
+<img src="captures/systemctl_restart_status.png">
+</details>
+
+Ara des de MySQL comprovarem que a partir d'ara el format de compressió és el que hem configurat (Zlib).
+Farem servir la següent sentència de consulta utilitzada anteriorment.
+```
+mysql> SELECT *
+FROM information_schema.rocksdb_cf_options
+WHERE option_type LIKE '%compression%'
+AND cf_name='default';
+```
+<details open>
+<summary><b>Compressió Zlib per defecte</b></summary>
+<img src="captures/compresion_zlib.png">
+</details>
+
+##### 🟢 ZSTD 🟢
+Ara, canviarem el format de compressió i utilitzarem el ZSTD.
+
+Anirem al fitxer de configuració de MySQL que la ruta és `/etc/my.cnf` i modificarem el paràmetre de la compressió de MyRocks (RocksDB), aplicant-ho al dimoni del MySQL (mysqld, servei que utilitza).
+
+```
+# nano /etc/my.cnf
+```
+Modificarem els paràmetres `bottommost_compression` i compression seguit especificant el mètode de `compressió` que volguem. Cada paràmetre finalitza amb un `;` i l'altre comença després d'aquest `;`
+```
+[mysqld]
+rocksdb_default_cf_options=bottommost_compression=kZSTD;compression=kZSTD
+```
+<details open>
+<summary><b>Canviar el format de compressió a ZSTD</b></summary>
+<img src="captures/default_zstd.png">
+</details>
+
+Seguit reiniciarem el servei de MySQL. Si ens dona un error o el status està en vermell és que algun paràmetre està malament configurat.
+```
+# systemctl restart mysqld && systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar i comprovar el servei de MySQLD</b></summary>
+<img src="captures/systemctl_restart_status.png">
+</details>
+
+Ara des de MySQL comprovarem que a partir d'ara el format de compressió és el que hem configurat (ZSTD).
+Farem servir la següent sentència de consulta utilitzada anteriorment.
+```
+mysql> SELECT *
+FROM information_schema.rocksdb_cf_options
+WHERE option_type LIKE '%compression%'
+AND cf_name='default';
+```
+<details open>
+<summary><b>Compressió ZSTD per defecte</b></summary>
+<img src="captures/compresion_zstd.png">
+</details>
+
+##### 🟢 SENSE COMPRESSIÓ 🟢
+Ara, deshabilitarem la compressió per defecte.
+
+Anirem al fitxer de configuració de MySQL que la ruta és `/etc/my.cnf` i modificarem el paràmetre de la compressió de MyRocks (RocksDB), aplicant-ho al dimoni del MySQL (mysqld, servei que utilitza).
+
+```
+# nano /etc/my.cnf
+```
+Modificarem els paràmetres `bottommost_compression` i compression seguit especificant el mètode de `compressió` que volguem. Cada paràmetre finalitza amb un `;` i l'altre comença després d'aquest `;`
+```
+[mysqld]
+rocksdb_default_cf_options=bottommost_compression=kDisableCompressionOption;compression=kNoCompression
+```
+<details open>
+<summary><b>Deshabilitar la compressió</b></summary>
+<img src="captures/default_nocompression.png">
+</details>
+
+Seguit reiniciarem el servei de MySQL. Si ens dona un error o el status està en vermell és que algun paràmetre està malament configurat.
+```
+# systemctl restart mysqld && systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar i comprovar el servei de MySQLD</b></summary>
+<img src="captures/systemctl_restart_status.png">
+</details>
+
+Ara des de MySQL comprovarem que a partir d'ara no utilitza cap format de compressió.
+Farem servir la següent sentència de consulta utilitzada anteriorment.
+```
+mysql> SELECT *
+FROM information_schema.rocksdb_cf_options
+WHERE option_type LIKE '%compression%'
+AND cf_name='default';
+```
+<details open>
+<summary><b>No utilitza Compressió per defecte</b></summary>
+<img src="captures/compresion_no.png">
+</details>
+
+##### 🟢 LZ4 (Per Defecte) 🟢
+Per defecte si no configurem la opció de compressió utilitza aquesta.
+
+Llavors treiem la linea configurada anteriorment i tindriem el format LZ4 per defecte.
+
+En cas de que al instal·lar el MyRocks hi hagi un altre format per defecte, el podrem especificar en el MySQL també.
+
+```
+# nano /etc/my.cnf
+```
+```
+[mysqld]
+rocksdb_default_cf_options=bottommost_compression=kLZ4Compression;compression=kLZ4Compression
+```
+<details open>
+<summary><b>Canviar el métode de compressió a LZ4 en cas de tenir un altre per defecte</b></summary>
+<img src="captures/compress_def_lz4.png">
+</details>
+
+Seguit reiniciarem el servei de MySQL. Si ens dona un error o el status està en vermell és que algun paràmetre està malament configurat.
+```
+# systemctl restart mysqld && systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar i comprovar el servei de MySQLD</b></summary>
+<img src="captures/systemctl_restart_status.png">
+</details>
+
+Ara des de MySQL comprovarem que a partir d'ara utilitza LZ4 per defecte.
+```
+mysql> mysql> SELECT *
+FROM information_schema.rocksdb_cf_options
+WHERE option_type LIKE '%compression%'
+AND cf_name='default';
+```
+<details open>
+<summary><b>Format de compressió LZ4 per defecte</b></summary>
+<img src="captures/kLZ4_default.png">
+</details>
+
+
+
 
 
 

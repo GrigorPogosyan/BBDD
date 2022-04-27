@@ -42,7 +42,7 @@ Nota: Crea 3 fitxers per cada taula CSV:
 > - nomtaula.CSV  🡺 Fitxer on conté les dades separades per el delimitador de la taula.
 
 ```
-mysql> ls /var/lib/mysql/github
+# ls /var/lib/mysql/github
 ```
 
 <details open>
