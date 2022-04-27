@@ -184,7 +184,7 @@ Anirem al fitxer de configuració de MySQL que la ruta és `/etc/my.cnf` i modif
 ```
 # nano /etc/my.cnf
 ```
-Modificarem els paràmetres `bottommost_compression` i compression seguit especificant el mètode de `compressió` que volguem. Cada paràmetre finalitza amb un `;` i l'altre comença després d'aquest `;`
+Modificarem els paràmetres `bottommost_compression` i `compression` seguit especificant el mètode de `compressió` que volguem. Cada paràmetre finalitza amb un `;` i l'altre comença després d'aquest `;`
 ```
 [mysqld]
 rocksdb_default_cf_options=bottommost_compression=kZlibCompression;compression=kZlibCompression
@@ -224,7 +224,7 @@ Anirem al fitxer de configuració de MySQL que la ruta és `/etc/my.cnf` i modif
 ```
 # nano /etc/my.cnf
 ```
-Modificarem els paràmetres `bottommost_compression` i compression seguit especificant el mètode de `compressió` que volguem. Cada paràmetre finalitza amb un `;` i l'altre comença després d'aquest `;`
+Modificarem els paràmetres `bottommost_compression` i `compression` seguit especificant el mètode de `compressió` que volguem. Cada paràmetre finalitza amb un `;` i l'altre comença després d'aquest `;`
 ```
 [mysqld]
 rocksdb_default_cf_options=bottommost_compression=kZSTD;compression=kZSTD
@@ -264,7 +264,7 @@ Anirem al fitxer de configuració de MySQL que la ruta és `/etc/my.cnf` i modif
 ```
 # nano /etc/my.cnf
 ```
-Modificarem els paràmetres `bottommost_compression` i compression seguit especificant el mètode de `compressió` que volguem. Cada paràmetre finalitza amb un `;` i l'altre comença després d'aquest `;`
+Modificarem els paràmetres `bottommost_compression` i `compression` seguit especificant el mètode de `compressió` que volguem. Cada paràmetre finalitza amb un `;` i l'altre comença després d'aquest `;`
 ```
 [mysqld]
 rocksdb_default_cf_options=bottommost_compression=kDisableCompressionOption;compression=kNoCompression
@@ -332,7 +332,7 @@ WHERE option_type LIKE '%compression%'
 AND cf_name='default';
 ```
 <details open>
-<summary><b>Format de compressió LZ4 per defecte</b></summary>
+<summary><b>Format de compressió LZ4 per defecte.</b></summary>
 <img src="captures/kLZ4_default.png">
 </details>
 
