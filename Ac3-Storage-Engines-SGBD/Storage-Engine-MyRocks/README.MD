@@ -173,6 +173,7 @@ RocksDB admet els següents formats de compressió:
 > - Zlib
 > - LZ4 (per defecte)
 > - LZ4HC
+> - ZSTD
 > - ZSTDNotFinal
 > - Sense Compressió
 
