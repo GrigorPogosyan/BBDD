@@ -112,6 +112,7 @@ mysql> SHOW VARIABLES LIKE 'innodb_autoextend_increment';
 <summary><b>Consultar la mida en Megabytes que se li sumarà a cada fitxer configurat amb autoextend.</b></summary>
 <img src="captures/innodb_autoextend_increment.png">
 </details>
+En resum té aquesta mida perquè està definida en la variable, i funciona d'aquesta manera, per no començar a reservar 10000M de cop quan realment no ens fa falta. Per això està el autoextend que és el que farà que el nostre fitxer augmenti de mida.
 
 ## Importar BD Sakila com a taules InnoDB
 Ara, importarem la BD Sakila que ens proporciona MySQL per fer proves com a taules InnoDB.
@@ -180,5 +181,79 @@ Al fer la següent comprovació podem veure que una taula no té especificat el 
 </details>
 
 Si revisem el fitxer manualment, podrem veure quina taula és. Si no especifica l'engine utilitzarà el que té per defecte el SGBD des del qual s'importa la BD.
+Però si ens fixem bé, ells canviem la variable global del Storage Engine per defecte a MyIsam abans d'executar la taula on no té definida cap Storage Engine, i encara nosaltres tinguem definits a nivell de configuració que per defecte és InnoDB, en el fitxer es modifica aquesta variable per MyISAM, llavors hem de treure aquesta linea o especificar el Storage Engine InnoDB en aquesta taula.
+
+Millor definir-lo en la sentència DDL.
+
+```
+Engine = InnoDB
+```
+
+<details open>
+<summary><b>Com es veuria abans d'especificar InnoDB</b></summary>
+<img src="captures/abans_posar.png">
+</details>
+<details open>
+<summary><b>Com es veuria després d'especificar InnoDB</b></summary>
+<img src="captures/despres_posar.png">
+</details>
+
+Ara quan sabem que tenim totes les taules amb el Storage Engine InnoDB, procedirem a importar-les en el nostre MySQL.
+
+Entrarem a MySQL en local, i importarem el Schema. I les dades del Schema
+```
+mysql> SOURCE /root/sakila-db/sakila-schema.sql
+```
+<details open>
+<summary><b>Importar BD Sakila (Schema)</b></summary>
+<img src="captures/import_sakila_schema.png">
+</details>
+
+```
+mysql> SOURCE /root/sakila-db/sakila-schema.sql
+```
+<details open>
+<summary><b>Importar BD Sakila (Schema)</b></summary>
+<img src="captures/import_sakila_schema.png">
+</details>
+
+```
+mysql> SOURCE /root/sakila-db/sakila-data.sql
+```
+<details open>
+<summary><b>Importar BD Sakila (Data)</b></summary>
+<img src="captures/import_sakila_data.png">
+</details>
+
+I ja ho tindriem importat
+
+## Fitxers de dades, Ruta i Mida
+Ara, com tenim el paràmetre `innodb_file_per_table` desactivat, ja no crea fitxers per cada taula de BD, ara les crea tot en un únic fitxer juntament amb els altres BD. 
+Antigament, si anessim a `/var/lib/mysql/sakila` veuriem els diferents fitxers en format .ibd de les diferents taules, però ara estarà buit aquesta carpeta i tot ho tindrem en el fitxer ibdata1 en binari, on la seva ruta completa seria `/var/lib/mysql/ibdata1`.
+
+Si mirem la ruta `/var/lib/mysql/sakila` podrem veure que està buida.
+```
+mysql> SOURCE /root/sakila-db/sakila-data.sql
+```
+<details open>
+<summary><b>Verificar que ja no crea els .ibd</b></summary>
+<img src="captures/sakila_buit.png">
+</details>
+
+I si mirem ara el fitxer ibdata1 que és on es guarda tota la informació de totes les bases de dades podrem veure que ha crescut, i el autoextend li ha sumat els `64M` que tenia configurat per defecte. Ara el fitxer té `76M` reservats, això vol dir que ha superat els `12M` inicials.
+
+<details open>
+<summary><b>Veure que ha crescut la mida del nostre System TableSpace ibdata1 degut a les importacions de dades anteriors</b></summary>
+<img src="captures/alish_ibda.png">
+</details>
+
+## Canviar la configuració de dades de MySQL
+En aquest apartat farem els següents canvis en el nostre SGBD.
+
+> - Canviar la localització del directori de dades.
+>- Tenir 2 fitxers de System Tablespace complint lo següent:
+>   - Tots 2 fitxers amb 50MB de mida inicial.
+>   - El tablespace ha de créixer de 5MB en 5MB
+>       - Situarem aquests fitxers en un disc diferent cadascun que insertarem i montarem en la nostra màquina vitual
 
 
