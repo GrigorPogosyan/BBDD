@@ -113,3 +113,72 @@ mysql> SHOW VARIABLES LIKE 'innodb_autoextend_increment';
 <img src="captures/innodb_autoextend_increment.png">
 </details>
 
+## Importar BD Sakila com a taules InnoDB
+Ara, importarem la BD Sakila que ens proporciona MySQL per fer proves com a taules InnoDB.
+
+Tenim sort i MySQL ja ha definit l'engine a cada sentència de creació de taules i ens ha estalviat feina, no obstant això hi ha taula/les que no tenen definit cap Storage Engine i això vol dir que en les taules que no hi ha especificat el Storage Engine utilitzaria el Storage Engine per defecte que tenim configurat en el nostre SGBD.
+
+Llavors el que farem serà posar InnoDB com a Storage Engine per defecte.
+```
+# nano /etc/my.cnf
+```
+```
+[mysqld]
+default-storage-engine=InnoDB
+```
+<details open>
+<summary><b>InnoDB default Storage Engine</b></summary>
+<img src="captures/innodb_default.png">
+</details>
+
+I seguit reiniciariem el servei de MySQL
+```
+# systemctl restart mysqld && systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar i veure l'estat del Servei</b></summary>
+<img src="captures/restart_status.png">
+</details>
+
+Ara, ja tenim configurat InnoDB com al motor d'emmagatzematge per defecte, ara hem de descarregar-nos la BD Sakila [d'aquesta pàgina](https://dev.mysql.com/doc/index-other.html)
+
+<details open>
+<summary><b>Pàgina per descarregar Sakila</b></summary>
+<img src="captures/sakila_page.png">
+</details>
+
+Nosaltres des de linux, farem un `wget` per descarregar-ho.
+```
+# wget https://downloads.mysql.com/docs/sakila-db.tar.gz
+```
+<details open>
+<summary><b>Descarregar Sakila</b></summary>
+<img src="captures/wget_sakila.png">
+</details>
+
+Ara, descomprimirem el .tar.gz obtingut de Sakila
+```
+# tar xzvf sakila-db.tar.gz
+```
+<details open>
+<summary><b>Descomprimir Sakila</b></summary>
+<img src="captures/tar_sakila.png">
+</details>
+
+Ara mirarem les sentències DDL sakila-schema.sql del Sakila que és el que ens interessa, per veure si hi ha alguna contradicció de Storage Engine, perquè volem que tot estigui en InnoDB.
+
+Al fer la següent comprovació podem veure que una taula no té especificat el Storage Engine, (també podem mirar-ho manualment en el fitxer).
+```
+# cat sakila-db/sakila-schema.sql | grep "CREATE TABLE" -c
+16
+# cat sakila-db/sakila-schema.sql | grep "ENGINE=InnoDB" -c
+15
+```
+<details open>
+<summary><b>Comparació de sentències CREATE TABLE i veure si tenen especificat Engine</b></summary>
+<img src="captures/grep_count.png">
+</details>
+
+Si revisem el fitxer manualment, podrem veure quina taula és. Si no especifica l'engine utilitzarà el que té per defecte el SGBD des del qual s'importa la BD.
+
+
