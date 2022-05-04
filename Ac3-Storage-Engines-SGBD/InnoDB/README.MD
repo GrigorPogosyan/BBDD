@@ -279,27 +279,97 @@ Ara, hem de posar els permisos corresponents al directori per a que MySQL pugui 
 <img src="captures/permisos_hd-mysql.png">
 </details>
 
-Ara, procedirem a canviar el datadir del arxiu de configuració `/etc/my.cnf`. L'aplicarem a sota del [mysqd]. Ja ens apareixerà les lineas però posarem les noves rutes tant del datadir com del socket.
+Ara, procedirem a canviar el directori de dades del MySQL des del fitxer de configuració `/etc/my.cnf`. Haurem de tocar els paràmetres `datadir` i `datadir` i deixar els paràmetres `log-error` i `pid-file` tal com ens venen per defecte. Aquests paràmetres els posarem a sota del `[mysqld]`. Els paràmetres que fan referència per exemple a MyRocks que l'hem hagut d'instal·lar, les hem de treure perquè al canviar de directori i generar nous fitxers de configuració les instal·lacions externes que hem fet per exemple del MyRocks els perdriem. 
+
+També, en la primera vegada que hem de reiniciar el servei del MySQL per a que ens generi tota l'estructura de fitxers, bd etc... Hem de tenir el my.cnf pelat, és a dir totes les variables que hem configurat de tipus: `innodb_file_per_table`, `default-storage-engine=InnoDB` les hem de comentar perquè sinó ens donarà error al reiniciar el servei, sempre al primer cop quan ha de crear l'estructura de fitxers al reiniciar el servei només hem de tenir sense comentar les variables `datadir`,`datadir`,`log-error`,`pid-file`. Després de que es reinici el servei i es crei l'estructura de fitxers, ja podem descomentar les linies anteriors que teniem. Però compte perquè tota la configuració ja sigui Storage Engine o un altre configuració instal·lat externament haurem de tornar-les a instal·lar si les volem tenir, perquè al generar-se nous fitxers de configuració aquestes externes es perden.
+
+Llavors obrirem el fitxer de configuració de MySQL
 ```
 # nano /etc/my.cnf
 ```
+I borrarem / comentarem totes les lineas de configuració de variables que tenen a veure amb característiques instal·lades externs, en aquest cas de MyRocks, perquè al generar-se un nou directori de dades sense fer còpia de l'anterior, totes les instal·lacions externes es perden i no té sentit intentar configurar una variable d'una característica (Storage Engine en aquest cas però podria ser un altre) que no en tenim instal·lada.
+
+També comentarem les lineas de configuració (si en tenim), d'altres paràmetres de MySQL, com per exemple el `default-storage-engine`, `innodb_file_per_table` perquè en el primer reinici que farem més endavant hem de tenir només especificat `datadir`, `socket`, `pid-file (el deixarem per defecte)` i `log-error (el deixarem per defecte)`
 ```
 [mysqld]
 datadir=/hd-mysql
 socket=/hd-mysql/mysql.sock
 ```
 <details open>
-<summary><b>Canviar el paràmetre del directori de dades del MySQL</b></summary>
+<summary><b>Comentar les lineas sobrants i canviar el directori de dades i socket</b></summary>
 <img src="captures/mycnf-datadir.png">
 </details>
 
-Ara, si estem utilitzant RHEL / CentOS hem de afegir també el `SELinux Security Context` a la nova ubicació
+Guardem el fitxer de configuració i sortim.
+
+Ara, si estem utilitzant RHEL / CentOS , si no tenim el `SELINUX` desactivat hem de afegir el `SELinux Security Context` a la nova ubicació, per a que funcioni
 ```
 # semanage fcontext -a -t mysqld_db_t "/hd-mysql(/.*)?"
 # restorecon -R /hd-mysql
 ```
+<details open>
+<summary><b>Afegir el SELinux Security Context a la nova ubicació</b></summary>
+<img src="captures/selinux.png">
+</details>
 
+Un cop fet això, si reiniciem el servei de MySQL i mirem l'estatus no hi hauriem de tenir cap problema.
+```
+# systemctl restart mysqld && systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar i veure l'estat del Servei</b></summary>
+<img src="captures/restart_status.png">
+</details>
 
+I si mirem en el nou directori, podrem veure com ha reproduït tota la estructura.
+<details open>
+<summary><b>Comprovar que ha creat els fitxers (tota la estructura)</b></summary>
+<img src="captures/lshd-mysql.png">
+</details>
 
+Ara, tornarem al `my.cnf`, i descomentarem les linies comentades anteriorment, on modificavem algunes variables del MySQL, excepte les variables que fan referència a una característica instal·lada, que ara al ser nova estructura no el tenim i per tant l'hem d'instal·lar de nou si el volem fer servir.
 
+També afegirem una configuració extra per a que ens funcioni els Sockets i poder fer login localment, si no l'afegim no podrem fer login al tornar a posar la contrasenya del MySQL.
 
+Llavors descomentarem les linies (si en teniem abans o volem tenir) i afegirem les linies per a que funcioni els Sockets a l'hora de fer login.
+```
+# nano /etc/my.cnf
+```
+```
+[client]
+socket=/hd-mysql/mysql.sock
+```
+<details open>
+<summary><b>Descomentar les linies de variables que utilitzem, i configurar per a que funcioni el socket per part del client</b></summary>
+<img src="captures/mycnf2.png">
+</details>
+
+Guardarem i reiniciarem el Servei.
+```
+# systemctl restart mysqld && systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar i veure l'estat del Servei</b></summary>
+<img src="captures/restart_status2.png">
+</details>
+
+Ara, hem d'anar a l'arxiu de logs i buscar la contrasenya que ens haurà generat del Root
+```
+# cat /var/log/mysql.log | grep "Generated"
+```
+<details open>
+<summary><b>Obtenir la contrasenya del Root</b></summary>
+<img src="captures/password_generated.png">
+</details>
+
+Ara, iniciarem sessió amb root i canviarem la contrasenya.
+```
+# mysql -u root -p"pwd_generat"
+```
+```
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'N3wP4ssw0rd'; flush privileges;
+```
+<details open>
+<summary><b>Iniciar sessió i canviar contrasenya</b></summary>
+<img src="captures/change_pwd.png">
+</details>
