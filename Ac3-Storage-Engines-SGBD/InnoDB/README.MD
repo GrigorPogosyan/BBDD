@@ -248,12 +248,58 @@ I si mirem ara el fitxer ibdata1 que és on es guarda tota la informació de tot
 </details>
 
 ## Canviar la configuració de dades de MySQL
-En aquest apartat farem els següents canvis en el nostre SGBD.
+En aquest apartat farem els següents canvis en el nostre MySQL.
 
 > - Canviar la localització del directori de dades.
 >- Tenir 2 fitxers de System Tablespace complint lo següent:
 >   - Tots 2 fitxers amb 50MB de mida inicial.
 >   - El tablespace ha de créixer de 5MB en 5MB
 >       - Situarem aquests fitxers en un disc diferent cadascun que insertarem i montarem en la nostra màquina vitual
+
+### Canviar Localització del directori de Dades
+En aquest punt canviarem la localització de dades del MySQL a la ruta `/hd-mysql`, és a dir a l'arrel. Ho farem sense passar els arxius de l'antiga ruta, farem que ho torni a generar ell.
+
+Llavors crearem el directori.
+```
+# mkdir /hd-mysql/
+```
+<details open>
+<summary><b>Crear el directori</b></summary>
+<img src="captures/mkdir_hdmysql.png">
+</details>
+
+Ara, hem de posar els permisos corresponents al directori per a que MySQL pugui accedir correctament i no tingui cap problema. Els permisos chmod 751, volen dir RWX al propietari RX al grup i X als altres.
+
+```
+# chown -R mysql:mysql /hd-mysql
+# chmod 751 /hd-mysql
+```
+<details open>
+<summary><b>Permisos del nou directori del MySQL</b></summary>
+<img src="captures/permisos_hd-mysql.png">
+</details>
+
+Ara, procedirem a canviar el datadir del arxiu de configuració `/etc/my.cnf`. L'aplicarem a sota del [mysqd]. Ja ens apareixerà les lineas però posarem les noves rutes tant del datadir com del socket.
+```
+# nano /etc/my.cnf
+```
+```
+[mysqld]
+datadir=/hd-mysql
+socket=/hd-mysql/mysql.sock
+```
+<details open>
+<summary><b>Canviar el paràmetre del directori de dades del MySQL</b></summary>
+<img src="captures/mycnf-datadir.png">
+</details>
+
+Ara, si estem utilitzant RHEL / CentOS hem de afegir també el `SELinux Security Context` a la nova ubicació
+```
+# semanage fcontext -a -t mysqld_db_t "/hd-mysql(/.*)?"
+# restorecon -R /hd-mysql
+```
+
+
+
 
 
