@@ -329,9 +329,7 @@ I si mirem en el nou directori, podrem veure com ha reproduït tota la estructur
 
 Ara, tornarem al `my.cnf`, i descomentarem les linies comentades anteriorment, on modificavem algunes variables del MySQL, excepte les variables que fan referència a una característica instal·lada, que ara al ser nova estructura no el tenim i per tant l'hem d'instal·lar de nou si el volem fer servir.
 
-També afegirem una configuració extra per a que ens funcioni els Sockets i poder fer login localment, si no l'afegim no podrem fer login al tornar a posar la contrasenya del MySQL.
-
-Llavors descomentarem les linies (si en teniem abans o volem tenir) i afegirem les linies per a que funcioni els Sockets a l'hora de fer login.
+Llavors descomentarem les linies (si en teniem abans o volem tenir) i també afegirem una configuració extra, per a que ens funcioni el login per MySQL i no ens doni error de `Socket` més endavant.
 ```
 # nano /etc/my.cnf
 ```
