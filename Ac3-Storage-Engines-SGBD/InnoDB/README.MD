@@ -371,3 +371,165 @@ mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'N3wP4ssw0rd'; flush privileg
 <summary><b>Iniciar sessió i canviar contrasenya</b></summary>
 <img src="captures/change_pwd.png">
 </details>
+
+Si volem, també podem comprovar que s'ha canviat mirant les variables pel MySQL.
+```
+mysql> SHOW VARIABLES WHERE Value LIKE '%/hd%';
+```
+<details open>
+<summary><b>Comprovar nova ruta de les variables</b></summary>
+<img src="captures/valuelikehd.png">
+</details>
+
+Ara, per últim lloc, si ens volem assegurar que el nostre MySQL ja no depén dels fitxers de l'antiga ruta podem renombrar l'antiga ruta i reiniciar el MySQL, si no dona error és que ho tenim bé i hem canviat la localització correctament.
+
+Després tornarem a posar el nom antic per si volem tornar a la ruta.
+<details open>
+<summary><b>Comprovar que el nostre MySQL ja no depén de l'antiga ruta</b></summary>
+<img src="captures/comprobacion.png">
+</details>
+
+### Configuració 2 System TableSpace en diferents discos
+En aquest apartat, configurarem 2 System TablesSpace. Els dos amb mida 50MB inicial, fent-los creixent de 5 MB en 5 MB i el `ibdata1` estàra en `/disk1/` i el `ibdata2` estarà en `/disk2/`.
+
+Llavors començem insertant els discos virtuals en la nostra màquina virtual / real si estem fent-ho en un cas real.
+
+Els discos en aquest cas de prova són de 2GB cadascún.
+<details open>
+<summary><b>Disk 1 creat i insertat</b></summary>
+<img src="captures/new_hard_disk1.png">
+</details>
+<details open>
+<summary><b>Disk 2 creat i insertat</b></summary>
+<img src="captures/new_hard_disk2.png">
+</details>
+
+Ara iniciarem la màquina.
+Comprovarem que tenim més discos insertats amb la comanda lsblk
+```
+# lsblk
+```
+<details open>
+<summary><b>Veure que el sistema reconeix els 2 discos</b></summary>
+<img src="captures/lsblk.png">
+</details>
+
+Ara accedirem al menu del programa `fdisk` indicant el disk1, és a dir que els canvis realitzats dins d'aquest menú es realitzaràn sobre el disk1
+
+```
+# sudo fdisk /dev/sdb
+``` 
+Després premem la lletra `M` i `Intro` per veure les opcions que tenim amb el disk
+<details open>
+<summary><b>Accedir al menu fdisk indicant el disc /dev/sdb (Disk1)</b></summary>
+<img src="captures/menufdisk.png">
+</details>
+
+Ara, crearem una partició primaria.
+<details open>
+<summary><b>Crear partició primària</b></summary>
+<img src="captures/partitionprimary.png">
+</details>
+
+Mirarem com ha quedat la particií i després, guardarem els canvis realitzats i sortirem del menu.
+<details open>
+<summary><b>Veurem els canvis com han quedat, els guardarem i sortirem.</b></summary>
+<img src="captures/writechanges.png">
+</details>
+
+Ara, hem de formatar la partició en el sistema de fitxers de linux `ext4`. Com abans hem consultat la partició sabem com es diu, en aquest cas `dev/sdb1`
+```
+# sudo mkfs -t ex4 /dev/sdb1
+```
+<details open>
+<summary><b>Formatar la partició a ext4</b></summary>
+<img src="captures/mkfsdevsdb1.png">
+</details>
+
+I ara si consultem la partició podem veure que ja està preparat per ser montat
+```
+# lsblk -o NAME,FSTYPE,SIZE /dev/sdb1
+```
+<details open>
+<summary><b>Veure com ha quedat la partició del primer disc</b></summary>
+<img src="captures/lsblkparam.png">
+</details>
+
+Informació de creació de particions extreta [d'aquesta pàgina](https://www.sapalomera.cat/moodlecf/apunts/smx/sox/index.html?cap=100&ref=2232).
+
+**LLAVORS FARIEM LO MATEIX PERÒ PER L'ALTRE DISC (DISC2)**
+
+I així es veuria el segon disc al fer els passos anteriors.
+<details open>
+<summary><b>Veure com ha quedat la partició del segon disc</b></summary>
+<img src="captures/lsblkparam2.png">
+</details>
+
+Arribat en aquest punt tenim preparat lo següent:
+
+- Disc 1 Partició 1 --> `/dev/sdb1` fs=ext4
+- Disc 2 Partició 1 --> `/dev/sdc1` fs=ext4
+
+Ara, crearem els directoris de /disk1 i /disk2 a l'arrel que és on muntarem els discs amb els permisos adients per el MySQL.
+```
+# mkdir /disk1
+# chown -R mysql:mysql /disk1
+# chmod 751 /disk1
+
+# mkdir /disk2
+# chown -R mysql:mysql /disk2
+# chmod 751 /disk2
+```
+<details open>
+<summary><b>Creació de carpetes i permisos on muntarem els discs</b></summary>
+<img src="captures/mkdir_disk1_disk2.png">
+</details>
+
+Ara, muntarem les particions temporalment en el seu directori corresponent per veure si hi ha algún problema i veure com ho monta.
+```
+# sudo mount -t ext4 /dev/sdb1 /disk1
+# sudo mount -t ext4 /dev/sdc1 /disk2
+# df -lh
+```
+<details open>
+<summary><b>Muntar les particions manualment i veure si hi ha algun problema</b></summary>
+<img src="captures/temporal_mount.png">
+</details>
+
+
+Un cop sabem que pot muntar-ho sense problema, en comptes de muntar-ho manualment ho muntarem en `etc/fstab` per a que cada vegada que s'inicii el sistema operatiu ell ho monti automàticament i no tinguem cap problema.
+
+```
+# nano /etc/fstab
+```
+
+I afegirem les següents lineas per a que ho monti.
+```
+# Muntar /dev/sdb1 en /disk1
+/dev/sdb1   /disk1     ext4    defaults        0       3
+
+# Muntar /dev/sdc1 en /disk2
+/dev/sdc1   /disk2     ext4    defaults        0       3
+```
+<details open>
+<summary><b>Montar les particions en els directoris des d'el Fstab de manera que al iniciar el sistema es montin automàticament</b></summary>
+<img src="captures/fstab.png">
+</details>
+
+Ara guardarem i reiniciarem la màquina.
+<details open>
+<summary><b>Reiniciar la màquina</b></summary>
+<img src="captures/init6.png">
+</details>
+
+Un cop que s'inicii amb la comanda `mount` mirarem si ens ha montat el disc i després amb la comanda df -lh ho tornarem a verificar, així estarem segurs al 100%.
+```
+# mount | grep "disk"
+# df -lh
+```
+<details open>
+<summary><b>Comprobació de que s'ha montat automàticament correctament</b></summary>
+<img src="captures/mount_dflh.png">
+</details>
+
+Arribat en aquest punt ja tenim preparat els discs, i el directori per podem posar els system tablespace
