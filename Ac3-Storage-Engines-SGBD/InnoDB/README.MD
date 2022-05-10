@@ -690,6 +690,20 @@ mysql> SOURCE /root/sakila-db/sakila-data.sql;
 <summary><b>Importar BD Sakila (Data)</b></summary>
 <img src="captures/import_sakila_data.png">
 </details>
+<hr>
+
+## Tablespace per cada taula en una ruta especificada.
+Partint del punt anterior, modificarem la configuració del MySQL, per a que cada taula generi el seu propi tablespace dins d'una carpeta que crearem preparada per aquests tablespaces.
+
+Llavors començarem creant la carpeta que es dirà `tspaces` i estarà situada a `/hd-mysql/`, la ruta d'aquest arxiu serà `/hd-mysql/tspaces`.
+
+Crearem la carpeta i li posarem els permisos adients de MySQL
+```
+# mkdir /hd-mysql/tspaces
+# chown mysql:mysql -R /hd-mysql/tspaces
+# chmod 751 -R /hd-mysql/tspaces
+```
+
 
 
 
