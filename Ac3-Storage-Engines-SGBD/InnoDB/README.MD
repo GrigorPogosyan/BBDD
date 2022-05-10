@@ -210,14 +210,6 @@ mysql> SOURCE /root/sakila-db/sakila-schema.sql
 </details>
 
 ```
-mysql> SOURCE /root/sakila-db/sakila-schema.sql
-```
-<details open>
-<summary><b>Importar BD Sakila (Schema)</b></summary>
-<img src="captures/import_sakila_schema.png">
-</details>
-
-```
 mysql> SOURCE /root/sakila-db/sakila-data.sql
 ```
 <details open>
@@ -302,7 +294,7 @@ socket=/hd-mysql/mysql.sock
 
 Guardem el fitxer de configuració i sortim.
 
-Ara, si estem utilitzant RHEL / CentOS , si no tenim el `SELINUX` desactivat hem de afegir el `SELinux Security Context` a la nova ubicació, per a que funcioni
+Ara, si estem utilitzant RHEL / CentOS , si no tenim el `SELINUX` desactivat hem de afegir el `SELinux Security Context` a la nova ubicació, per a que funcioni. També el podrem deshabilitar per evitar problemes
 ```
 # semanage fcontext -a -t mysqld_db_t "/hd-mysql(/.*)?"
 # restorecon -R /hd-mysql
@@ -322,6 +314,9 @@ Un cop fet això, si reiniciem el servei de MySQL i mirem l'estatus no hi haurie
 </details>
 
 I si mirem en el nou directori, podrem veure com ha reproduït tota la estructura.
+
+⚠️ ATENCIÓ ⚠️ : SI FEM AQUEST PAS DE REINICIAR, DESPRÉS HEM DE TORNAR A BORRAR TOT I CREAT TOT DE NOU PERQUÈ EN L'APARTAT DE IBDATA CANVIAREM EL DIRECTORI I NO MANTINDREM EL IBDATA1 QUE ENS CREARÀ ARA A `/HD-MYSQL`. LLAVORS TORNAREM A GENERAR LA ESTRUCTURA PERÒ LOCALITZANT ELS IBDATA EN UN LLOC DIFERENT. LLAVORS SI NO CANVIARÀS ELS PATH DEL IBDATA POTS FER AQUEST PAS TRANQUILAMENT.
+
 <details open>
 <summary><b>Comprovar que ha creat els fitxers (tota la estructura)</b></summary>
 <img src="captures/lshd-mysql.png">
@@ -329,7 +324,7 @@ I si mirem en el nou directori, podrem veure com ha reproduït tota la estructur
 
 Ara, tornarem al `my.cnf`, i descomentarem les linies comentades anteriorment, on modificavem algunes variables del MySQL, excepte les variables que fan referència a una característica instal·lada, que ara al ser nova estructura no el tenim i per tant l'hem d'instal·lar de nou si el volem fer servir.
 
-Llavors descomentarem les linies (si en teniem abans o volem tenir) i també afegirem una configuració extra, per a que ens funcioni el login per MySQL i no ens doni error de `Socket` més endavant.
+Llavors descomentarem les linies (si en teniem abans o volem tenir) i també afegirem una configuració extra, per a que ens funcioni el login per MySQL i no ens doni error de `Socket` més endavant, perquè aquestruta del Socket si no l'especifiques en la secció de `[Client]` utilitza la que té per defecte, i com hem canviat de directori hem d'especificar el del nou directori.
 ```
 # nano /etc/my.cnf
 ```
@@ -389,7 +384,7 @@ Després tornarem a posar el nom antic per si volem tornar a la ruta.
 <img src="captures/comprobacion.png">
 </details>
 
-### Configuració 2 System TableSpace en diferents discos
+### Configuració System Tablespace en 2 Discos
 En aquest apartat, configurarem 2 System TablesSpace. Els dos amb mida 50MB inicial, fent-los creixent de 5 MB en 5 MB i el `ibdata1` estàra en `/disk1/` i el `ibdata2` estarà en `/disk2/`.
 
 Llavors començem insertant els discos virtuals en la nostra màquina virtual / real si estem fent-ho en un cas real.
@@ -470,7 +465,7 @@ Arribat en aquest punt tenim preparat lo següent:
 - Disc 1 Partició 1 --> `/dev/sdb1` fs=ext4
 - Disc 2 Partició 1 --> `/dev/sdc1` fs=ext4
 
-Ara, crearem els directoris de /disk1 i /disk2 a l'arrel que és on muntarem els discs amb els permisos adients per el MySQL.
+Ara, crearem els directoris de /disk1 i /disk2 a l'arrel que és on muntarem els discs amb els permisos adients per el MySQL. Encara que després de montar el disc sobre la carpeta pot ser que els permisos configurats ara desapareixin i es posin els de root
 ```
 # mkdir /disk1
 # chown -R mysql:mysql /disk1
@@ -497,7 +492,7 @@ Ara, muntarem les particions temporalment en el seu directori corresponent per v
 </details>
 
 
-Un cop sabem que pot muntar-ho sense problema, en comptes de muntar-ho manualment ho muntarem en `etc/fstab` per a que cada vegada que s'inicii el sistema operatiu ell ho monti automàticament i no tinguem cap problema.
+Un cop sabem que pot muntar-ho sense problema, en comptes de muntar-ho manualment afegirem unes linies en `etc/fstab` per a que cada vegada que s'inicii el sistema operatiu ell ho monti automàticament i no tinguem cap problema.
 
 ```
 # nano /etc/fstab
@@ -532,4 +527,170 @@ Un cop que s'inicii amb la comanda `mount` mirarem si ens ha montat el disc i de
 <img src="captures/mount_dflh.png">
 </details>
 
-Arribat en aquest punt ja tenim preparat els discs, i el directori per podem posar els system tablespace
+Ara, al montar el disc sobre la carpeta, pot ser que es canviin els permisos a root automàticament.
+Si passa això tornem a posar els permisos, propietari i grup d'aquestes carpetes.
+```
+# chown -R mysql:mysql /disk1
+# chmod 751 /disk1
+
+# chown -R mysql:mysql /disk2
+# chmod 751 /disk2
+```
+<details open>
+<summary><b>Permisos Discs</b></summary>
+<img src="captures/permisos_disk.png">
+</details>
+
+Arribat en aquest punt ja tenim preparat els discs, el directori amb els permisos adients.
+
+⚠️ATENCIÓ⚠️: EN AQUEST PAS CANVIAREM LA RUTA DELS IBDATA SENSE MANTENIR L'ANTERIOR QUE ENS HA GENERAT, AIXÒ VOL DIR RE GENERAREM LA ESTRUCTURA DEL `/hd-mysql` LOCALITZANT EN UN LLOC DIFERENTS ELS IBDATA I PERDREM LES DADES ANTERIORS, SI VOLEM QUE LES DADES ANTIGUES ES MANTINGUIN HAUREM D'ESPECIFICAR 3 IBDATA, L'ANTIC, EL NOU I EL SEGON NOU PERÒ EN AQUEST CAS FAREM LA VERSIÓ DE RE GENERAR-LOS.
+
+Ara el que farem serà canviar la ruta dels `ibdata` cap a discos externs.
+
+Primer, desactivarem el `SE LINUX` si estem utilitzant un SO `RHEL` o `CENTOS`, podriem afegir la regla a la nova ubicació, però per evitar més problemes el desactivem.
+```
+# nano /etc/selinux/config
+SELINUX=disabled
+```
+<details open>
+<summary><b>Desactivar SELINUX</b></summary>
+<img src="captures/disable_selinux.png">
+</details>
+
+Posteriorment, guardarem els canvis i reiniciarem la màquina.
+
+```
+# init 6
+```
+
+Com s'ha dit anteriorment, com regenerarem el contingut i perdrem les dades, hem de buidar el contingut de `/hd-mysql` o la ruta del destí que tinguem per a que torni a generar tots els fitxers, si canviem de destí no fa falta aquest pas.
+
+```
+# rm -r -R -f /hd-mysql/*
+```
+
+<details open>
+<summary><b>Borrar el contingut de la carpeta destí per generar els fitxers</b></summary>
+<img src="captures/vaciar_destino.png">
+</details>
+
+
+Anirem a l'arxiu de configuració de MySQL situat a `/etc/my.cnf`.
+```
+# nano /etc/my.cnf
+```
+I afegirem les següents linies en la secció de `[mysqld]`.
+
+La següent linia treiem el path del data_home_dir, perquè després en el ibdata especificarem la ruta absoluta on guardarem els ibdata. Sinó concatenara la ruta d'aquest paràmetres més la ruta que es posi en el ibdata.
+- `innodb_data_home_dir =`  
+
+La següent linia especificarem la ruta absoluta de cada ibdata, amb la mida inicial de 50M, i el segon ibdata creixerà automàticament a mesura que ho necessiti. Si en el paràmetre anterior especifiquem alguna ruta, utilitzarà la ruta anterior + la que es posi en aquest paràmetre
+`
+- `innodb_data_file_path=/disk1/ibdata1:50M;/disk2/ibdata2:50M:autoextend`
+
+La següent linia indicarà de quina mida anirà creixent el ibdata que tingui autoextend.
+- `innodb_autoextend_increment = 5`
+
+```
+[mysqld]
+datadir=/hd-mysql
+socket=/hd-mysql/mysql.sock
+
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
+
+innodb_file_per_table=OFF
+
+innodb_data_home_dir = 
+innodb_data_file_path=/disk1/ibdata1:50M;/disk2/ibdata2:50M:autoextend
+innodb_autoextend_increment=5
+
+mysqlx_socket = /hd-mysql/mysqlx.sock
+
+[client]
+socket=/hd-mysql/mysql.sock
+```
+
+També si mirem en els apartats anterior s'explica que en el fitxer de configuracio `my.cnf` en la secció de `[mysqld]` haviem de comentar els paràmetres opcionals que teniem posats per a que la primera vegada que regenerra l'estructura no doni error, per exemple el paràmetre de `default-storage-engine` s'ha de comentar (després de que monti la estructura podem descomentar aquestes linees). També posarem la secció de `[client]` especificant la nova ruta del `Socket` per a que ens deixi loguejar-nos.
+També podem especificar el socket del `Plugin X` de MySQL, que es diu `mysqlx.sock`.
+
+<details open>
+<summary><b>Configuració per regenerar la estructura i tenir 2 System Tablespace en llocs diferents</b></summary>
+<img src="captures/innodb_data.png">
+</details>
+
+Ara, reinicirem el servei de MySQL i si tot va bé haurà reiniciat amb èxit. Si no funciona amb éxit, borra els fitxers que ha generat al directori de dades, i torna a provar de reiniciar.
+
+```
+# systemctl restart mysqld
+# systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar servei MySQL</b></summary>
+<img src="captures/systemctl_status.png">
+</details>
+
+Si mirem el directori de dades podrem veure que ha generat tot.
+```
+# ls -alis /hd-mysql
+```
+<details open>
+<summary><b>Directori de dades generat</b></summary>
+<img src="captures/ls_alis_hdmysql.png">
+</details>
+
+I si mirem els discos en cada disc ha creat el seu ibdata amb `50MB` inicials.
+```
+# ls -alish /disk1
+# ls -alish /disk2
+```
+<details open>
+<summary><b>Veure els ibdata generat i la seva mida</b></summary>
+<img src="captures/ls_alish_disk.png">
+</details>
+
+Ara, com s'ha fet en l'apartat de canviar el directori de MySQL, hem de tornar a buscar la contrasenya del Root en els logs, i tornar-la a canviar.
+```
+# cat /var/log/mysqld.log | grep "generated"
+```
+```
+# mysql -u root -p"passwordgenerated"
+```
+```
+mysql> ALTER USER 'root'@'localhost' IDENTIFIED BY 'N3WP4SSW0RD';
+mysql> FLUSH PRIVILEGES;
+```
+<details open>
+<summary><b>Canviar contrasenya del Root</b></summary>
+<img src="captures/recover_password.png">
+</details>
+
+I ara també podem mirar per les variables del MySQL les rutes dels paràmetres que hem canviat.
+```
+mysql> SHOW VARIABLES WHERE VALUE LIKE '%/hd-mysql%';
+mysql> SHOW VARIABLES WHERE VALUE LIKE '%/dis%';
+mysql> SHOW VARIABLES LIKE '%autoextend%';
+mysql> SHOW VARIABLES LIKE '%innodb_data_h%';
+```
+<details open>
+<summary><b>Veure que han canviat els path dels variables com a comprovació</b></summary>
+<img src="captures/show_variables_change.png">
+</details>
+
+Ara, tornarem a importar la BD de Sakila el Schema com a taules InnoDB, (ens assegurarem que tenim per defecte el Storage Engine InnoDB). 
+```
+mysql> SOURCE /root/sakila-db/sakila-schema.sql;
+mysql> SOURCE /root/sakila-db/sakila-data.sql;
+```
+<details open>
+<summary><b>Importar BD Sakila (Schema)</b></summary>
+<img src="captures/import_sakila_schema.png">
+</details>
+<details open>
+<summary><b>Importar BD Sakila (Data)</b></summary>
+<img src="captures/import_sakila_data.png">
+</details>
+
+
+
+
