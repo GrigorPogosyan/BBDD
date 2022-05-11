@@ -767,6 +767,11 @@ I mirarem també com ha quedat la carpeta de la BD de la taula en el directori d
 <summary><b>Verificar que la carpeta de la BD del directori de dades anterior ha quedat buida</b></summary>
 <img src="captures/ls-provaSpace-vacio.png">
 </details>
+<hr>
 
+## Creació Tablespace Generals
+En aquest apartat crearem tablespaces generals en discos diferents i dividirem les taules de la BD de Sakila en aquests dos tablespaces situats en llocs diferents.
+
+### Tablespace ts1 a /disk1
 
 
