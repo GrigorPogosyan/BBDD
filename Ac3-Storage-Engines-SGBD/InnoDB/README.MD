@@ -695,16 +695,78 @@ mysql> SOURCE /root/sakila-db/sakila-data.sql;
 ## Tablespace per cada taula en una ruta especificada.
 Partint del punt anterior, modificarem la configuració del MySQL, per a que cada taula generi el seu propi tablespace dins d'una carpeta que crearem preparada per aquests tablespaces.
 
-Llavors començarem creant la carpeta que es dirà `tspaces` i estarà situada a `/hd-mysql/`, la ruta d'aquest arxiu serà `/hd-mysql/tspaces`.
+Llavors començarem creant la carpeta que es dirà `tspaces` i estarà situada a `/tspaces`, la ruta d'aquest arxiu serà `/tspaces`, hem de crear la carpeta de tspaces en un lloc diferent del directori de dades, perquè per raons de seguretat no ens deixarà posar el data directory de la taula a una ruta descendent del directori de dades.
 
 Crearem la carpeta i li posarem els permisos adients de MySQL
 ```
-# mkdir /hd-mysql/tspaces
-# chown mysql:mysql -R /hd-mysql/tspaces
-# chmod 751 -R /hd-mysql/tspaces
+# mkdir /tspaces
+# chown mysql:mysql -R /tspaces
+# chmod 751 -R /tspaces
 ```
+<details open>
+<summary><b>Crear i preparar el directori dels tablespaces</b></summary>
+<img src="captures/mkdir_tspaces.png">
+</details>
 
+Anirem al `my.cnf` i posarem en ON o treiem la variable de `innodb_file_per_table` d'aquesta manera cada taula generarà el seu propi tablespace, per defecte si no hi ha aquest paràmetre especificat en el `my.cnf`, genera el seu propi tablespace.
+```
+# nano /etc/my.cnf
 
+[mysqld]
+innodb_file_per_table=ON
+```
+<details open>
+<summary><b>Activar el paràmetre innodb_file_per_table</b></summary>
+<img src="captures/innodb_file_per_table.png">
+</details>
+
+Posteriorment reiniciarem i comprobarem el servei de MySQLD
+```
+# systemctl restart mysqld && systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar i comprovar el servei de MySQL</b></summary>
+<img src="captures/systemctl_status2.png">
+</details>
+
+Si volem que per defecte els tablespaces de les taules es generin en un data directori diferent a la del `datadir`, no podem fer-ho, no hi ha cap opció. El que si que podem fer és alhora de crear la taula especificar en la mateixa sentència el data directori d'aquella taula i d'aquesta manera canviar-li la ruta en aquesta taula. Perquè per defecte la carpeta de la BD i el tablespace de les taules les genera en el directori `datadir` del `MySQL`, no hi ha cap paràmetre de tipus: bd_data_dir, ni table_data_dir, ho haurem d'especificar amb el paràmetre `TABLESPACE` `DATA DIRECTORY` en la sentència DDL alhora de crear la taula, o també podem modificar taules anteriors amb la sentència ALTER i modificar el path.
+
+Llavors ara, entrarem al MySQL i crearem nostra BD de prova.
+```
+mysql>CREATE DATABASE provaSpace;
+mysql>CREATE TABLE taulaProves (id INT PRIMARY KEY, nom VARCHAR(30)) TABLESPACE=innodb_file_per_table DATA DIRECTORY="/tspaces/";
+```
+En la comanda anterior, tornem a especificar que el `tablespace` sigui `innodb_file_per_table` segons les fonts de MySQL amb aquest paràmetre t'estalvies activar el paràmetre per el `my.cnf`, però l'especificarem de totes maneres, i el paràmetre `DATA DIRECTORY` tindrà com a valor la ruta on volem guardar el tablespace.
+
+<details open>
+<summary><b>Creació de la taula especificant el directori del tablespace</b></summary>
+<img src="captures/tablespace-datadirectory.png">
+</details>
+
+⚠️Atenció: Si es posa el paràmetre `DATA DIRECTORY` sense que acompanyi el paràmetre `TABLESPACE` (encara que estigui ON a nivell de fitxer), posiblement doni un error, la solució del error en molts casos és posant el paràmetre `TABLESPACE`
+
+<details open>
+<summary><b>Posible error i solució</b></summary>
+<img src="captures/tablespace-datadirectoryerror.png">
+</details>
+
+I si mirem la ruta del DATA DIRECTORY que hem especificat abans podem trobat el tablespace de la taula. Cada taula estarà dins d'una carpeta que es dirà amb el nom de la BD que pertany la taula.
+```
+# ls -alish /tspaces/provaSpace/
+```
+<details open>
+<summary><b>Verificar que guarda el tablespace en la carpeta tspaces</b></summary>
+<img src="captures/ls-tspaces-provaSpace.png">
+</details>
+
+I mirarem també com ha quedat la carpeta de la BD de la taula en el directori de dades que en teoria ha de quedar buida perquè la única taula que té l'hem creat en una ruta diferent.
+```
+# ls -alish /hd-mysql/provaSpace
+```
+<details open>
+<summary><b>Verificar que la carpeta del directori de dades ha quedat buida</b></summary>
+<img src="captures/ls-provaSpace-vacio.png">
+</details>
 
 
 
