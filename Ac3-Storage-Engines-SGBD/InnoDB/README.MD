@@ -764,7 +764,7 @@ I mirarem també com ha quedat la carpeta de la BD de la taula en el directori d
 # ls -alish /hd-mysql/provaSpace
 ```
 <details open>
-<summary><b>Verificar que la carpeta del directori de dades ha quedat buida</b></summary>
+<summary><b>Verificar que la carpeta de la BD del directori de dades anterior ha quedat buida</b></summary>
 <img src="captures/ls-provaSpace-vacio.png">
 </details>
 
