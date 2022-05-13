@@ -805,6 +805,15 @@ Reiniciarem el servei i el comprovarem.
 <img src="captures/systemctl_status3.png">
 </details>
 
+Si volem comprovar que la variable s'ha modificat ho podem veure mitjançant una consulta SQL.
+```
+mysql> SHOW VARIABLES LIKE '%directori%';
+```
+<details open>
+<summary><b>Comprovar que la variable innodb_directories s'ha modificat correctament</b></summary>
+<img src="captures/like_directori.png">
+</details>
+
 Posteriorment crearem els tablespaces `ts1` situat a `/disk1` i el `ts2` situat a `/disk2` mitjançant sentències SQL. (Tenim els permisos de carpeta de disk1 i disk2 configurats en els apartats anteriors)
 ```
 mysql> CREATE TABLESPACE ts1 ADD DATAFILE '/disk1/ts1.ibd' ENGINE=InnoDB;
@@ -816,3 +825,26 @@ mysql> CREATE TABLESPACE ts2 ADD DATAFILE '/disk2/ts2.ibd' ENGINE=InnoDB;
 <summary><b>Creació dels tablespaces</b></summary>
 <img src="captures/create_tablespace.png">
 </details>
+
+Podem llistar els directoris i podem mirar que s'han creat correctament.
+```
+# ls -alish /disk1
+# ls -alish /disk2
+```
+<details open>
+<summary><b>Veure que ha creat els tablespaces en els directoris</b></summary>
+<img src="captures/ls_ts.png">
+</details>
+
+### Importar Sakila col·locant les taules en els tablespaces
+Ara, importarem la BD de Sakila però les taules repartides en els tablespaces que hem creat anteriorment.
+
+Si ja tenim la BD Sakila, haurem de modificar el tablespace mitjançant la sentència ALTER. Modificarem la taula i li assignarem el tablespace, pero a continuació farem la versió d'importació.
+
+El que hem de fer ara és modificar les sentències DDL de les creacions de les taules `actor`,`address`, i `category` i assignar aquests en el tablespace `ts1`.
+
+Llavors obrirem el Schema DB de Sakila per editar el contingut
+```
+# nano /root/sakila-db/sakila-schema.sql
+```
+I a les taules actor, address i category, afegirem el tablespace `ts1` creat anteriorment, de manera que es veurien així finalment les taules amb el paràmetre `TABLESPACE`:
