@@ -720,7 +720,7 @@ innodb_file_per_table=ON
 <img src="captures/innodb_file_per_table.png">
 </details>
 
-Posteriorment reiniciarem i comprobarem el servei de MySQLD
+Posteriorment reiniciarem i comprovarem el servei de MySQLD
 ```
 # systemctl restart mysqld && systemctl status mysqld
 ```
@@ -772,6 +772,47 @@ I mirarem també com ha quedat la carpeta de la BD de la taula en el directori d
 ## Creació Tablespace Generals
 En aquest apartat crearem tablespaces generals en discos diferents i dividirem les taules de la BD de Sakila en aquests dos tablespaces situats en llocs diferents.
 
-### Tablespace ts1 a /disk1
+### Tablespace ts1 a /disk1 i ts2 a /disk2
+Crearem un tablespace anomenat ts1 a `/disk1` on situarem les taules de "actor", "address", i "category" de la BD de Sakila.
 
+Ara, la opció innodb_file_per_table ens es igual.
 
+El que farem serà d'un principi anar a l'arxiu de configuració `my.cnf` i afegir "directoris de confiança del innodb" apuntant cap al destí per evitar un error al crear el tablespace fora del directori de dades.
+```
+# nano /etc/my.cnf
+```
+```
+[mysqld]
+innodb_directories=/disk1;/disk2
+```
+<details open>
+<summary><b>Afegit "paths" de confiança en el innodb per poder guardar dades fora de la ruta del directori de dades</b></summary>
+<img src="captures/innodb_directories.png">
+</details>
+
+Amb lo anterior ens estalviem el següent error alhora de crear el tablespace en un path diferent a la del directori de dades:
+<details open>
+<summary><b>Error que tindriem al crear el tablespace fora del directori de dades si no posem el paràmetre anterior.</b></summary>
+<img src="captures/error_confianca.png">
+</details>
+
+Reiniciarem el servei i el comprovarem.
+```
+# systemctl restart mysqld && systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar el servei per aplicar els canvis anteriors</b></summary>
+<img src="captures/systemctl_status3.png">
+</details>
+
+Posteriorment crearem els tablespaces `ts1` situat a `/disk1` i el `ts2` situat a `/disk2` mitjançant sentències SQL. (Tenim els permisos de carpeta de disk1 i disk2 configurats en els apartats anteriors)
+```
+mysql> CREATE TABLESPACE ts1 ADD DATAFILE '/disk1/ts1.ibd' ENGINE=InnoDB;
+```
+```
+mysql> CREATE TABLESPACE ts2 ADD DATAFILE '/disk2/ts2.ibd' ENGINE=InnoDB;
+```
+<details open>
+<summary><b>Creació dels tablespaces</b></summary>
+<img src="captures/create_tablespace.png">
+</details>
