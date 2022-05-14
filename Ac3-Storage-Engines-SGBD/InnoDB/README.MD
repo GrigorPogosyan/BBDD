@@ -848,13 +848,24 @@ Llavors obrirem el Schema DB de Sakila per editar el contingut
 # nano /root/sakila-db/sakila-schema.sql
 ```
 I a les taules actor, address i category, afegirem el tablespace `ts1` creat anteriorment, de manera que es veurien així finalment les taules amb el paràmetre `TABLESPACE`:
+```
+TABLESPACE ts1
+```
 <details open>
 <summary><b>Canviar el DDL de les taules actor address i category i afegir-los al tablespace ts1 (abans d'importar-lo a la BD)</b></summary>
 <img src="captures/tablespace_ts1.png">
 </details>
 
 I a la resta de taules els afegirem al tablespace ts2
+```
+TABLESPACE ts2
+```
 <details open>
 <summary><b>Canviar el DDL de la resta de taules i afegir-los al tablespace ts2 (abans d'importar-lo a la BD)</b></summary>
 <img src="captures/tablespace_ts2.png">
+<img src="captures/tablespace_ts2_1.png">
+<img src="captures/tablespace_ts2_2.png">
+<img src="captures/tablespace_ts2_3.png">
+<img src="captures/tablespace_ts2_4.png">
+<img src="captures/tablespace_ts2_5.png">
 </details>
