@@ -847,7 +847,7 @@ Llavors obrirem el Schema DB de Sakila per editar el contingut
 ```
 # nano /root/sakila-db/sakila-schema.sql
 ```
-I a les taules actor, address i category, afegirem el tablespace `ts1` creat anteriorment, de manera que es veurien així finalment les taules amb el paràmetre `TABLESPACE`:
+I a les taules actor, address i category, afegirem el tablespace `ts1` creat anteriorment, de manera que es veurien així finalment les taules amb el paràmetre `TABLESPACE`, encara que estigui posat, important que les taules estiguin en InnoDB!:
 ```
 TABLESPACE ts1
 ```
@@ -869,3 +869,110 @@ TABLESPACE ts2
 <img src="captures/tablespace_ts2_4.png">
 <img src="captures/tablespace_ts2_5.png">
 </details>
+
+Guardarem els canvis de DDL fets al fitxer SQL del Schema de Sakila, i procedirem a importar, recordar que en cas de tenir-lo importat i voler canviar el tablespace ES POT !!!
+[+ Informació](https://dev.mysql.com/doc/refman/5.7/en/general-tablespaces.html)
+
+```
+mysql> SOURCE /root/sakila-db/sakila-schema.sql
+```
+<details open>
+<summary><b>Importat l'Schema de Sakila amb les modificacions en les taules DDL que hem fet</b></summary>
+<img src="captures/import_sakila_to_ts.png">
+</details>
+
+Un cop importat, per comprovar que les taules anteriors pertanyen cadascú al seu general tablespace corresponent ho podrem verificar amb les següents sentències, on LIKE 'ts1' equival al nom del nostre tablespace
+```
+mysql> SELECT a.NAME AS space_name, b.NAME AS table_name
+FROM INFORMATION_SCHEMA.INNODB_TABLESPACES a,
+INFORMATION_SCHEMA.INNODB_TABLES b 
+WHERE a.SPACE=b.SPACE AND a.NAME LIKE 'ts1';
+```
+<details open>
+<summary><b>Verificar les taules pertanyents al tablespace ts1</b></summary>
+<img src="captures/check_ts1.png">
+</details>
+
+Ara verificarem les taules del ts2.
+```
+mysql> SELECT a.NAME AS space_name, b.NAME AS table_name
+FROM INFORMATION_SCHEMA.INNODB_TABLESPACES a,
+INFORMATION_SCHEMA.INNODB_TABLES b 
+WHERE a.SPACE=b.SPACE AND a.NAME LIKE 'ts2';
+```
+<details open>
+<summary><b>Verificar les taules pertanyents al tablespace ts2</b></summary>
+<img src="captures/check_ts2.png">
+</details>
+
+A més podrem verificar la mida dels generals tablespaces `ts1` i `ts2`, si ho comparem amb la anterior mida que es pot veure en els apartats anteriors d'aquest document, aquesta mida ha pujat degut a les importacions que hem fet.
+(Òbviament la mida del ts2 és major ja que conté més taules amb més camps)
+```
+# ls -lh /disk1/ts1.ibd
+# ls -lh /disk2/ts2.ibd
+```
+<details open>
+<summary><b>Verificar que la mida dels tablespaces ha pujat</b></summary>
+<img src="captures/check_ts_size.png">
+</details>
+
+També podem mirar el directori de dades de la BD, hauria d'estar buit.
+<details open>
+<summary><b>Verificar que les taules no es guarden al directori per defecte, sinó que estan en els tablespaces</b></summary>
+<img src="captures/vacio_sakila.png">
+</details>
+
+Un cop verificat que tenim ben configurats els tablespaces, procedirem a importar el contingut de les taules.
+```
+mysql> SOURCE /root/sakila-db/sakila-data.sql
+```
+<details open>
+<summary><b>Importar el contingut de les taules Sakila</b></summary>
+<img src="captures/sakila_data.png">
+</details>
+
+Ara, tornarem a verificar la mida dels tablespaces i podem veure que encara han crescut més.
+```
+# ls -lh /disk1/ts1.ibd
+# ls -lh /disk2/ts2.ibd
+```
+<details open>
+<summary><b>Verificar que la mida dels tablespaces ha tornat a pujar</b></summary>
+<img src="captures/check_ts_size2.png">
+</details>
+
+Ara, finalment ens queda comprovar que podem fer sentències DML sobre aquestes dades guardades en diferents tablespaces.
+
+Farem un parell de sentències "chorras", un a cada taula situat a cada tablespace.
+```
+mysql> UPDATE actor SET first_name = "bb" WHERE first_name RLIKE '.mp.';
+```
+<details open>
+<summary><b>Canvis DML a la taula situada a ts1</b></summary>
+<img src="captures/dml_ts1.png">
+</details>
+
+I comprovarem que s'han realitat els canvis
+```
+mysql> SELECT * FROM actor;
+```
+<details open>
+<summary><b>Comprovació dels canvis realitzats de la taula actor</b></summary>
+<img src="captures/dml_ts1_prueba.png">
+</details>
+
+Ara modificarem una taula que estigui en el ts2 com per exemple la taula `country`
+```
+mysql> UPDATE country SET last_update = now();
+```
+<details open>
+<summary><b>Canvis DML a la taula situada a ts2</b></summary>
+<img src="captures/dml_ts2_prueba.png">
+</details>
+
+<details open>
+<summary><b>Comprovació dels canvis realitzats de la taula country</b></summary>
+<img src="captures/dml_ts1_select.png">
+</details>
+
+Arribat en aquest punt ja sabem que tenim els tablespaces correctament configurats. 
