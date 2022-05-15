@@ -75,3 +75,5 @@ mysql> SHOW ENGINE INNODB STATUS\G
 <summary><b>Veure el últim Checkpoint </b></summary>
 <img src="captures/lsn5.png">
 </details>
+
+[+ Info ](https://www.percona.com/blog/2012/02/17/the-relationship-between-innodb-log-checkpointing-and-dirty-buffer-pool-pages/)
