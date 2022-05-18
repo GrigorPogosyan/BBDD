@@ -619,7 +619,7 @@ També podem especificar el socket del `Plugin X` de MySQL, que es diu `mysqlx.s
 <img src="captures/innodb_data.png">
 </details>
 
-Ara, reinicirem el servei de MySQL i si tot va bé haurà reiniciat amb èxit. Si no funciona amb éxit, borra els fitxers que ha generat al directori de dades, i torna a provar de reiniciar.
+Ara, reinicirem el servei de MySQL i si tot va bé haurà reiniciat amb èxit. Si no funciona amb éxit, borra els fitxers que ha generat al directori de dades, i tornarem a provar de reiniciar.
 
 ```
 # systemctl restart mysqld
