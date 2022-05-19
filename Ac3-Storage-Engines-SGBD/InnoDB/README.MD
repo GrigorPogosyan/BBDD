@@ -619,7 +619,7 @@ També podem especificar el socket del `Plugin X` de MySQL, que es diu `mysqlx.s
 <img src="captures/innodb_data.png">
 </details>
 
-Ara, reinicirem el servei de MySQL i si tot va bé haurà reiniciat amb èxit. Si no funciona amb éxit, borra els fitxers que ha generat al directori de dades, i torna a provar de reiniciar.
+Ara, reinicirem el servei de MySQL i si tot va bé haurà reiniciat amb èxit. Si no funciona amb éxit, borra els fitxers que ha generat al directori de dades, i tornarem a provar de reiniciar.
 
 ```
 # systemctl restart mysqld
@@ -708,16 +708,19 @@ Crearem la carpeta i li posarem els permisos adients de MySQL
 <img src="captures/mkdir_tspaces.png">
 </details>
 
-Anirem al `my.cnf` i posarem en ON o treiem la variable de `innodb_file_per_table` d'aquesta manera cada taula generarà el seu propi tablespace, per defecte si no hi ha aquest paràmetre especificat en el `my.cnf`, genera el seu propi tablespace.
+🟢 MANERA 1🟢
+
+Anirem al `my.cnf` i posarem en ON o treiem la variable de `innodb_file_per_table` d'aquesta manera cada taula generarà el seu propi tablespace, per defecte si no hi ha aquest paràmetre especificat en el `my.cnf`, genera el seu propi tablespace. També posarem el paràmetre `innodb_directories` especificant el directori de confiança `/tspaces`, perquè si tenim un directori apart creat per nosaltres i no és natiu del MySQL, tindrem problemes, l'haurem de dir en el paràmetre que aquest directori forma part dels directoris d'InnoDB
 ```
 # nano /etc/my.cnf
 
 [mysqld]
 innodb_file_per_table=ON
+innodb_directories="/tspaces";
 ```
 <details open>
-<summary><b>Activar el paràmetre innodb_file_per_table</b></summary>
-<img src="captures/innodb_file_per_table.png">
+<summary><b>Activar el paràmetre innodb_file_per_table i especificarem innodb_directories</b></summary>
+<img src="captures/innodb_file_per_table_directories.png">
 </details>
 
 Posteriorment reiniciarem i comprovarem el servei de MySQLD
@@ -729,28 +732,50 @@ Posteriorment reiniciarem i comprovarem el servei de MySQLD
 <img src="captures/systemctl_status2.png">
 </details>
 
-Si volem que per defecte els tablespaces de les taules es generin en un data directori diferent a la del `datadir`, no podem fer-ho, no hi ha cap opció. El que si que podem fer és alhora de crear la taula especificar en la mateixa sentència el data directori d'aquella taula i d'aquesta manera canviar-li la ruta en aquesta taula. Perquè per defecte la carpeta de la BD i el tablespace de les taules les genera en el directori `datadir` del `MySQL`, no hi ha cap paràmetre de tipus: bd_data_dir, ni table_data_dir, ho haurem d'especificar amb el paràmetre `TABLESPACE` `DATA DIRECTORY` en la sentència DDL alhora de crear la taula, o també podem modificar taules anteriors amb la sentència ALTER i modificar el path.
+Si volem que per defecte els tablespaces de les taules es generin en un data directori diferent a la del `datadir`, no podem fer-ho, no hi ha cap opció. El que si que podem fer és alhora de crear la taula especificar en la mateixa sentència el data directori d'aquella taula i d'aquesta manera canviar-li la ruta del tablespace que generarà aquesta taula. Perquè per el tablespace de les taules les genera en el directori `datadir` del `MySQL` dins d'una carpeta de la seva BD.
 
-Llavors ara, entrarem al MySQL i crearem nostra BD de prova.
+Llavors el que farem, serà en la sentència DDL especificaR amb el paràmetre `DATA DIRECTORY` la ruta on volem que generi el tablespace de la taula
+
+Llavors ara, entrarem al MySQL i crearem nostra BD de prova amb la taula especificant el directori del tablespace creat anteriorment.
 ```
 mysql>CREATE DATABASE provaSpace;
+mysql>USE provaSpace;
+mysql>CREATE TABLE taulaProves (id INT PRIMARY KEY, nom VARCHAR(30)) DATA DIRECTORY="/tspaces/";
+```
+<details open>
+<summary><b>Crear taula especificant el directori del tablespace</b></summary>
+<img src="captures/data_directory_tspaces.png">
+</details>
+
+🟢 MANERA 2 🟢
+
+També tenim una manera alternativa de crear el tablespace d'una taula en un directori especícic. Aquesta manera alternativa, és per si no volem especificar els paràmetres `innodb_file_per_table` i `innodb_directories` en el `my.cnf` i ho volem especificar només en la sentència DDL de la creació de taula, fent d'aquesta manera una "creació excepcional de taula"
+
+És a dir en la sentència DDL posant uns paràmetres podem fer una creació excepcional i dir que aquesta taula tindrà el innodb_file_per_table i el seu directori de dades estarà situada a X lloc, sense la necessitat de modificar paràmetres a nivell de fitxer.
+```
+mysql>CREATE DATABASE provaSpace;
+mysql>USE provaSpace;
 mysql>CREATE TABLE taulaProves (id INT PRIMARY KEY, nom VARCHAR(30)) TABLESPACE=innodb_file_per_table DATA DIRECTORY="/tspaces/";
 ```
-En la comanda anterior, tornem a especificar que el `tablespace` sigui `innodb_file_per_table` segons les fonts de MySQL amb aquest paràmetre t'estalvies activar el paràmetre per el `my.cnf`, però l'especificarem de totes maneres, i el paràmetre `DATA DIRECTORY` tindrà com a valor la ruta on volem guardar el tablespace.
+En la comanda anterior, especificarem que el `tablespace` sigui `innodb_file_per_table`, segons les fonts de MySQL amb aquest paràmetre t'estalvies activar el paràmetre per el `my.cnf`, i el paràmetre `DATA DIRECTORY` tindrà com a valor la ruta on volem guardar el tablespace..
+
+I d'aquesta manera creariem el tablespace de la taula en una ruta diferent sense tocar paràmetres a nivell de fitxer
 
 <details open>
 <summary><b>Creació de la taula especificant el directori del tablespace</b></summary>
 <img src="captures/tablespace-datadirectory.png">
 </details>
 
-⚠️Atenció: Si es posa el paràmetre `DATA DIRECTORY` sense que acompanyi el paràmetre `TABLESPACE` (encara que estigui ON a nivell de fitxer), posiblement doni un error, la solució del error en molts casos és posant el paràmetre `TABLESPACE`
+⚠️Atenció: Si es posa el paràmetre `DATA DIRECTORY` sense que acompanyi el paràmetre `TABLESPACE` (encara que estigui ON a nivell de fitxer), posiblement doni un error, la solució del error en molts casos és posant el paràmetre `TABLESPACE`, o si ho volem fer de la manera 1, especificar el `innodb_directories`
 
 <details open>
 <summary><b>Posible error i solució</b></summary>
 <img src="captures/tablespace-datadirectoryerror.png">
 </details>
 
-I si mirem la ruta del DATA DIRECTORY que hem especificat abans podem trobat el tablespace de la taula. Cada taula estarà dins d'una carpeta que es dirà amb el nom de la BD que pertany la taula.
+🟢 COMPROVACIONS 🟢
+
+I si mirem la ruta del DATA DIRECTORY que hem especificat abans podem trobat el tablespace de la taula. Cada taula estarà dins d'una carpeta que es dirà amb el nom de la BD que pertany la taula, funcionarà qualsevol de les dues maneres
 ```
 # ls -alish /tspaces/provaSpace/
 ```
