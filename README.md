@@ -4,6 +4,7 @@
 - [Instal·lacions dels SGBD i configuració Inicial Bàsica](Ac1-Instal·lacions-SGBD/)
 - [Configuracions de Logs i Connexió Segura Percona Server SSL](Ac2-Configuracions-Logs/)
 - [Storage Engines](Ac3-Storage-Engines-SGBD)
+- [Rèpliques i Backups](Ac4-Replica-i-Backup)
 <hr>
 
 ## Explicació de la UF
