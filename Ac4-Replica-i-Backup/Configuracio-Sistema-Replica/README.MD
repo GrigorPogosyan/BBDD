@@ -28,6 +28,8 @@ En un entorn real fent [click aqui](https://www.tecmint.com/set-static-ip-addres
 
 El següent pas que s'hauria de fer és tenir preparat les màquines amb Percona Server 8.0 amb el MySQL instal·lat. [Fent clic aqui](https://github.com/GrigorPogosyan/M02-Base-de-Dades/tree/main/Ac1-Instal%C2%B7lacions-SGBD/Percona-Server8.0) podràs veure la guia d'instal·lació de Percona-Server MySQL, necessitarem connexió a Internet en les màquines.
 
+En aquesta pràctica la `IP: 192.168.151.142` correspon a la màquina `Slave`, i la `IP 192.168.151.143` correspon la màquina `Master`
+
 Ara, desactivarem el `SELINUX` en les `dues màquines` per estalviar problemes, en un cas real s'haurien de fer servir les regles. SELINUX és el Firewall de processos que té Red Hat per mesures de seguretat.
 
 Anirem a l'arxiu del SELINUX i posarem en `disable` el valor.
@@ -62,4 +64,104 @@ Ara, en cas de que estiguem virtualitzant i dupliquem màquines de Percona, aque
 <img src="captures/compare_uuid.png">
 </details>
 
-En cas de que tinguem UUID iguals haurem de borrar el fitxer `auto.cnf` del MySQL del `Slave` reiniciar el servei i que torni a generar un nou `UUID`.
+En cas de que tinguem UUID iguals haurem de borrar el fitxer `auto.cnf` del MySQL d'una de les dues màquines, reiniciar el servei i que torni a generar un nou `UUID`.
+```
+# rm /var/lib/mysql/auto.cnf
+```
+<details open>
+<summary><b>Eliminar el fitxer auto.cnf</b></summary>
+<img src="captures/rm_autocnf.png">
+</details>
+
+I ara reiniciarem i comprovarem el servei.
+
+```
+# systemctl restart mysqld && systemctl status mysqld
+```
+<details open>
+<summary><b>Reiniciar i comprovar el servei de MySQL</b></summary>
+<img src="captures/systemctl_restart_status.png">
+</details>
+
+Ara, tornarem a comprovar el UUID dels dos servidors i si tot ha anat bé tindrem `diferent UUID`
+```
+# cat /var/lib/mysql/auto.cnf
+```
+<details open>
+<summary><b>Comparar els UUID dels servidors i assegurar-nos que són diferents</b></summary>
+<img src="captures/compare_uuid2.png">
+</details>
+
+
+Ara, lo primer que hem de fer és tenir el `LOG BIN` del `Servidor Master Activat`, per defecte ve activat en aquest sistema, però si no el tenim per defecte activat afegirem la linia `log-bin=mysqld-bin` en la secció de `[mysqld]` del MySQL.
+
+També haurem de posar identificador de servidor en el Servidor Mestre `server-id=1`, aquest valor estar entre 1 i 232.
+
+Llavors obrirem l'arxiu de configuració de MySQL del servidor `Mestre` i configurarem aquestes opcions.
+
+```
+# nano /etc/my.cnf
+```
+```
+[mysqld]
+log-bin=mysql-bin
+server-id=1 
+```
+<details open>
+<summary><b>Activar el log bin (si no ho tenim per defecte activat), i assignar l'identificador de servidor al servidor Mestre</b></summary>
+<img src="captures/logbin_serverid.png">
+</details>
+
+MASTER:
+Miramos los logs y los rotamos y veremos que el binlog ha rotado al 2
+mysql -u root -pSox2020$
+SHOW MASTER LOGS;
+SHOW MASTER STATUS;
+FLUSH LOGS;
+SHOW MASTER STATUS;
+
+CREAMOS USUARIO DE REPLICA POR DEFECTO CON ENCRIPTACION SHA2
+CREATE USER 'replication'@'192.168.151.142' IDENTIFIED BY 'Sox2020$';
+
+
+LE DAMOS PERMISOS DE REPLICA A ESTE USUARIO QUE HEMOS CREAEDO
+GRANT REPLICATION SLAVE ON *.* TO 'replication'@'192.168.151.142';
+FLUSH PRIVILEGES;
+
+DEL MASTER HACEMOS UNA COPIA DE TODAS LAS BASES DE DATOS Y LO GUARDAMOS UN ARCHIVO
+mysqldump -u root -pSox2020$ --all-databases --master-data > dbdump.db
+
+MIRAMOS HASTA DONDE LLEGA LA COPIA, PARA QUE EL SLAVE LUEGO COMIENZA D ESE APARTADO DEL LOGFILE Y NO DESDE 0 PORQEU SINO ESTARA QUERIENDO REPLICAR CONTENIDO QUE YA TIENE
+BUSCAMOS EN DBDUMP.DB por el valor MASTER_LOG_FILE:
+
+ESTA ES LA LINIA
+CHANGE MASTER TO MASTER_LOG_FILE='mysql-bin.000002', MASTER_LOG_POS=899;
+
+LE PONEMOS AL SLAVE IDENTIFICADOR 2 Y LE QUITAMOS LOS LOGBIN, YA QUE SI ES SLAVE Y EN PRINCIPIO NO TIENE K PASAR SU LOGFILE PARA REPLICAR MAS ABAJO, ES INUTIL TENER EL LOGFILE ACTIVADO
+[mysqld]
+server-id=2 
+disable_log_bin
+
+REINICIAR SERVER
+
+IMPORTAMOS LA COPIA DE TODAS LAS BASES DE DATOS HECHAS ANTERIORMENTE, UN APARTADO DA ERROR... PERO SIGUE FUNCIONANDO, SI TENEMOS 1 BASE DE DATOS PODEMOS HACE COPIA DE ESA BASE DE DATOS
+SLAVE: 
+desde mysql import source dbdump.bd
+
+
+HACEMOS EL CHANGE MASTER TO, EL GET_MASTER_PUBLIC_KEY HAY QEU PONERLO PORQE SI NO NOS DICE ERROR DE USUARIO QUE NO PUEDE LOGUEARSE USANDO SHA256, PORQUE? PORQUE NO OBTIENE LA CLAVE PUBLICA PARA QUE EL SERVIDOR PUBLICO LO DESENCRIPTE EN LA PRIVADA Y POR ESO DA ERROR, OTRA SOLUCION SERIA QUE PUSIERAMOS PASSWORD EN NATIVO
+CHANGE MASTER TO
+MASTER_HOST='192.168.151.143',
+MASTER_USER='replication',
+MASTER_PASSWORD='Sox2020$',
+MASTER_PORT=3306,
+MASTER_LOG_FILE='mysql-bin.000002',
+MASTER_LOG_POS=899,
+GET_MASTER_PUBLIC_KEY=1,
+MASTER_CONNECT_RETRY=10;
+
+COMENZAMOS EL SLAVE  Y EN TEORIA TIENE K IR
+START SLAVE;
+
+SHOW SLAVE STATUS \G
+
