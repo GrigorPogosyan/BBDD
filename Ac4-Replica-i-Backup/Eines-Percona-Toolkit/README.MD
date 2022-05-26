@@ -15,6 +15,8 @@ Les `Percona Toolkit` són un conjunt d'eines avançades en la linea de comandes
 
 Aquestes eines són les alternatives als scripts privat que fa la gent per administrar la seva BD, la diferència es que les eines de Percona han sigut desenvolupades profesionalment, ben testejades i documentades.
 
+⚠️S'ha fet aquesta guía, després de montar el sistema de replicació `Master` - `Slave` provinent del apartat anterior de [Configuració-Sistema-Replica](https://github.com/GrigorPogosyan/M02-Base-de-Dades/tree/main/Ac4-Replica-i-Backup/Configuracio-Sistema-Replica )⚠️
+
 A continuació utilitzarem les següents eines:
   > - pt-table-checksum : Aquesta eina verifica la integritat de la replicació del MySQL, relitza una verificació de coherència de la replicació mitjançant unes comandes que utilitzarem en el Master. pt-table-checksum detecta rèpliques automàticament i es connecta a elles, moltes vegades això pot fallar i s'ha d'especificar la màquina slave, es connectarà als slaves automàticament si tenim el mateix compte (un compte d'administració per exemple) amb el mateix password i es connectarà a tots els slaves que trobi.
 
