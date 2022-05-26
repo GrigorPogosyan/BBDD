@@ -333,6 +333,12 @@ mysql> SOURCE /root/sakila-db/sakila-data.sql
 </details>
 
 I ara si tornem a comprovar, veurem que les dades han sigut replicades cap al `Slave` i que en les dues màquines tenim les mateixes dades.
+```
+mysql> SHOW DATABASES;
+```
+```
+mysql> SELECT * FROM actor LIMIT 3;
+```
 <details open>
 <summary><b>Verificar que la replicació es realitza correctament.</b></summary>
 <img src="captures/replication_done.png">
