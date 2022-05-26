@@ -122,7 +122,7 @@ Si no ignorem les <em>taules filles</em> **( --no-check-child-tables)** i el che
 Cannot delete or update a parent row: a foreign key constraint fails (`sakila`.`film_actor`, CONSTRAINT `fk_film_actor_actor` FOREIGN KEY (`actor_id`) REFERENCES `actor` (`actor_id`) ON DELETE RESTRICT ON UPDATE CASCADE) [for Statement "REPLACE INTO `sakila`.`actor`(`actor_id`, `first_name`, `last_name`, `last_update`) VALUES ('1', 'PENELOPE', 'GUINESS', '2006-02-15 04:34:33') /*percona-toolkit src_db:sakila src_tbl:actor src_dsn:P=3306,h=192.168.151.143,p=...,u=replication dst_db:sakila dst_tbl:actor dst_dsn:P=3306,h=192.168.151.142,p=...,u=replication lock:1 transaction:1 changing_src:1 replicate:0 bidirectional:0 pid:29192 user:root host:localhost.localdomain*/"] at line 10950 while doing sakila.actor on 192.168.151.142
 ```
 
-Ara, un cop hem sincronitzat la inconsistència que teniem, si tornem a fer el `Checksum` nos ens hauria de sortir cap diferència de dades.
+Ara, un cop hem sincronitzat el `Slave` al `Master` degut a la inconsistència que teniem, si tornem a fer el `Checksum` nos ens hauria de sortir cap diferència de dades.
 ```
 # pt-table-checksum -u percona_user -pSox2020$ -h 192.168.151.143 --no-check-binlog-format --databases=sakila;
 ```
