@@ -53,7 +53,7 @@ Ara, farem un `pt-table-checksum` amb la base de dades de `Sakila` que el tenim 
 
 En la sentència també especificarem el paràmetre `--no-check-binlog-format` perquè el format de Row per defecte és MIXED, i el Checksum el comprova utlitzant Statement, llavors per evitar problemes evitem que miri el format del binlog.
 
-Si no li posem el paràmetre --databases=sakila, verificarà per totes les bases de dades.
+Si no li posem el paràmetre --databases=sakila, verificarà totes les taules en totes les bases de dades.
 
 🟢 Manera 1: Mateix usuari en el Master i Slave i que es connecti automàticament als Slaves que trobi el script.:
 ```
