@@ -267,86 +267,73 @@ I ara arriba la part de la configuració de `CHANGE MASTER TO` en el `Slave`. On
 I la comanda per aquest cas seria:
 ```
 mysql> CHANGE MASTER TO
-    -> MASTER_HOST='192.168.151.143',
-    -> MASTER_USER='replication',
-    -> MASTER_PASSWORD='Sox2020$',
-    -> MASTER_PORT=3306,
-    -> MASTER_LOG_FILE='mysql-bin.000002',
-    -> MASTER_LOG_POS=899,
-    -> GET_MASTER_PUBLIC_KEY=1,
-    -> MASTER_CONNECT_RETRY=10;
+    MASTER_HOST='192.168.151.143',
+    MASTER_USER='replication',
+    MASTER_PASSWORD='Sox2020$',
+    MASTER_PORT=3306,
+    MASTER_LOG_FILE='mysql-bin.000002',
+    MASTER_LOG_POS=898,
+    GET_MASTER_PUBLIC_KEY=1,
+    MASTER_CONNECT_RETRY=10;
 ```
 <details open>
-<summary><b>Farem el change master to</b></summary>
+<summary><b>Farem el change master to en el Slave</b></summary>
 <img src="captures/change_master_to.png">
 </details>
 
-I ara amb la sentència `START SLAVE` la màquina començarà a ser el Slave.
+I ara amb la sentència `START SLAVE` la màquina començarà a ser el Slave, i iniciarem la replicació
 ```
 msyql> START SLAVE;
 ```
+<details open>
+<summary><b>Començar la rèplica</b></summary>
+<img src="captures/start_slave.png">
+</details>
 
-COMENZAMOS EL SLAVE  Y EN TEORIA TIENE K IR
-START SLAVE;
+I ara mirarem el Status del Slave, verificarem que no hi ha cap problema, i mirarem que el `Slave` estigui esperant canvis i el `IO_THREAD` estigui esperant events.
+```
+mysql> SHOW SLAVE STATUS \G
+```
+<details open>
+<summary><b>Mirar l'estat del slave i assegurar-nos de que està esperant events</b></summary>
+<img src="captures/slave_status.png">
+<img src="captures/slave_status2.png">
+</details>
 
-SHOW SLAVE STATUS \G
+L'estat de l'anterior status és correcte, però ara falta la comprovació de que realment està fent la rèplica. El que farem serà importar la BD de Sakila en el Master i veurem si es replica cap al Slave.
 
-------------------------------
+Primer de tot mirarem que no tenim cap BD de Sakila en cap de les dues màquines.
+<details open>
+<summary><b>Mirarem que no tenim Sakila-DB</b></summary>
+<img src="captures/no_sakila.png">
+</details>
 
-PERCONA TOOLKIT
+Ara, en el `Master` importarem la BD de Sakila. Tant el `SCHEMA` com el `DATA`.
 
-SI EN RHEL TENEMOS PORBLEMA DE REPOSITORIO, HACER LO SIGUIENTE:
+Per descarregar sakila ja s'ha explicat en els anterior apartats, un breu resum són les següents comandes:
+```
+# wget https://downloads.mysql.com/docs/sakila-db.tar.gz
+# tar -xvzf sakila-db.tar.gz
+```
 
-dnf clean all
-rm -frv /var/cache/dnf
-subscription-manager refresh
-dnf update
+I ara si ara importarem la BD de `Sakila` en el `Master`
+```
+mysql> SOURCE /root/sakila-db/sakila-schema.sql
+```
+```
+mysql> SOURCE /root/sakila-db/sakila-data.sql
+```
+<details open>
+<summary><b>Importar Sakila Schema en el Master</b></summary>
+<img src="captures/import_sakila_schema.png">
+</details>
+<details open>
+<summary><b>Importar Sakila Data en el Master</b></summary>
+<img src="captures/import_sakila_data.png">
+</details>
 
-INSTALAMOS PERCONA TOOLKIT
-sudo yum install percona-toolkit
-
-Hacemos pt checksum, QUE LO QUE HACE ÉS MIRAR LA INTEGRIDAD DE LOS DATOS ENTRE MASTER Y SLAVE Y NOS DICE SI HAY ALGUNA DIFERENCIA ENTRE LA TABLA DEL MASTER Y SERVER
-miramos el documentar perldoc y miramos el manual k tenems en linux
---nocheck-binlog-format
-
--d github    (--databases)
-
--h localhost
--u root
--p Sox2020$
-
---slave-user
---slave-password
-
- pt-table-checksum -u root -pSox2020$ -h localhost --no-check-binlog-format --slave-user=replication --slave-password=Sox2020$ --databases=github
-
- Si no pones --slave user ni slave password da error diiend k no se puede conectar
-
- ahora importamos sakila y hacemos esto 
-  pt-table-checksum -u root -pSox2020$ -h localhost --no-check-binlog-format --slave-user=replication --slave-password=Sox2020$ --databases=sakila
-
-  En el slave hacemos un update de actor por ejemplo, y luego volvemos a poner la comanda y nos dice que hay una diferencia al hacer checsum
-  pt-table-checksum -u root -pSox2020$ -h localhost --no-check-binlog-format --slave-user=replication --slave-password=Sox2020$ --databases=sakila
-
-TS ERRORS  DIFFS     ROWS  DIFF_ROWS  CHUNKS SKIPPED    TIME TABLE
-05-25T06:33:00      0      1      200          0       1       0   0.317 sakila.actor
-
-CLARO AHORA COMO ARREGLAMOS LOS DIFFS? PUES TENEMS LA EINA PT TALBE SYNC QUE PODEMOS DECIR QUE EL EN E CASO QUE HAYA DIFS QUE EL SLAVE VUELVA A SINCRONIZAR PERÒ HACIENDO CASO AL MASTER Y ESA TABLA SE HABRA ARREGLADO DE LOS DIFFS.
-
-Ahora con  table sync miraremos en el servidor de replicacion que cambios han hecho que no estan en el master
-pt-table-sync --sync-to-master h=192.168.151.142,u=replication,p=Sox2020$,P=3306 --databases=sakila --tables=actor --print
-
-una vez que miramos los cambios, hacemos la sync, no miramos check de cpnstraint ni tablas de hijos:
-
-pt-table-sync --sync-to-master h=192.168.151.142,u=replication,p=Sox2020$,P=3306 --databases=sakila --tables=actor --no-check-child-tables --no-foreign-key-checks --execute
-
-
-
-sino nos da este problema, aunque bueno, estando en el master no tenemos que tenre los datos mal y nos podemos fiar y hacer quen o compruebe las foraneas ya qeu en el master me lo habran introducido bien
-
-pt-table-sync --sync-to-master h=192.168.151.142,u=replication,p=Sox2020$,P=3306 --databases=sakila --tables=actor --execute
-Cannot delete or update a parent row: a foreign key constraint fails (`sakila`.`film_actor`, CONSTRAINT `fk_film_actor_actor` FOREIGN KEY (`actor_id`) REFERENCES `actor` (`actor_id`) ON DELETE RESTRICT ON UPDATE CASCADE) [for Statement "REPLACE INTO `sakila`.`actor`(`actor_id`, `first_name`, `last_name`, `last_update`) VALUES ('1', 'PENELOPE', 'GUINESS', '2006-02-15 04:34:33') /*percona-toolkit src_db:sakila src_tbl:actor src_dsn:P=3306,h=192.168.151.143,p=...,u=replication dst_db:sakila dst_tbl:actor dst_dsn:P=3306,h=192.168.151.142,p=...,u=replication lock:1 transaction:1 changing_src:1 replicate:0 bidirectional:0 pid:29192 user:root host:localhost.localdomain*/"] at line 10950 while doing sakila.actor on 192.168.151.142
-
-I despres si tornem a fer checksum ja no tindrem diferencies
-
-pt-table-checksum -u root -pSox2020$ -h localhost --no-check-binlog-format --slave-user=replication --slave-password=Sox2020$ --databases=sakila
+I ara si tornem a comprovar, veurem que les dades han sigut replicades cap al `Slave` i que en les dues màquines tenim les mateixes dades.
+<details open>
+<summary><b>Verificar que la replicació es realitza correctament.</b></summary>
+<img src="captures/replication_done.png">
+</details>
