@@ -212,6 +212,8 @@ Llavors assignarem el `server-id` 2 i traurem el `log_bin` en el `Slave`:
 server-id=2
 disable_log_bin
 ```
+⚠️ ATENCIÓ ⚠️ En un cas real s'hauria de posar el `Slave` en mode `READ-ONLY` en el `my.cnf`. Ja que el Slave només servirà per la lectura de dades.
+
 <details open>
 <summary><b>Posarem el identificador de servidor 2, i traurem el log_bin</b></summary>
 <img src="captures/logbin_serverid2.png">

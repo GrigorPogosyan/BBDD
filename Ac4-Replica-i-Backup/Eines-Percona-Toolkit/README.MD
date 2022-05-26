@@ -21,7 +21,7 @@ A continuació utilitzarem les següents eines:
   > - pt-table-sync : Aquesta eina ve lligat amb l'apartat anterior, un cop que sabem que tenim una inconsistència de dades entre `Master` i `Slave`, aquesta eina serveix per sincronitzar les dades de la taula amb el paràmetre `--sync-to-master` que veurem més endavant podem dir que el Slave sincronitzi les dades que té el `Master`, i d'aquesta manera solucionariem el problema de la inconsistència de dades.
 
 ## Percona Toolkit
-Començarem a instal·lar aquestes eines en el `Master`.
+Començarem a instal·lar aquestes eines en el `Master`. (Hem de tenir el repositori afegit i habilitat (en teoria ho tenim degut a que hem hagut de fer aquests pasos al instal·lar Percona MySQL 8.0))
 ```
 # yum install percona-toolkit -y
 ```
