@@ -15,13 +15,15 @@ Les `Percona Toolkit` són un conjunt d'eines avançades en la linea de comandes
 
 Aquestes eines són les alternatives als scripts privat que fa la gent per administrar la seva BD, la diferència es que les eines de Percona han sigut desenvolupades profesionalment, ben testejades i documentades.
 
+⚠️S'ha fet aquesta guía, després de montar el sistema de replicació `Master` - `Slave` provinent del apartat anterior de [Configuració-Sistema-Replica](https://github.com/GrigorPogosyan/M02-Base-de-Dades/tree/main/Ac4-Replica-i-Backup/Configuracio-Sistema-Replica )⚠️
+
 A continuació utilitzarem les següents eines:
   > - pt-table-checksum : Aquesta eina verifica la integritat de la replicació del MySQL, relitza una verificació de coherència de la replicació mitjançant unes comandes que utilitzarem en el Master. pt-table-checksum detecta rèpliques automàticament i es connecta a elles, moltes vegades això pot fallar i s'ha d'especificar la màquina slave, es connectarà als slaves automàticament si tenim el mateix compte (un compte d'administració per exemple) amb el mateix password i es connectarà a tots els slaves que trobi.
 
   > - pt-table-sync : Aquesta eina ve lligat amb l'apartat anterior, un cop que sabem que tenim una inconsistència de dades entre `Master` i `Slave`, aquesta eina serveix per sincronitzar les dades de la taula amb el paràmetre `--sync-to-master` que veurem més endavant podem dir que el Slave sincronitzi les dades que té el `Master`, i d'aquesta manera solucionariem el problema de la inconsistència de dades.
 
 ## Percona Toolkit
-Començarem a instal·lar aquestes eines en el `Master`.
+Començarem a instal·lar aquestes eines en el `Master`. (Hem de tenir el repositori afegit i habilitat (en teoria ho tenim degut a que hem hagut de fer aquests pasos al instal·lar Percona MySQL 8.0))
 ```
 # yum install percona-toolkit -y
 ```
@@ -53,7 +55,7 @@ Ara, farem un `pt-table-checksum` amb la base de dades de `Sakila` que el tenim 
 
 En la sentència també especificarem el paràmetre `--no-check-binlog-format` perquè el format de Row per defecte és MIXED, i el Checksum el comprova utlitzant Statement, llavors per evitar problemes evitem que miri el format del binlog.
 
-Si no li posem el paràmetre --databases=sakila, verificarà per totes les bases de dades.
+Si no li posem el paràmetre --databases=sakila, verificarà totes les taules en totes les bases de dades.
 
 🟢 Manera 1: Mateix usuari en el Master i Slave i que es connecti automàticament als Slaves que trobi el script.:
 ```
@@ -120,7 +122,7 @@ Si no ignorem les <em>taules filles</em> **( --no-check-child-tables)** i el che
 Cannot delete or update a parent row: a foreign key constraint fails (`sakila`.`film_actor`, CONSTRAINT `fk_film_actor_actor` FOREIGN KEY (`actor_id`) REFERENCES `actor` (`actor_id`) ON DELETE RESTRICT ON UPDATE CASCADE) [for Statement "REPLACE INTO `sakila`.`actor`(`actor_id`, `first_name`, `last_name`, `last_update`) VALUES ('1', 'PENELOPE', 'GUINESS', '2006-02-15 04:34:33') /*percona-toolkit src_db:sakila src_tbl:actor src_dsn:P=3306,h=192.168.151.143,p=...,u=replication dst_db:sakila dst_tbl:actor dst_dsn:P=3306,h=192.168.151.142,p=...,u=replication lock:1 transaction:1 changing_src:1 replicate:0 bidirectional:0 pid:29192 user:root host:localhost.localdomain*/"] at line 10950 while doing sakila.actor on 192.168.151.142
 ```
 
-Ara, un cop hem sincronitzat la inconsistència que teniem, si tornem a fer el `Checksum` nos ens hauria de sortir cap diferència de dades.
+Ara, un cop hem sincronitzat el `Slave` al `Master` degut a la inconsistència que teniem, si tornem a fer el `Checksum` nos ens hauria de sortir cap diferència de dades.
 ```
 # pt-table-checksum -u percona_user -pSox2020$ -h 192.168.151.143 --no-check-binlog-format --databases=sakila;
 ```
