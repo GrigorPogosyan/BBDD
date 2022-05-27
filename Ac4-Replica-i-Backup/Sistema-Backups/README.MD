@@ -22,6 +22,8 @@ Utilitzarem l'eina `Percona XtraBackup` que alguns dels següents scripts o prog
  - `xbcrypt` --> Eina que encripta i desencripta fitxers de Backup.
 
 El primer que hem de fer és instal·lar el `Percona XtraBackup`. ((Hem de tenir el repositori afegit i habilitat (en teoria ho tenim degut a que hem hagut de fer aquests pasos al instal·lar Percona MySQL 8.0))
+
+⚠️ EN CAS DE QUE ESTIGUEM EN UNA INFRAESTRUCTURA MASTER - SLAVE AL RESTAURAR UNA CÒPIA EN EL MÀSTER, HAUREM DE TORNAR A CONFIGURAR ELS SLAVES ⚠️
 ```
 # yum install percona-xtrabackup-80 -y 
 ```
@@ -64,7 +66,7 @@ I sabrem que la còpia ha sigut exitosa si el prompt ens retorna el següent mis
 <img src="captures/xtrabackup_backup_ok.png">
 </details>
 
-Després de fer cada backup, hem de *preparar* el seu contingut. perquè els arxius de dades no son coherents en el instant de temps que s'han preparat, perquè es van copiar en diferents moments mentres s'executava el programa i es posible que s'hagin afegit o canviat les dades mentre això sucedia. Es pot restaurar la còpia sense fer la preparació de la copia despres del backup, però es molt recomenable preparar-lo perquè poden donar errors de danys de l'arxiu.
+Després de fer cada backup, hem de *preparar* el seu contingut. perquè els arxius de dades no son coherents en el instant de temps que s'han preparat, perquè es van copiar en diferents moments mentres s'executava el programa i es posible que s'hagin afegit o canviat les dades mentre això sucedia. Es pot restaurar la còpia sense fer la preparació de la copia despres del backup, però es molt recomenable preparar-lo perquè poden donar errors de danys de l'arxiu. També hem de fer el `prepare` perquè els ibdata que copia, tota la informació no pot estar en el ibdata, podria haver-hi informació pendent de ser escrit en el ibdata que estigués en el undolog, doncs el prepare s'encarrega d'això.
 ```
 # xtrabackup --prepare --target-dir=/disk/backups/backupBD
 ```
